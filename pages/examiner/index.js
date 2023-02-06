@@ -1,7 +1,8 @@
+import PortalLayout from "@/component/layout/portalLayout";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import ExaminerLayout from "@/component/layout/examinerLayout";
-import Layout from "@/component/layout/layout";
+import { examinerPages } from "@/constants/routes";
+
 
 const Home = () => {
   const {status, data } = useSession();
@@ -24,10 +25,9 @@ const Home = () => {
 
 Home.getLayout = function getLayout(page) {
   return (
-      <ExaminerLayout>
+    <PortalLayout pages={examinerPages}>
       <main>{page}</main>
-      </ExaminerLayout>
-   
+    </PortalLayout>
   )
 }
 
