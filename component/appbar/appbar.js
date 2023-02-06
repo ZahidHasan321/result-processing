@@ -1,24 +1,18 @@
-import * as React from 'react';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+import * as React from 'react';
+const drawerWidth = 240;
 
 export default function MenuAppBar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -28,8 +22,8 @@ export default function MenuAppBar() {
     setAnchorEl(null);
   };
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box sx={{ flexGrow: 1}}>
+      <AppBar position="fixed" sx={{zIndex: (theme) => {theme.zIndex.drawer+1}}}>
         <Toolbar>
           <IconButton
             size="large"
@@ -37,12 +31,15 @@ export default function MenuAppBar() {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            href="\"
           >
-            <MenuIcon />
+            ICON
           </IconButton>
+
+          <MenuItem/>
           
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            portal
+            Result Processing System
           </Typography>
           
           {auth && (

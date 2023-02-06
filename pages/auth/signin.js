@@ -37,15 +37,7 @@ export default function SignIn() {
   {
     const session = await getSession()
     if(session.user){
-      if(session.user.role == 'examiner'){
-        Router.push('/examiner/')
-      }
-      else if(session.user.role == 'courseTeacher'){
-        Router.push('/courseTeacher/')
-      }
-      else if(session.user.role == 'examCommittee'){
-        Router.push('/examCommittee/')
-      }
+      Router.push('/');
     }
   }
 

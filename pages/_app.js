@@ -1,28 +1,16 @@
-import { CssBaseline } from "@mui/material"
+import { CssBaseline, ThemeProvider } from "@mui/material"
 import { SessionProvider } from "next-auth/react"
-import Layout from "@/component/layout/layout"
-import { useRouter } from "next/router"
+import theme from "@/styles/Theme"
 
 export default function App({ Component, pageProps }) {
-  const router = useRouter();
+  const getLayout = Component.getLayout || ((page) => page)
 
-  if(router.pathname == "/auth/signin"){
-    return(
-      <>
-      <SessionProvider session={pageProps.session}>
-      <CssBaseline />
-      <Component {...pageProps} />
-      </SessionProvider>
-      </>
-    )
-  }
-
-  return (
+  return getLayout(
   <SessionProvider session={pageProps.session}>
-  <Layout>
+  <ThemeProvider theme={theme}>
   <CssBaseline />
   <Component {...pageProps} />
-  </Layout>
+  </ThemeProvider>
   </SessionProvider>
   )
 }
