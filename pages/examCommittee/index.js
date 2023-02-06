@@ -1,4 +1,5 @@
-import CommitteeLayout from "@/component/layout/committeeLayout";
+import PortalLayout from "@/component/layout/portalLayout";
+import { committeePages } from "@/constants/routes";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 
@@ -21,12 +22,11 @@ const Home = () => {
 }
 
 Home.getLayout = function getLayout(page) {
-    return (
-      <CommitteeLayout>
-        <main>{page}</main>
-      </CommitteeLayout>
-    )
-  }
-
+  return (
+    <PortalLayout pages={committeePages}>
+      <main>{page}</main>
+    </PortalLayout>
+  )
+}
   
 export default Home;

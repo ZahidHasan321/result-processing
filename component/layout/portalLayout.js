@@ -1,12 +1,11 @@
 import { Box, Toolbar } from "@mui/material";
-import MenuAppBar from "../appbar/appbar";
 import ResponsiveDrawer from "../drawer/responsivedrawer";
 
-const CommitteeLayout = ({children}) => {
+const PortalLayout = ({children, ...restProps}) => {
     return(
         <>
         <Box sx={{display:"flex"}}>
-        <ResponsiveDrawer/>
+        <ResponsiveDrawer {...restProps}/>
         <Box sx={{display:"flex", flexDirection:"column"}}>
         <Toolbar/>
         <main>{children}</main>
@@ -16,4 +15,4 @@ const CommitteeLayout = ({children}) => {
     )
 }
 
-export default CommitteeLayout;
+export default PortalLayout;
