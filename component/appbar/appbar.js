@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 import * as React from 'react';
 const drawerWidth = 240;
 
@@ -21,21 +22,29 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const linkStyle = {
+    textDecoration:"none", 
+    color:"black"
+  }
+
   return (
     <Box sx={{ flexGrow: 1}}>
       <AppBar position="fixed" sx={{zIndex: (theme) => {theme.zIndex.drawer+1}}}>
         <Toolbar>
+          <Link href={'/'}>
           <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
-            href="\"
+            sx={{ mr: 2}}
           >
+           <Typography color={"black"} fontSize="20px" sx={{textDecoration:'none'}}>
             ICON
+            </Typography>
           </IconButton>
-
+          </Link>
           <MenuItem/>
           
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -76,6 +85,7 @@ export default function MenuAppBar() {
           )}
         </Toolbar>
       </AppBar>
+      <Toolbar/>
     </Box>
   );
 }

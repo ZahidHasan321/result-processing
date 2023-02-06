@@ -26,8 +26,8 @@ const Home = () => {
     <>
       <Container maxWidth="xl" sx={{display:"flex", alignContent:"center", justifyContent:"center"}} >
         <Stack marginTop={"20%"} spacing={50} direction = "row">
-        <Link style={linkStyle} href="\examiner"><Button sx = {boxButton} variant = "contained"> Examiner Portal</Button></Link>
-        <Link style = {linkStyle} href="\examCommittee"><Button sx = {boxButton} variant = "contained">Exam Committee portal</Button></Link>
+        <Link style={linkStyle} href="/examiner"><Button sx = {boxButton} variant = "contained"> Examiner Portal</Button></Link>
+        <Link style = {linkStyle} href="/examCommittee"><Button sx = {boxButton} variant = "contained">Exam Committee portal</Button></Link>
         </Stack>
       </Container>
     </>

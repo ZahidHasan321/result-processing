@@ -1,32 +1,102 @@
-import PortalLayout from "@/component/layout/portalLayout";
-import { committeePages } from "@/constants/routes";
-import { useSession } from "next-auth/react";
-import Router from "next/router";
+import Layout from "@/component/layout/layout";
+import { Box } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { getSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
+const columns = [
+  {
+    field: "exam_session",
+    headerName: "Exam Session",
+    minWidth: 200,
+    flex:1
+  },
+  {
+    field: "semester",
+    headerName: "Semester",
+    minWidth: 200,
+    flex:1
+  },
+  {
+    field: "role",
+    headerName: "Role",
+    minWidth: 200,
+    flex:1
+  },
+  {
+    field: "published",
+    headerName: "published",
+    type:"boolean",
+    minWidth: 200,
+    flex:1
+  }
+]
 
 const Home = () => {
-  const {status, data } = useSession();
-  if(status === 'unauthenticated'){
-    Router.replace('auth/signin');
+  const [list, setList] = useState(null);
+  const router = useRouter();
+  async function getList()
+  {
+    const {user} = await getSession();
+     await fetch('/api/examCommittee/committeeLog',{
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify(user.id)
+    }).then(res => res.json())
+    .then(data => setList(data));
   }
-  if(status ===  'authenticated'){
-    return(
-    <>
-      <h1>Exam Committee page</h1>
-    </>
-    )
+
+  function handleRowClick(event)
+  {
+    event.preventD
+    const rowData = event.row;
+    const url = `/examCommittee/${rowData.exam_session}/${rowData.semester}/dashboard`
+    router.push(url);
   }
+  
+  useEffect(()=>{
+    getList();
+  },[])
+
+  if(!list) return <div> loading </div>
 
   return(
-  <h1>loading</h1>
-  )
-}
+        <Box sx={{m: '20px', pr:"40px", width:"100%"}}>
+        <DataGrid 
+            rows={list}
+            columns={columns}
+            pageSize={10}
+            autoHeight
+            disableSelectionOnClick
+            getRowId={(row) => row.id + row.exam_session + row.semester}
+            onRowClick={handleRowClick}
+            rowsPerPageOptions={[10]}
+            disableColumnFilter
+            disableColumnSelector
+            disableDensitySelector
+            components={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: {
+                csvOptions: { disableToolbarButton: true },
+                printOptions: { disableToolbarButton: true },
+                showQuickFilter: true,
+                quickFilterProps: { debounceMs: 250 },
+              },
+            }}
+            />
+        </Box>
+    )
 
-Home.getLayout = function getLayout(page) {
-  return (
-    <PortalLayout pages={committeePages}>
-      <main>{page}</main>
-    </PortalLayout>
-  )
 }
-  
+Home.getLayout = function getLayout(page){
+    return (
+      <Layout>
+        <main>{page}</main>
+      </Layout>
+    )
+  }
 export default Home;

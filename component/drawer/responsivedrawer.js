@@ -7,21 +7,19 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import MenuAppBar from '../appbar/appbar';
 
 const drawerWidth = 180;
 
-function ResponsiveDrawer({pages}) {
+function ResponsiveDrawer({pages, query}) {
   const drawer = (
     <div>
       <MenuAppBar />
-      <Toolbar/>
-      
       <List>
         {pages.map((page, index) => (
-          <Link href={page.routepath} key={index} style={{textDecoration:"none", color:"black"}}>
+          <Link href={{pathname:page.routepath, query}} key={index} style={{textDecoration:"none", color:"black"}}>
           <ListItem key={page.routename} disablePadding>
             <ListItemButton>
               <ListItemIcon>

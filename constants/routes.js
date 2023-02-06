@@ -5,11 +5,11 @@ export const examinerPages = [
       },
     {
       routename: "Current",
-      routepath: "/examiner/current"
+      routepath: "/examiner/current/"
     },
     {
       routename: "History",
-      routepath: "/examiner/history"
+      routepath: "/examiner/history/"
     }
   ]
 
@@ -17,15 +17,15 @@ export const examinerPages = [
   export const committeePages = [
     {
         routename: "Dashboard",
-        routepath: "/examCommittee/"
+        routepath: "/examCommittee/[session]/[semester]/dashboard",
       },
     {
       routename: "Current",
-      routepath: "/examCommittee/current"
+      routepath: "/examCommittee/[session]/[semester]/current"
     },
     {
       routename: "History",
-      routepath: "/examCommittee/history"
+      routepath: "/examCommittee/[session]/[semester]/history"
     }
   ]
 
