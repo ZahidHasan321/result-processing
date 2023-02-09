@@ -35,7 +35,6 @@ function ResponsiveDrawer({pages, query}) {
   );
 
   return (
-    <Box sx={{display:"flex"}}>
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -52,7 +51,6 @@ function ResponsiveDrawer({pages, query}) {
           {drawer}
         </Drawer>
       </Box>
-    </Box>
   );
 }
 

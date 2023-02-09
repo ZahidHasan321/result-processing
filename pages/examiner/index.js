@@ -1,4 +1,4 @@
-import PortalLayout from "@/component/layout/portalLayout";
+import DrawerLayout from "@/component/layout/drawerLayout";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
 import { examinerPages } from "@/constants/routes";
@@ -13,8 +13,6 @@ const Home = () => {
     return(
     <>
       <h1>Examiner page</h1>
-      <h1>Examiner page</h1>
-      <h1>Examiner page</h1>
     </>
     )
   }
@@ -25,9 +23,9 @@ const Home = () => {
 
 Home.getLayout = function getLayout(page) {
   return (
-    <PortalLayout pages={examinerPages}>
+    <DrawerLayout pages={examinerPages}>
       <main>{page}</main>
-    </PortalLayout>
+    </DrawerLayout>
   )
 }
 

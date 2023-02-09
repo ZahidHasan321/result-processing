@@ -1,4 +1,4 @@
-import PortalLayout from "@/component/layout/portalLayout";
+import DrawerLayout from "@/component/layout/drawerLayout";
 import { examinerPages } from "@/constants/routes";
 
 const History = () => {
@@ -12,9 +12,9 @@ const History = () => {
 
 History.getLayout = function getLayout(page) {
     return (
-      <PortalLayout pages={examinerPages}>
+      <DrawerLayout pages={examinerPages}>
         <main>{page}</main>
-      </PortalLayout>
+      </DrawerLayout>
     )
   }
   

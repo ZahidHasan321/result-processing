@@ -1,5 +1,5 @@
-import PortalLayout from "@/component/layout/portalLayout";
-import { committeePages } from "@/constants/routes";
+import DrawerLayout from "@/component/layout/drawerLayout";
+import { semesterPages } from "@/constants/routes";
 import { useRouter } from "next/router";
 
 
@@ -12,9 +12,9 @@ Dashboard.getLayout = function getLayout(page){
     const query = router.query;
 
     return (
-      <PortalLayout pages={committeePages} query={query}>
+      <DrawerLayout pages={semesterPages} query={query}>
         <main>{page}</main>
-      </PortalLayout>
+      </DrawerLayout>
     )
   }
 
