@@ -1,17 +1,17 @@
 import CommitteeDialog from "@/component/dialog/committeeDialog";
 import DrawerLayout from "@/component/layout/drawerLayout";
-import Layout from "@/component/layout/layout";
 import { AdminPages } from "@/constants/routes";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import {DataGrid} from "@mui/x-data-grid/DataGrid";
 import { useEffect, useState } from "react";
 
   
 
-const Home = ({sessionList}) => {
+const Home = () => {
 const [semester, setSemester] = useState("");
 const [semesterList, setSemesterList] = useState([]);
-const [loading, setLoading] = useState(true);
+const [sessionList, setSessionList] = useState([]);
+const [loading, setLoading] = useState(false);
 const [session, setSession] = useState("")
 const [committeeList, setCommitteeList] = useState([]);
 const [open, setOpen] = useState(false)
@@ -53,6 +53,16 @@ const columns = [
       flex:1
     },
   ]
+const getSessionList = async() => {
+    setLoading(true);
+    fetch('/api/admin/sessionList')  
+    .then(res => res.json())
+    .then(data => setSessionList(data))
+    setLoading(false);
+}
+useEffect(() => {
+    getSessionList();
+},[])
 
 useEffect(()=> {
     if(semester != '' && session != ''){
@@ -90,7 +100,7 @@ if(loading) <div>loading</div>
 
 return(
     <Box>
-        <Box sx={{ mt:"30px", display:'flex', "&:last-child":{marginLeft:'auto'}}}>
+        <Box sx={{ mt:"30px", display:'flex'}}>
             <Box sx={{width:'150px'}}>
             <FormControl fullWidth>
             <InputLabel id="session-select-label">Sesssion</InputLabel>
@@ -103,12 +113,11 @@ return(
             >
                 <MenuItem key={'none'} value=''><em>None</em></MenuItem>
                 {
-                    sessionList.length > 0 ? (sessionList.map((session, idx) => {
+                    sessionList.map((session, idx) => {
                         return(
                         <MenuItem key={idx} value={session.exam_session}> {session.exam_session} </MenuItem>
                         )
-                        })):
-                    <MenuItem>-</MenuItem>
+                        })
                 }
             </Select>}
         </FormControl>
@@ -116,7 +125,7 @@ return(
         <Box sx={{width:'150px'}}>
         <FormControl fullWidth>
         <InputLabel id="Semester-select-label">Semester</InputLabel>
-        { semesterList && <Select
+        {semesterList && <Select
           labelId="Semester-select-label"
           id="semester-select"
           label="Semester"
@@ -125,12 +134,11 @@ return(
         >
             <MenuItem key={'none'} value=''><em>None</em></MenuItem>
                 {
-                    semesterList.length > 0 ? (semesterList.map((sem, idx) => {
+                    semesterList.map((sem, idx) => {
                         return(
                         <MenuItem key={idx} value={sem.semester}> {sem.semester} </MenuItem>
                         )
-                        })):
-                    <MenuItem>-</MenuItem>
+                        })
                 }
         </Select>}
         </FormControl>
@@ -141,7 +149,6 @@ return(
       <DataGrid 
       columns={columns}
       rows={committeeList}
-      pageSize={10}
       autoHeight
       />
 
@@ -156,17 +163,5 @@ Home.getLayout = function getLayout(page){
             <main>{page}</main>
         </DrawerLayout>
     )
-}
-
-export async function getStaticProps()
-{
-    const result = await fetch('http://localhost:3000/api/admin/sessionList');   
-    const sessionList = await result.json();
-
-    return {
-        props:{
-            sessionList
-        }
-    }
 }
 export default Home;

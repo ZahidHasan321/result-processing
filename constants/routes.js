@@ -58,8 +58,8 @@ export const examinerPages = [
       routepath: "/admin/",
     },
     {
-        routename: "Teacher List",
-        routepath: "/admin/teacherList",
+        routename: "Manage Teachers",
+        routepath: "/admin/teachers/",
       },
   ]
 

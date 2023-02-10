@@ -1,19 +1,17 @@
-import MailIcon from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import { Divider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import MenuAppBar from '../appbar/appbar';
 
 const drawerWidth = 180;
 
-function ResponsiveDrawer({pages, query}) {
+function ResponsiveDrawer({pages, query}){
+
   const drawer = (
     <div>
       <MenuAppBar />
@@ -22,14 +20,13 @@ function ResponsiveDrawer({pages, query}) {
           <Link href={{pathname:page.routepath, query}} key={index} style={{textDecoration:"none", color:"black"}}>
           <ListItem key={page.routename} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
               <ListItemText primary={page.routename} />
             </ListItemButton>
           </ListItem>
+          <Divider/>
           </Link>
         ))}
+
       </List>
     </div>
   );
