@@ -1,9 +1,9 @@
 import MenuAppBar from "../appbar/appbar";
 
-const Layout = ({children}) => {
+const Layout = ({children, ...restProps}) => {
     return(
         <>
-        <MenuAppBar/>
+        <MenuAppBar {...restProps}/>
         <main>{children}</main>
         </>
     )

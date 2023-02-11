@@ -1,4 +1,5 @@
 import DrawerLayout from "@/component/layout/drawerLayout";
+import Layout from "@/component/layout/layout";
 import { committeePages } from "@/constants/routes";
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
@@ -92,9 +93,9 @@ const History = () => {
 }
 History.getLayout = function getLayout(page){
     return (
-      <DrawerLayout pages={committeePages}>
+      <Layout pages={committeePages}>
         <main>{page}</main>
-      </DrawerLayout>
+      </Layout>
     )
   }
 export default History;

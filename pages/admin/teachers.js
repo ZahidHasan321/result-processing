@@ -1,29 +1,21 @@
 import TeacherDialog from "@/component/dialog/TeacherDialog";
-import DrawerLayout from "@/component/layout/drawerLayout";
+import Layout from "@/component/layout/layout";
 import { AdminPages } from "@/constants/routes";
-import {DeleteForever} from "@mui/icons-material";
+import { DeleteForever } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
-import {DataGrid} from "@mui/x-data-grid/DataGrid";
+import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { useEffect, useState } from "react";
 
 const Teachers = () => {
     const [list, setList] = useState([]);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(null)
     const [open, setOpen] = useState(false);
 
     const getList = async() => {
-      
-      await fetch('/api/admin/teacherList')
+       fetch('/api/admin/teacherList')
       .then(res => res.json())
       .then(data => setList(data));
-      
     }
-
-    useEffect(() => {
-      setLoading(true);
-      getList()
-      setLoading(false)
-  },[])
 
     const handleDeleteRow = async(e, params) =>
     {
@@ -37,11 +29,19 @@ const Teachers = () => {
       getList();
     }
 
+    const handleOnClose = () =>{
+      getList();
+      setOpen(false);
+    }
+    const handleAddTeacher = () => {
+        setOpen(true);
+    }
+
 const columns = [
     {
       field: "name",
       headerName: "Name",
-      minWidth: 200,
+      minWidth: 150,
       flex:1
     },
     {
@@ -59,7 +59,7 @@ const columns = [
     {
       field: "department",
       headerName: "Department",
-      minWidth: 200,
+      minWidth: 150,
       flex:1
     },
     {
@@ -77,26 +77,20 @@ const columns = [
     
   ]
 
-  const handleOnClose = () =>{
-    setOpen(false);
-  }
-  const handleAddTeacher = () => {
-      setOpen(true);
-  }
+  if(loading) return <div>loading</div>
 
-    return(
-        <Box>
-          <Box sx={{display:'flex', }}>
-            <Button onClick={handleAddTeacher}>Add Teacher</Button>
-          </Box>
-            <Box sx={{width:"100%", m: "10px", pr:"30px", height:500}}>
+    return( 
+        <Box sx={{display:'flex', flexDirection:'column', m:3}}>
+            <Button sx={{ml:'auto', mb:1}} variant="outlined" onClick={handleAddTeacher}>Add Teacher</Button>
+            
             <DataGrid 
+            sx={{boxShadow:1}}
             columns={columns}
             rows={list}
-            
             disableSelectionOnClick
+            hideFooter
+            autoHeight
             />
-            </Box>
             <TeacherDialog open={open} onClose={handleOnClose} list={list}/>
         </Box>
     )
@@ -104,9 +98,9 @@ const columns = [
 
 Teachers.getLayout = function getLayout(page){
   return(
-      <DrawerLayout pages={AdminPages}>
+      <Layout pages={AdminPages}>
           <main>{page}</main>
-      </DrawerLayout>
+      </Layout>
   )
 }
 export default Teachers;

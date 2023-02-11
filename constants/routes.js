@@ -54,13 +54,19 @@ export const examinerPages = [
 
   export const AdminPages = [
     {
-      routename: "Committee Manager",
+      routename: "Manage Committee",
       routepath: "/admin/",
     },
     {
         routename: "Manage Teachers",
         routepath: "/admin/teachers/",
-      },
+    },
+    {
+      routename: "Test",
+      routepath: "/admin/test/",
+  },
+  
+      
   ]
 
 

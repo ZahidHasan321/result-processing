@@ -1,4 +1,5 @@
 import DrawerLayout from "@/component/layout/drawerLayout";
+import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { useRouter } from "next/router";
 
@@ -11,9 +12,9 @@ Current.getLayout = function getLayout(page){
     const query = router.query;
 
     return (
-      <DrawerLayout pages={semesterPages} query={query}>
+      <Layout pages={semesterPages} query={query}>
         <main>{page}</main>
-      </DrawerLayout>
+      </Layout>
     )
   }
 

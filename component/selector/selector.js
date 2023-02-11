@@ -3,7 +3,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const BasicSelect = (props) => {
 
-    const {list, value ,onChange, label} = props;
+    const {list, value ,onChange, label, sx} = props;
 
     function handleChange(e)
     {
@@ -11,7 +11,7 @@ const BasicSelect = (props) => {
     }
 
     return(
-        <Box sx={{width:'150px'}}>
+        <Box sx={sx}>
         <FormControl fullWidth>
         <InputLabel id={`${label}_select-label`}>{label}</InputLabel>
         {list && <Select
@@ -25,7 +25,7 @@ const BasicSelect = (props) => {
                   {
                     ((list).map((item, idx) => {
                           return(
-                          <MenuItem key={idx} value={item.name}> {item.name}</MenuItem>
+                          <MenuItem key={idx} value={item.id}> {item.name}</MenuItem>
                           )
                           }))}
                   

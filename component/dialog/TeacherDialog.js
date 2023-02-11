@@ -1,20 +1,18 @@
-import { Alert, Dialog, DialogTitle } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Alert, Dialog, DialogTitle, IconButton, InputAdornment } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Container } from '@mui/system';
 import { useState } from 'react';
 
-const roles = [
-    {id: 1, rolename: 'Chairman'},
-    {id: 2, rolename: 'Tabulator'},
-    {id: 1, rolename: 'Member'}
-]
+
 
 const TeacherDialog = (props) => {
     const{open, onClose} = props;
     const [showAlert, setShowAlert] = useState(null);
     const [showError, setShowError] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
     function handleClose(){
         onClose();
     }
@@ -56,7 +54,7 @@ const TeacherDialog = (props) => {
 
     return(
     <>
-        <Dialog   open={open} onClose={handleClose}> 
+        <Dialog   open={open} onClose={handleClose} sx={{backdropFilter:'blur(5px)'}}> 
         <Container component="main" maxWidth='xs'>
                 <Box
                 sx={{
@@ -66,8 +64,8 @@ const TeacherDialog = (props) => {
                     alignItems: 'center',
                 }}
                 >
-            <DialogTitle sx={{m:'3'}}>Add Teacher</DialogTitle>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, ml:4}}>
+            <DialogTitle sx={{m:'3', fontWeight:'bold'}}>Add Teacher</DialogTitle>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
                     <TextField
                     margin="normal"
                     required
@@ -83,8 +81,23 @@ const TeacherDialog = (props) => {
                     fullWidth
                     name="password"
                     label="Password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     id="password"
+                    
+                    InputProps={{
+                        endAdornment:(
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => {setShowPassword((show) => !show)}}
+                            onMouseDown={(e) => {e.preventDefault()}}
+                            edge = 'end'
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                    )}} 
+                    
                     />
 
                     <TextField
@@ -120,17 +133,17 @@ const TeacherDialog = (props) => {
                     variant="contained"
                     sx={{ mt: 3, mb: 2}}
                     >
-                    Sign In
+                    SUBMIT
                     </Button>
                 </Box>
+                {
+                    showAlert && <Alert severity='success'>Teacher Added Successfully</Alert>
+                }
+                {
+                    showError && <Alert severity='error'>ERROR!! Email already exists</Alert>
+                }
                 </Box>
                 </Container>
-                {
-                    showAlert && <Alert severity='success'>Teacher Added</Alert>
-                }
-                {
-                    showError && <Alert severity='error'>Email already exists</Alert>
-                }
         </Dialog>
         </>
     )

@@ -1,4 +1,4 @@
-import DrawerLayout from "@/component/layout/drawerLayout";
+import Layout from "@/component/layout/layout";
 import { examinerPages } from "@/constants/routes";
 
 const Current = () => {
@@ -11,9 +11,9 @@ const Current = () => {
 
 Current.getLayout = function getLayout(page) {
     return (
-      <DrawerLayout pages={examinerPages}>
+      <Layout pages={examinerPages}>
         <main>{page}</main>
-      </DrawerLayout>
+      </Layout>
     )
   }
 

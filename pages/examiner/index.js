@@ -1,7 +1,7 @@
-import DrawerLayout from "@/component/layout/drawerLayout";
+import Layout from "@/component/layout/layout";
+import { examinerPages } from "@/constants/routes";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import { examinerPages } from "@/constants/routes";
 
 
 const Home = () => {
@@ -23,9 +23,9 @@ const Home = () => {
 
 Home.getLayout = function getLayout(page) {
   return (
-    <DrawerLayout pages={examinerPages}>
-      <main>{page}</main>
-    </DrawerLayout>
+    <Layout pages={examinerPages}>
+        <main>{page}</main>
+      </Layout>
   )
 }
 
