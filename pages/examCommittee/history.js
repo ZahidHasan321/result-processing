@@ -35,13 +35,13 @@ const columns = [
   }
 ]
 
-const Home = () => {
+const History = () => {
   const [list, setList] = useState(null);
   const router = useRouter();
   async function getList()
   {
     const {user} = await getSession();
-     await fetch('/api/examCommittee/committeeLog',{
+     await fetch('/api/examCommittee/committeeLogHistroy',{
       method:'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -53,7 +53,6 @@ const Home = () => {
 
   function handleRowClick(event)
   {
-    
     const rowData = event.row;
     const url = `/examCommittee/${rowData.exam_session}/${rowData.semester}/dashboard`
     router.push(url);
@@ -66,7 +65,7 @@ const Home = () => {
   if(!list) return <div> loading </div>
 
   return(
-        <Box sx={{m: '20px', pr:"40px", width:"100%"}}>
+        <Box sx={{m: '20px', pr:"40px", width:1550}}>
         <DataGrid 
             rows={list}
             columns={columns}
@@ -92,11 +91,11 @@ const Home = () => {
     )
 
 }
-Home.getLayout = function getLayout(page){
-    return ( 
+History.getLayout = function getLayout(page){
+    return (
       <Layout pages={committeePages}>
         <main>{page}</main>
       </Layout>
     )
   }
-export default Home;
+export default History;

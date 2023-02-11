@@ -1,7 +1,8 @@
+import Layout from "@/component/layout/layout";
+import { examinerPages } from "@/constants/routes";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-import ExaminerLayout from "@/component/layout/examinerLayout";
-import Layout from "@/component/layout/layout";
+
 
 const Home = () => {
   const {status, data } = useSession();
@@ -11,8 +12,6 @@ const Home = () => {
   if(status ===  'authenticated'){
     return(
     <>
-      <h1>Examiner page</h1>
-      <h1>Examiner page</h1>
       <h1>Examiner page</h1>
     </>
     )
@@ -24,10 +23,9 @@ const Home = () => {
 
 Home.getLayout = function getLayout(page) {
   return (
-      <ExaminerLayout>
-      <main>{page}</main>
-      </ExaminerLayout>
-   
+    <Layout pages={examinerPages}>
+        <main>{page}</main>
+      </Layout>
   )
 }
 

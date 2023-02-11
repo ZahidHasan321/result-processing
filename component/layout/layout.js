@@ -1,19 +1,12 @@
-import { Box, Toolbar } from "@mui/material";
 import MenuAppBar from "../appbar/appbar";
-import ResponsiveDrawer from "../drawer/responsivedrawer";
 
-const ExaminerLayout = ({children}) => {
+const Layout = ({children, ...restProps}) => {
     return(
         <>
-        <Box sx={{display:"flex"}}>
-        <ResponsiveDrawer/>
-        <Box sx={{display:"flex", flexDirection:"column"}}>
-        <Toolbar/>
+        <MenuAppBar {...restProps}/>
         <main>{children}</main>
-        </Box>
-        </Box>
         </>
     )
 }
 
-export default ExaminerLayout;
+export default Layout;
