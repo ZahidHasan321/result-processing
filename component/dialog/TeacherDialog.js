@@ -1,9 +1,9 @@
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Alert, Dialog, DialogTitle, IconButton, InputAdornment } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import  VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { Alert, Container, Dialog, DialogTitle, IconButton, InputAdornment } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { Container } from '@mui/system';
 import { useState } from 'react';
 
 
@@ -89,7 +89,7 @@ const TeacherDialog = (props) => {
                         <InputAdornment position="end">
                           <IconButton
                             aria-label="toggle password visibility"
-                            onClick={() => {setShowPassword((show) => !show)}}
+                            onClick={() => {setShowPassword(!showPassword)}}
                             onMouseDown={(e) => {e.preventDefault()}}
                             edge = 'end'
                           >

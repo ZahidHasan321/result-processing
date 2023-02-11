@@ -1,7 +1,7 @@
 import TeacherDialog from "@/component/dialog/TeacherDialog";
 import Layout from "@/component/layout/layout";
 import { AdminPages } from "@/constants/routes";
-import { DeleteForever } from "@mui/icons-material";
+import DeleteForever from "@mui/icons-material/DeleteForever";
 import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { useEffect, useState } from "react";
@@ -91,7 +91,7 @@ const columns = [
             hideFooter
             autoHeight
             />
-            <TeacherDialog open={open} onClose={handleOnClose} list={list}/>
+            {open && <TeacherDialog open={open} onClose={handleOnClose} list={list}/>}
         </Box>
     )
 }
