@@ -2,7 +2,7 @@ import pool from "@/lib/db";
 
 export default async function handler(req, res) {
     const query = { 
-        text: 'SELECT semester FROM exam_committee WHERE exam_session = $1::int',
+        text: 'SELECT DISTINCT semester FROM exam_committee WHERE exam_session = $1::int',
         values: [req.body]
     }
   

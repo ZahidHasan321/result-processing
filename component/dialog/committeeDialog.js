@@ -11,7 +11,7 @@ const roles = [
 
 const CommitteeDialog = (props) => {
     const{open, onClose, list} = props;
-    const [showAlert, setShowAlert] = useState(true);
+    const [showAlert, setShowAlert] = useState(null);
     const [showError, setShowError] = useState(null);
     const [session, setSession] = useState('');
     const [semester, setSemester] = useState('');
@@ -33,6 +33,9 @@ const CommitteeDialog = (props) => {
                 if(res.ok)
                 {
                     setShowAlert(true);
+                    setSession('');
+                    setSemester('');
+                    dispatch({type:'RESET'});
                     setTimeout(() => {
                         setShowAlert(false);
                     },5000)
@@ -55,7 +58,6 @@ const CommitteeDialog = (props) => {
         <Box sx={{display:'flex', justifyContent:'center'}}>
         <DialogTitle sx={{fontWeight:'bold', fontSize:'3ex'}}>Create Committee</DialogTitle>
         </Box>
-        
             <Box
                 sx={{
                     marginTop: 'auto',
@@ -126,10 +128,10 @@ const CommitteeDialog = (props) => {
                 </Box>
                 <Box width={300} sx={{alignSelf:'center', zIndex:99, postion:'absolute', mb:2}}>
                 {
-                    showAlert && <Alert severity='success'>Teacher Added</Alert>
+                    showAlert && <Alert severity='success'>Teacher Added SuccessFully</Alert>
                 }
                 {
-                    showError && <Alert severity='error'>Email already exists</Alert>
+                    showError && <Alert severity='error'>ERROR!!Member already exists</Alert>
                 }
                 </Box>
                 </Box>

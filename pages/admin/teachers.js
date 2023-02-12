@@ -37,12 +37,17 @@ const Teachers = () => {
         setOpen(true);
     }
 
+    useEffect(() => {
+      setLoading(true)
+      getList()
+      setLoading(false)
+    },[])
+
 const columns = [
     {
       field: "name",
       headerName: "Name",
-      minWidth: 150,
-      flex:1
+      minWidth: 250
     },
     {
       field: "email",
@@ -53,8 +58,7 @@ const columns = [
     {
       field: "phone",
       headerName: "Phone",
-      minWidth: 200,
-      flex:1
+      minWidth: 250
     },
     {
       field: "department",

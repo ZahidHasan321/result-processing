@@ -63,6 +63,10 @@ export const memberReducer = (state, action) => {
                 ...state,
                 role5:action.payload
             }
+        case "RESET":
+            return{
+                INITIAL_STATE
+            }
         default:
             return state;
     }

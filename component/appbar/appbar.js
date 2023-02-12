@@ -1,10 +1,9 @@
 import AdbIcon from '@mui/icons-material/Adb';
 import MenuIcon from '@mui/icons-material/Menu';
+import { Tab, Tabs } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,14 +12,20 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-import * as React from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-const settings = [{name: 'Profile', ref: '/'},{name:'Admin', ref:'/admin/'}, {name: 'Logout', ref:''}];
 
 function MenuAppBar(props) {
   var {pages, query} = props;
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const router = useRouter();
+
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [value, setValue] = useState(pages && pages.findIndex(object => {
+    return object.routepath === router.pathname
+  }));
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -40,12 +45,13 @@ function MenuAppBar(props) {
   if(pages == undefined)
   pages = [];
 
+  useEffect(() => {
+  },[])
+  
   return (
     <AppBar position="static">
-      <Container maxWidth="">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters variant='dense'>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1}} />
-          
           <Typography
             variant="h6"
             noWrap
@@ -94,31 +100,30 @@ function MenuAppBar(props) {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page.routename} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page.routename}</Typography>
-                </MenuItem>
-              ))}
             </Menu>
           </Box>
           
          
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page, index) => (
-
-          <Link href={{pathname:page.routepath, query}} key={index} style={{textDecoration:'none'}}>
-              <Button
-                key={page.routename}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block', ":hover": {transform:'translateY(-2px)', boxShadow: '0px 10px 20px 5px rgba(0, 0, 0, 0.5)'} }}
-              >
-                {page.routename}
-              </Button>
-           </Link>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' },justifyContent:'center' }}>
+          <Tabs 
+          value={value || 0}
+          aria-label="Navigation Tabs"
+          indicatorColor="secondary"
+          textColor="inherit"
+          >
+          {pages.map((page, index) => (
+            <Tab 
+            label={page.routename}
+            component={Link}
+            key={index}
+            onClick={() => {setValue(index)}}
+            href={{pathname: page.routepath, query}}
+            />
             ))}
+            </Tabs>
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, mr:1 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Avatar" src="" />
@@ -146,7 +151,7 @@ function MenuAppBar(props) {
             </Menu>
           </Box>
         </Toolbar>
-      </Container>
+      
     </AppBar>
   );
 }

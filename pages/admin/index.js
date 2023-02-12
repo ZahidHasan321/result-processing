@@ -25,6 +25,7 @@ const [showError, setShowError] = useState(null);
 
 function handleClose()
 {
+    getSessionList();
     setOpen(false);
 }
 
@@ -94,8 +95,7 @@ const columns = [
     {
       field: "name",
       headerName: "Name",
-      minWidth: 200,
-      flex:1
+      minWidth: 300
     },
     {
       field: "email",
@@ -106,8 +106,7 @@ const columns = [
     {
         field: "phone",
         headerName: "Phone",
-        minWidth: 200,
-        flex:1
+        minWidth: 250
       },
       {
         field: "department",
@@ -119,8 +118,7 @@ const columns = [
     {
       field: "role",
       headerName: "Role",
-      minWidth: 200,
-      flex:1
+      minWidth: 200
     },
   ]
 
@@ -220,7 +218,6 @@ return(
         </FormControl>
         </Box>
         <Box sx={{ml:'auto', mr:2}}>
-        <Link href='/admin/teachers' style={{textDecoration:'none'}}><Button variant="outlined">Teachers List</Button></Link>
         <Button variant="outlined" onClick={handleCreateCommittee} sx={{ml:2}}>Create Committee</Button>
         {session && semester && <Button variant="contained"  onClick={handleDeleteCommittee} sx={{ml:2, bgcolor:'red'}}>Delete Committee</Button>}
         <Link href='/admin/teachers'></Link>

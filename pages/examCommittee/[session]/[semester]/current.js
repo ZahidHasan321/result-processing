@@ -1,4 +1,3 @@
-import DrawerLayout from "@/component/layout/drawerLayout";
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { useRouter } from "next/router";

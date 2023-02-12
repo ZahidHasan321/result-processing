@@ -1,5 +1,6 @@
 import Layout from "@/component/layout/layout";
-import { Button, Container, Stack } from "@mui/material";
+import { Button, Container, Stack, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Router from "next/router";
@@ -12,7 +13,7 @@ const Home = () => {
 
   const boxButton = {
     size: "large",
-    height:"200px",
+    height:"100px",
     width:"200px",
     justifyContent:"center"
   }
@@ -24,12 +25,16 @@ const Home = () => {
   if(status ===  'authenticated'){
     return(
     <>
-      <Container maxWidth="xl" sx={{display:"flex", alignContent:"center", justifyContent:"center"}} >
-        <Stack marginTop={"20%"} spacing={50} direction = "row">
+      <Container maxWidth="xl">
+      <Box sx={{display:"flex", flexDirection:'column', alignItems:'center', mt:'10%'}}>
+      <Typography fontSize={50} mb={10}>Choose which one you want to work on?</Typography>
+        <Stack direction='row' spacing={40}>
         <Link style={linkStyle} href="/examiner"><Button sx = {boxButton} variant = "contained"> Examiner Portal</Button></Link>
         <Link style = {linkStyle} href="/examCommittee"><Button sx = {boxButton} variant = "contained">Exam Committee portal</Button></Link>
         </Stack>
+        </Box>
       </Container>
+      
     </>
     )
   }

@@ -5,27 +5,23 @@ export const examinerPages = [
   },
     {
         routename: "Dashboard",
-        routepath: "/examiner/"
+        routepath: "/examiner"
       },
     {
       routename: "Current",
-      routepath: "/examiner/current/"
+      routepath: "/examiner/current"
     },
     {
       routename: "History",
-      routepath: "/examiner/history/"
+      routepath: "/examiner/history"
     }
   ]
 
 
   export const committeePages = [
     {
-      routename: "Home",
-      routepath: "/",
-    },
-    {
         routename: "Current",
-        routepath: "/examCommittee/",
+        routepath: "/examCommittee",
       },
     {
       routename: "History",
@@ -54,16 +50,16 @@ export const examinerPages = [
 
   export const AdminPages = [
     {
-      routename: "Manage Committee",
-      routepath: "/admin/",
+      routename: "Exam Committee",
+      routepath: "/admin",
     },
     {
-        routename: "Manage Teachers",
-        routepath: "/admin/teachers/",
+        routename: "Teachers",
+        routepath: "/admin/teachers",
     },
     {
-      routename: "Test",
-      routepath: "/admin/test/",
+      routename: "Courses",
+      routepath: "/admin/courses",
   },
   
       
