@@ -21,7 +21,6 @@ const BasicSelect = (props) => {
             value={value || ''}
             onChange={handleChange}
           >
-              <MenuItem key={'none'} value=''><em>None</em></MenuItem>
                   {
                     ((list).map((item, idx) => {
                           return(

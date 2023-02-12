@@ -26,7 +26,6 @@ function MenuAppBar(props) {
     return object.routepath === router.pathname
   }));
 
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -46,7 +45,11 @@ function MenuAppBar(props) {
   pages = [];
 
   useEffect(() => {
-  },[])
+    setValue(pages && pages.findIndex(object => {
+      return object.routepath === router.pathname
+    }))
+    console.log('runs')
+  },[router.pathname])
   
   return (
     <AppBar position="static">

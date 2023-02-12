@@ -1,6 +1,7 @@
 import { INITIAL_STATE, memberReducer } from "@/helper/memberReducer";
 import { Alert, Box, Button, Dialog, DialogTitle, TextField } from "@mui/material";
 import { useReducer, useState } from "react";
+import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 import BasicSelect from "../selector/selector";
 
 const roles = [
@@ -95,27 +96,27 @@ const CommitteeDialog = (props) => {
                     </Box>
 
                     <Box sx={{display:'flex', mb:2}}>
-                    <BasicSelect sx={{width:'350px', mr:4}} list={list} value={state.member1} onChange={(value) => {dispatch({type:'MEMBER1', payload:value})}} label={'Member'}/>
+                    <AutoCompleteTeacher sx={{width:'350px', mr:4}} list={list} value={state.member1} onChange={(value) => {dispatch({type:'MEMBER1', payload:value})}} label={'Member'}/>
                     <BasicSelect sx={{width:'200px'}} list={roles} value={state.role1} onChange={(value) => {dispatch({type:'ROLE1', payload:value})}} label={'Role'}/>
                     </Box>
 
                     <Box sx={{display:'flex', mb:2}}>
-                    <BasicSelect sx={{width:'350px', mr:4}} list={list} value={state.member2} onChange={(value) => {dispatch({type:'MEMBER2', payload:value})}} label={'Member'}/>
+                    <AutoCompleteTeacher sx={{width:'350px', mr:4}} list={list} value={state.member2} onChange={(value) => {dispatch({type:'MEMBER2', payload:value})}} label={'Member'}/>
                     <BasicSelect sx={{width:'200px'}} list={roles} value={state.role2} onChange={(value) => {dispatch({type:'ROLE2', payload:value})}} label={'Role'}/>
                     </Box>
 
                     <Box sx={{display:'flex', mb:2}}>
-                    <BasicSelect sx={{width:'350px', mr:4}} list={list} value={state.member3} onChange={(value) => {dispatch({type:'MEMBER3', payload:value})}} label={'Member'}/>
+                    <AutoCompleteTeacher sx={{width:'350px', mr:4}} list={list} value={state.member3} onChange={(value) => {dispatch({type:'MEMBER3', payload:value})}} label={'Member'}/>
                     <BasicSelect sx={{width:'200px'}} list={roles} value={state.role3} onChange={(value) => {dispatch({type:'ROLE3', payload:value})}} label={'Role'}/>
                     </Box>
 
                     <Box sx={{display:'flex', mb:2}}>
-                    <BasicSelect sx={{width:'350px', mr:4}} list={list} value={state.member4} onChange={(value) => {dispatch({type:'MEMBER4', payload:value})}} label={'Member'}/>
+                    <AutoCompleteTeacher sx={{width:'350px', mr:4}} list={list} value={state.member4} onChange={(value) => {dispatch({type:'MEMBER4', payload:value})}} label={'Member'}/>
                     <BasicSelect sx={{width:'200px'}} list={roles} value={state.role4} onChange={(value) => {dispatch({type:'ROLE4', payload:value})}} label={'Role'}/>
                     </Box>
 
                     <Box sx={{display:'flex', mb:2}}>
-                    <BasicSelect sx={{width:'350px', mr:4}} list={list} value={state.member5} onChange={(value) => {dispatch({type:'MEMBER5', payload:value})}} label={'Member'}/>
+                    <AutoCompleteTeacher sx={{width:'350px', mr:4}} list={list} value={state.member5} onChange={(value) => {dispatch({type:'MEMBER5', payload:value})}} label={'Member'}/>
                     <BasicSelect sx={{width:'200px'}} list={roles} value={state.role5} onChange={(value) => {dispatch({type:'ROLE5', payload:value})}} label={'Role'}/>
                     </Box>
                     <Button
