@@ -2,8 +2,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { useState } from "react";
 
 const AutoCompleteTeacher = (props) => {
-    const [inputValue, setInputValue] = useState('');
-    const {list, value, label, onChange, sx} = props;
+    const {list,value ,label, onChange, sx} = props;
     const [selectValue, setSelectValue] = useState(null);
     return(
         <Autocomplete

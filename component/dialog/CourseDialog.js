@@ -26,14 +26,14 @@ const CourseDialog = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(code == '' || semester == '' || name == '' || credit == '' || type == ''){
+        if (code == '' || semester == '' || name == '' || credit == '' || type == '') {
             setShowError(true)
-                setTimeout(() => {
-                    setShowError(false)
-                }, 4000)
+            setTimeout(() => {
+                setShowError(false)
+            }, 4000)
             return;
         }
-       
+
         await fetch('/api/admin/courses/addCourse', {
             method: 'POST',
             headers: {
@@ -103,7 +103,7 @@ const CourseDialog = (props) => {
                             value={credit}
                             onChange={(e) => { e.preventDefault(); setCredit(e.target.value) }}
                             autoFocus
-                            sx={{mr:4}}
+                            sx={{ mr: 4 }}
                         />
 
                         <TextField
@@ -115,11 +115,11 @@ const CourseDialog = (props) => {
                             value={semester}
                             onChange={(e) => { e.preventDefault(); setSemester(e.target.value) }}
                             autoFocus
-                            sx={{mb:2}}
+                            sx={{ mb: 2 }}
                         />
 
-                        <BasicSelect sx={{width:'200px'}} value={type} list={typeList} onChange={(value) => { setType(value) }} label='Course Type' />
-                        <Box sx={{display:'table', m:'0 auto'}}>
+                        <BasicSelect sx={{ width: '200px' }} value={type} list={typeList} onChange={(value) => { setType(value) }} label='Course Type' />
+                        <Box sx={{ display: 'table', m: '0 auto' }}>
                             <Button
                                 type="submit"
                                 variant="contained"
@@ -130,12 +130,14 @@ const CourseDialog = (props) => {
                         </Box>
 
                     </Box>
-                    {
-                        showAlert && <Alert severity='success'>Course Added Successfully</Alert>
-                    }
-                    {
-                        showError && <Alert severity='error'>ERROR has occured!!</Alert>
-                    }
+                    <Box width={300} sx={{alignSelf:'center'}}>
+                        {
+                            showAlert && <Alert severity='success'>Course Added Successfully</Alert>
+                        }
+                        {
+                            showError && <Alert severity='error'>ERROR has occured!!</Alert>
+                        }
+                    </Box>
                 </Box>
             </Container>
         </Dialog>

@@ -2,7 +2,7 @@ import CourseDialog from "@/component/dialog/CourseDialog";
 import Layout from "@/component/layout/layout";
 import { AdminPages } from "@/constants/routes";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import { useEffect, useState } from "react";
 

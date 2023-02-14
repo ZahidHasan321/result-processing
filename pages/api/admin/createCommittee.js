@@ -3,8 +3,6 @@ import pool from "@/lib/db";
 export default async function(req, res){
     const param = req.body;
 
-    console.log(param);
-
     if(param.session == '' || param.semester == ''){
         req.status(505).send("session or semester can't be empty");
     }

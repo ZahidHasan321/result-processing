@@ -26,6 +26,8 @@ const Home = () => {
 
   function handleClose() {
     getSessionList();
+    if(session != '')
+      getSemesterList();
     setOpen(false);
   }
 
@@ -134,23 +136,29 @@ const Home = () => {
         .then(res => res.json())
         .then(data => setCommitteeList(data));
     }
+    else if(semester == '') setCommitteeList([]); 
   }, [semester])
+
+  const getSemesterList = async() =>{
+    await fetch('/api/admin/semesterList', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(session)
+    })
+      .then(res => res.json())
+      .then(data => setSemesterList(data))
+  }
 
   useEffect(() => {
     if (session != '') {
-      fetch('/api/admin/semesterList', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(session)
-      })
-        .then(res => res.json())
-        .then(data => setSemesterList(data))
-
+        getSemesterList();
+        setSemester('');
     }
     else if (session == '') {
       setSemesterList([]);
+      setCommitteeList([])
       setSemester('');
     }
   }, [session])
@@ -192,7 +200,7 @@ const Home = () => {
             </Select>}
           </FormControl>
         </Box>
-        <Box sx={{ ml: 'auto', mr: 2 }}>
+        <Box sx={{ ml: 'auto', }}>
           <Button variant="outlined" onClick={handleCreateCommittee} sx={{ ml: 2 }}>Create Committee</Button>
           {session && semester && <Button variant="contained" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red' }}>Delete Committee</Button>}
           <Link href='/admin/teachers'></Link>

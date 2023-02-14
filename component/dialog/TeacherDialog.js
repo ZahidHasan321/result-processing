@@ -136,7 +136,7 @@ const TeacherDialog = (props) => {
                                 autoFocus
                             />
                             {/* <BasicSelect list={list} value={member1} onChange={handleChange} label={'Teacher'}/> */}
-                            <Box sx={{display:'table', m:'0 auto'}}>
+                            <Box sx={{ display: 'table', m: '0 auto' }}>
                                 <Button
                                     type="submit"
                                     variant="contained"
@@ -146,12 +146,15 @@ const TeacherDialog = (props) => {
                                 </Button>
                             </Box>
                         </Box>
-                        {
-                            showAlert && <Alert sx={{width:100}} severity='success'>Teacher Added Successfully</Alert>
-                        }
-                        {
-                            showError && <Alert sx={{}} severity='error'>ERROR has occured!!</Alert>
-                        }
+
+                        <Box width={300} sx={{ alignSelf: 'center' }}>
+                            {
+                                showAlert && <Alert sx={{ width: 100 }} severity='success'>Teacher Added Successfully</Alert>
+                            }
+                            {
+                                showError && <Alert sx={{}} severity='error'>ERROR has occured!!</Alert>
+                            }
+                        </Box>
                     </Box>
                 </Container>
             </Dialog>

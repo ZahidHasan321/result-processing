@@ -48,7 +48,6 @@ function MenuAppBar(props) {
     setValue(pages && pages.findIndex(object => {
       return object.routepath === router.pathname
     }))
-    console.log('runs')
   },[router.pathname])
   
   return (
