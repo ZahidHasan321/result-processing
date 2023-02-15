@@ -149,10 +149,10 @@ const TeacherDialog = (props) => {
 
                         <Box width={300} sx={{ alignSelf: 'center' }}>
                             {
-                                showAlert && <Alert sx={{ width: 100 }} severity='success'>Teacher Added Successfully</Alert>
+                                showAlert && <Alert severity='success'>Teacher Added Successfully</Alert>
                             }
                             {
-                                showError && <Alert sx={{}} severity='error'>ERROR has occured!!</Alert>
+                                showError && <Alert severity='error'>ERROR has occured!!</Alert>
                             }
                         </Box>
                     </Box>

@@ -26,25 +26,21 @@ export const examinerPages = [
     {
       routename: "History",
       routepath: "/examCommittee/history"
-    },
+    }
   ]
 
   export const semesterPages = [
     {
-      routename: "Home",
-      routepath: "/",
-    },
-    {
         routename: "Dashboard",
-        routepath: "/examCommittee/[session]/[semester]/dashboard",
-      },
-    {
-      routename: "Current",
-      routepath: "/examCommittee/[session]/[semester]/current"
+        routepath: "/examCommittee/[session]/[semester]/",
     },
     {
-      routename: "History",
-      routepath: "/examCommittee/[session]/[semester]/history"
+      routename: "Submitted",
+      routepath: "/examCommittee/[session]/[semester]/submitted"
+    },
+    {
+      routename: "Decoded",
+      routepath: "/examCommittee/[session]/[semester]/decoded"
     }
   ]
 

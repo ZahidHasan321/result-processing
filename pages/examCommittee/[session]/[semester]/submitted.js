@@ -2,11 +2,11 @@ import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { useRouter } from "next/router";
 
-const Current = () => {
-    return <h1>Current</h1>
+const Submitted = () => {
+    return <h1>Submitted</h1>
 }
 
-Current.getLayout = function getLayout(page){
+Submitted.getLayout = function getLayout(page){
     const router = useRouter();
     const query = router.query;
 
@@ -17,4 +17,4 @@ Current.getLayout = function getLayout(page){
     )
   }
 
-export default Current;
+export default Submitted;

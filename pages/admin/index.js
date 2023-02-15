@@ -168,7 +168,7 @@ const Home = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-        <Box width={300} sx={{ zIndex: 99, position: 'absolute' }}>
+        <Box width={300} sx={{ zIndex: 99, position: 'absolute',}}>
           {
             showAlert && <Alert severity='success'>Deleted Successfully</Alert>
           }

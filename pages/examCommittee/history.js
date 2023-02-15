@@ -28,7 +28,14 @@ const columns = [
   },
   {
     field: "published",
-    headerName: "published",
+    headerName: "Published",
+    type:"boolean",
+    minWidth: 200,
+    flex:1
+  },
+  {
+    field: "publish_date",
+    headerName: "Publish Date",
     type:"boolean",
     minWidth: 200,
     flex:1
@@ -54,7 +61,7 @@ const History = () => {
   function handleRowClick(event)
   {
     const rowData = event.row;
-    const url = `/examCommittee/${rowData.exam_session}/${rowData.semester}/dashboard`
+    const url = `/examCommittee/${rowData.exam_session}/${rowData.semester}/`
     router.push(url);
   }
   
@@ -65,7 +72,8 @@ const History = () => {
   if(!list) return <div> loading </div>
 
   return(
-        <Box sx={{m: '20px', pr:"40px", width:1550}}>
+    <Box sx={{display:'flex', justifyContent:'center'}}>
+    <Box sx={{m:2, width:'80%'}}>
         <DataGrid 
             rows={list}
             columns={columns}
@@ -88,6 +96,7 @@ const History = () => {
             }}
             />
         </Box>
+      </Box>
     )
 
 }
