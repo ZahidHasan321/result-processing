@@ -67,13 +67,17 @@ const Home = () => {
     <Box sx={{display:'flex', justifyContent:'center'}}>
       <Box sx={{m:2, width:'80%'}}>
         <DataGrid
+        sx={{
+          '& .MuiDataGrid-cell:focus': {
+          outline: 'none',
+          },
+        }}
           rows={list}
           columns={columns}
-          pageSize={10}
           autoHeight
           disableSelectionOnClick
           getRowId={(row) => row.id + row.exam_session + row.semester}
-          onRowClick={handleRowClick}
+          onRowDoubleClick={handleRowClick}
           rowsPerPageOptions={[10]}
           disableColumnSelector
           disableDensitySelector

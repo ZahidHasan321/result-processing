@@ -32,7 +32,7 @@ export const examinerPages = [
   export const semesterPages = [
     {
         routename: "Dashboard",
-        routepath: "/examCommittee/[session]/[semester]/",
+        routepath: "/examCommittee/[session]/[semester]",
     },
     {
       routename: "Submitted",

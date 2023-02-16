@@ -69,6 +69,7 @@ const Courses = () => {
       body: JSON.stringify(params.id)
     })
     getCourseList();
+    getSemesterList();
   }
 
   const getSemesterList = async () => {
@@ -108,7 +109,7 @@ const Courses = () => {
 
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', m: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', m:2, mr:4, ml:4 }}>
       <Box sx={{ display: 'flex', mb: 2 }}>
         <Box sx={{ width: '150px' }}>
           <FormControl fullWidth>
@@ -132,7 +133,7 @@ const Courses = () => {
           </FormControl>
         </Box>
 
-        <Button variant="outlined" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end' }}>Add Course</Button>
+        <Button variant="outlined" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end', boxShadow:1 }}>Add Course</Button>
       </Box>
       <DataGrid
         columns={columns}

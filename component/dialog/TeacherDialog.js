@@ -60,7 +60,7 @@ const TeacherDialog = (props) => {
     }
 
     return (
-        <>
+        <Box>
             <Dialog open={open} onClose={handleClose} sx={{ backdropFilter: 'blur(5px)' }}>
                 <Container component="main" maxWidth='lg'>
                     <Box
@@ -158,7 +158,7 @@ const TeacherDialog = (props) => {
                     </Box>
                 </Container>
             </Dialog>
-        </>
+        </Box>
     )
 }
 

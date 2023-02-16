@@ -2,6 +2,7 @@ import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const columns = [
   {
@@ -31,9 +32,15 @@ const columns = [
 ]
 
 const Dashboard = () => {
+  const [courseData, setCourseData] = useState([])
+
+
+  const getCourseData = () => {
+    
+  }
+  
     return(
       <Box>
-
       </Box>
     )
 }

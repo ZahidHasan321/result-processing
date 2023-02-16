@@ -26,7 +26,7 @@ const Home = () => {
 
   function handleClose() {
     getSessionList();
-    if(session != '')
+    if (session != '')
       getSemesterList();
     setOpen(false);
   }
@@ -45,10 +45,6 @@ const Home = () => {
 
   const handleDeleteCommittee = () => {
     setOpenConfirm(true);
-  }
-
-  const handleConfirmClose = () => {
-    setOpenConfirm(false);
   }
 
   const getSessionList = async () => {
@@ -136,10 +132,10 @@ const Home = () => {
         .then(res => res.json())
         .then(data => setCommitteeList(data));
     }
-    else if(semester == '') setCommitteeList([]); 
+    else if (semester == '') setCommitteeList([]);
   }, [semester])
 
-  const getSemesterList = async() =>{
+  const getSemesterList = async () => {
     await fetch('/api/admin/semesterList', {
       method: 'POST',
       headers: {
@@ -153,8 +149,8 @@ const Home = () => {
 
   useEffect(() => {
     if (session != '') {
-        getSemesterList();
-        setSemester('');
+      getSemesterList();
+      
     }
     else if (session == '') {
       setSemesterList([]);
@@ -166,9 +162,9 @@ const Home = () => {
   if (loading) <div>loading</div>
 
   return (
-    <Box>
+    <Box sx={{ml:2, mr:2}}>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-        <Box width={300} sx={{ zIndex: 99, position: 'absolute',}}>
+        <Box width={300} sx={{ zIndex: 99, position: 'absolute', }}>
           {
             showAlert && <Alert severity='success'>Deleted Successfully</Alert>
           }
@@ -177,9 +173,9 @@ const Home = () => {
           }
         </Box>
       </Box>
-      <Box sx={{ m: 2,mt:1 , display: 'flex', alignItems: 'end' }}>
-        <AutoCompleteSession sx={{ width: '150px', mr:2 }} list={sessionList} onChange={(value) => setSession(value)} label='Session' />
-        <Box sx={{ width: '150px'}}>
+      <Box sx={{ m: 2, mt: 1, display: 'flex', alignItems: 'end' }}>
+        <AutoCompleteSession sx={{ width: '150px', mr: 2 }} list={sessionList} onChange={(value) => setSession(value)} label='Session' />
+        <Box sx={{ width: '150px' }}>
           <FormControl fullWidth>
             <InputLabel id="Semester-select-label">Semester</InputLabel>
             {semesterList && <Select
@@ -201,8 +197,8 @@ const Home = () => {
           </FormControl>
         </Box>
         <Box sx={{ ml: 'auto', }}>
-          <Button variant="outlined" onClick={handleCreateCommittee} sx={{ ml: 2 }}>Create Committee</Button>
-          {session && semester && <Button variant="contained" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red' }}>Delete Committee</Button>}
+          <Button variant="outlined" onClick={handleCreateCommittee} sx={{ ml: 2 , boxShadow:1}}>Create Committee</Button>
+          {session && semester && <Button variant="contained" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow:1, ":hover":{bgcolor:'red'} }}>Delete Committee</Button>}
           <Link href='/admin/teachers'></Link>
         </Box>
 
@@ -217,7 +213,7 @@ const Home = () => {
         />
       </Box>
 
-      {openConfirm && <ConfirmDialog open={openConfirm} onClose={handleConfirmClose} onConfirm={handleConfirmSubmit} />}
+      {openConfirm && <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />}
       {open && <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />}
     </Box>
   )

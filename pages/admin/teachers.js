@@ -11,11 +11,13 @@ const Teachers = () => {
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
 
+
   const getList = async () => {
     fetch('/api/admin/teacherList')
-      .then(res => res.json())
+      .then(res =>res.json())
       .then(data => setList(data));
   }
+
 
   const handleDeleteRow = async (e, params) => {
     await fetch('/api/admin/deleteTeacher', {
@@ -83,8 +85,8 @@ const Teachers = () => {
   if (loading) return <div>loading</div>
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mt:4.5 }}>
-      <Button sx={{ ml: 'auto', mb: 2 }} variant="outlined" onClick={handleAddTeacher}>Add Teacher</Button>
+    <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mt:4.5, ml:4,mr:4 }}>
+      <Button sx={{ ml: 'auto', mb: 2, boxShadow:1 }} variant="outlined" onClick={handleAddTeacher}>Add Teacher</Button>
 
       <DataGrid
         sx={{ boxShadow: 1 }}
@@ -94,7 +96,7 @@ const Teachers = () => {
         hideFooter
         autoHeight
       />
-      {open && <TeacherDialog open={open} onClose={handleOnClose} list={list} />}
+      {open && <TeacherDialog open={open} onClose={handleOnClose} />}
     </Box>
   )
 }

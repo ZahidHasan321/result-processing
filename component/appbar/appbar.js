@@ -149,7 +149,7 @@ function MenuAppBar(props) {
             >
               <Link href='/' style={{textDecoration:'none', color:'black'}}><MenuItem>Profile</MenuItem></Link>
               <Link href='/admin/' style={{textDecoration:'none', color:'black'}}><MenuItem>Admin Panel</MenuItem></Link>
-              <MenuItem onClick={() => {signOut()}}>Logout</MenuItem>
+              <MenuItem onClick={() => {signOut({callbackUrl:'/auth/signin'})}}>Logout</MenuItem>
             </Menu>
           </Box>
         </Toolbar>
