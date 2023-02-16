@@ -1,6 +1,34 @@
 const { createTheme } = require("@mui/material");
 
-const theme = createTheme({
+const Theme = createTheme({
+    palette:{
+        primary:{
+            main:'#7986CB'
+        }
+    },
+
+    components: {
+        
+        MuiDataGrid: {
+          styleOverrides: {
+            root:{
+              
+            },
+            columnHeaderTitle:{
+            },
+            columnHeader:{
+              backgroundColor:'#f2f2f2',
+              height:'50px'
+            },
+            columnSeparator:{
+              
+            },
+            GridColDef:{
+              headerAlign: 'center',
+            }
+          },
+        },
+      },
 })
 
-export default theme;
+export default Theme;

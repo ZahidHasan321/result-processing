@@ -3,7 +3,7 @@ import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
 import { AdminPages } from "@/constants/routes";
-import { Alert, Box, Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Alert, Box, Button, Card, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -51,7 +51,9 @@ const Home = () => {
     setLoading(true);
     fetch('/api/admin/sessionList')
       .then(res => res.json())
-      .then(data => setSessionList(data))
+      .then(data => {
+        setSessionList(data);
+      })
     setLoading(false);
   }
 
@@ -87,30 +89,30 @@ const Home = () => {
   const columns = [
     {
       field: "name",
-      headerName: "Name",
-      minWidth: 300
+      headerName: "NAME",
+      minWidth: 300,
     },
     {
       field: "email",
-      headerName: "Email",
+      headerName: "EMAIL",
       minWidth: 200,
       flex: 1
     },
     {
       field: "phone",
-      headerName: "Phone",
-      minWidth: 250
+      headerName: "PHONE",
+      minWidth: 250,
     },
     {
       field: "department",
-      headerName: "Deptartment",
+      headerName: "DEPARTMENT",
       minWidth: 200,
       flex: 1
     },
 
     {
       field: "role",
-      headerName: "Role",
+      headerName: "ROLE",
       minWidth: 200
     },
   ]
@@ -150,7 +152,6 @@ const Home = () => {
   useEffect(() => {
     if (session != '') {
       getSemesterList();
-      
     }
     else if (session == '') {
       setSemesterList([]);
@@ -162,60 +163,65 @@ const Home = () => {
   if (loading) <div>loading</div>
 
   return (
-    <Box sx={{ml:2, mr:2}}>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-        <Box width={300} sx={{ zIndex: 99, position: 'absolute', }}>
-          {
-            showAlert && <Alert severity='success'>Deleted Successfully</Alert>
-          }
-          {
-            showError && <Alert severity='error'>ERROR!! Cannot be deleted</Alert>
-          }
+    <Card variant="outlined" sx={{ m: 3, boxShadow: 3 }}>
+
+      <Box sx={{ ml: 2, mr: 2 }}>
+        <Typography fontSize={30} sx={{ ml: 2, mt:2 }}>Exam committee</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+          <Box width={300} sx={{ zIndex: 99, position: 'absolute', }}>
+            {
+              showAlert && <Alert severity='success'>Deleted Successfully</Alert>
+            }
+            {
+              showError && <Alert severity='error'>ERROR!! Cannot be deleted</Alert>
+            }
+          </Box>
         </Box>
-      </Box>
-      <Box sx={{ m: 2, mt: 1, display: 'flex', alignItems: 'end' }}>
-        <AutoCompleteSession sx={{ width: '150px', mr: 2 }} list={sessionList} onChange={(value) => setSession(value)} label='Session' />
-        <Box sx={{ width: '150px' }}>
-          <FormControl fullWidth>
-            <InputLabel id="Semester-select-label">Semester</InputLabel>
-            {semesterList && <Select
-              labelId="Semester-select-label"
-              id="semester-select"
-              label="Semester"
-              value={semester || ''}
-              onChange={handleSemesterChange}
-            >
-              <MenuItem key={'none'} value=''><em>None</em></MenuItem>
-              {
-                semesterList.map((sem, idx) => {
-                  return (
-                    <MenuItem key={idx} value={sem.semester}> {sem.semester} </MenuItem>
-                  )
-                })
-              }
-            </Select>}
-          </FormControl>
+        <Typography variant="caption" sx={{ml:2}}>Choose a session and a semester</Typography>
+        <Box sx={{ mt:1, ml:2, mr:2, mb:3, display: 'flex', alignItems: 'end' }}>
+          <AutoCompleteSession sx={{ width: '180px', mr: 3 }} list={sessionList} onChange={(value) => { setSession(value) }} label='Session' />
+          <Box sx={{ width: '180px' }}>
+            <FormControl fullWidth>
+              <InputLabel id="Semester-select-label">Semester</InputLabel>
+              {semesterList && <Select
+                labelId="Semester-select-label"
+                id="semester-select"
+                label="Semester"
+                value={semester || ''}
+                onChange={handleSemesterChange}
+              >
+                <MenuItem key={'none'} value=''><em>None</em></MenuItem>
+                {
+                  semesterList.map((sem, idx) => {
+                    return (
+                      <MenuItem key={idx} value={sem.semester}> {sem.semester} </MenuItem>
+                    )
+                  })
+                }
+              </Select>}
+            </FormControl>
+          </Box>
+          <Box sx={{ ml: 'auto', }}>
+            <Button variant="contained" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color:'white', bgcolor:'#67be23'}}>Create Committee</Button>
+            {session && semester && <Button variant="contained" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'red' } }}>Delete Committee</Button>}
+            <Link href='/admin/teachers'></Link>
+          </Box>
+
         </Box>
-        <Box sx={{ ml: 'auto', }}>
-          <Button variant="outlined" onClick={handleCreateCommittee} sx={{ ml: 2 , boxShadow:1}}>Create Committee</Button>
-          {session && semester && <Button variant="contained" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow:1, ":hover":{bgcolor:'red'} }}>Delete Committee</Button>}
-          <Link href='/admin/teachers'></Link>
+        <Box sx={{ m: 2, mb: 4 }}>
+          <DataGrid
+            sx={{ boxShadow: 3 }}
+            columns={columns}
+            rows={committeeList}
+            hideFooter
+            autoHeight
+          />
         </Box>
 
+        {openConfirm && <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />}
+        {open && <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />}
       </Box>
-      <Box sx={{ m: 2 }}>
-        <DataGrid
-          sx={{ boxShadow: 1 }}
-          columns={columns}
-          rows={committeeList}
-          hideFooter
-          autoHeight
-        />
-      </Box>
-
-      {openConfirm && <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />}
-      {open && <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />}
-    </Box>
+    </Card>
   )
 }
 

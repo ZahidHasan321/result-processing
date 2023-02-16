@@ -89,7 +89,7 @@ const Teachers = () => {
       <Button sx={{ ml: 'auto', mb: 2, boxShadow:1 }} variant="outlined" onClick={handleAddTeacher}>Add Teacher</Button>
 
       <DataGrid
-        sx={{ boxShadow: 1 }}
+        sx={{ boxShadow: 1, }}
         columns={columns}
         rows={list}
         disableSelectionOnClick

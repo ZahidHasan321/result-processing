@@ -136,6 +136,10 @@ const Courses = () => {
         <Button variant="outlined" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end', boxShadow:1 }}>Add Course</Button>
       </Box>
       <DataGrid
+        sx={{boxShadow:1, '.MuiDataGrid-columnHeaderTitle': { 
+          fontWeight: 'bold !important',
+          overflow: 'visible !important'
+       }}}
         columns={columns}
         rows={courseList}
         getRowId={(row) => row.course_code}

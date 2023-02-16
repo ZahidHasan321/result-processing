@@ -51,7 +51,7 @@ function MenuAppBar(props) {
   },[router.pathname])
   
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{bgcolor:'#5C6BC0'}}>
         <Toolbar disableGutters variant='dense'>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1}} />
           <Typography
