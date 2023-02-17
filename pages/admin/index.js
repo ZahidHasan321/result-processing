@@ -3,7 +3,7 @@ import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
 import { AdminPages } from "@/constants/routes";
-import { Alert, Box, Button, Card, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, Collapse, Fade, FormControl, Grow, InputLabel, MenuItem, Paper, Select, Slide, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -21,6 +21,7 @@ const Home = () => {
   const [openConfirm, setOpenConfirm] = useState(false)
   const [teacherlist, setTeacherList] = useState([]);
 
+  const [checked, setChecked] = useState(false);
   const [showAlert, setShowAlert] = useState(null);
   const [showError, setShowError] = useState(null);
 
@@ -132,9 +133,12 @@ const Home = () => {
         body: JSON.stringify({ session, semester })
       })
         .then(res => res.json())
-        .then(data => setCommitteeList(data));
+        .then(data => { setCommitteeList(data); setChecked(true) });
     }
-    else if (semester == '') setCommitteeList([]);
+    else if (semester == '') {
+      setCommitteeList([]);
+      setChecked(false);
+    }
   }, [semester])
 
   const getSemesterList = async () => {
@@ -163,10 +167,10 @@ const Home = () => {
   if (loading) <div>loading</div>
 
   return (
-    <Card variant="outlined" sx={{ m: 3, boxShadow: 3 }}>
+    <Paper variant="outlined" elevation={3} sx={{ m: 3, boxShadow: 3, height: '700px' }}>
 
       <Box sx={{ ml: 2, mr: 2 }}>
-        <Typography fontSize={30} sx={{ ml: 2, mt:2 }}>Exam committee</Typography>
+        <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
           <Box width={300} sx={{ zIndex: 99, position: 'absolute', }}>
             {
@@ -177,8 +181,8 @@ const Home = () => {
             }
           </Box>
         </Box>
-        <Typography variant="caption" sx={{ml:2}}>Choose a session and a semester</Typography>
-        <Box sx={{ mt:1, ml:2, mr:2, mb:3, display: 'flex', alignItems: 'end' }}>
+        <Typography variant="caption" sx={{ ml: 2 }}>Choose a session and a semester</Typography>
+        <Box sx={{ mt: 1, ml: 2, mr: 2, mb: 3, display: 'flex', alignItems: 'end' }}>
           <AutoCompleteSession sx={{ width: '180px', mr: 3 }} list={sessionList} onChange={(value) => { setSession(value) }} label='Session' />
           <Box sx={{ width: '180px' }}>
             <FormControl fullWidth>
@@ -202,26 +206,39 @@ const Home = () => {
             </FormControl>
           </Box>
           <Box sx={{ ml: 'auto', }}>
-            <Button variant="contained" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color:'white', bgcolor:'#67be23'}}>Create Committee</Button>
-            {session && semester && <Button variant="contained" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'red' } }}>Delete Committee</Button>}
-            <Link href='/admin/teachers'></Link>
+
+            <Slide in={checked} direction='right' mountOnEnter unmountOnExit easing={{
+              enter: "cubic-bezier(0, 1.2, .8, 1)",
+              exit: "liner"
+            }}>
+              <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'darkred' } }}>Delete Committee</Button>
+            </Slide>
+            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23' }}>Create Committee</Button>
           </Box>
 
         </Box>
-        <Box sx={{ m: 2, mb: 4 }}>
-          <DataGrid
-            sx={{ boxShadow: 3 }}
-            columns={columns}
-            rows={committeeList}
-            hideFooter
-            autoHeight
-          />
-        </Box>
+        <Collapse in={checked}
+        timeout={{
+          enter:300,
+          exit:300,
+        }}>
+          <Box sx={{ m: 2, mb: 4 }}>
+            <DataGrid
+              sx={{ boxShadow: 3 }}
+              columns={columns}
+              rows={committeeList}
+              hideFooter
+              autoHeight
+            />
+          </Box>
+        </Collapse>
 
         {openConfirm && <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />}
-        {open && <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />}
+        
+          {open && <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />}
+        
       </Box>
-    </Card>
+    </Paper>
   )
 }
 

@@ -1,5 +1,5 @@
 import { INITIAL_STATE, memberReducer } from "@/helper/memberReducer";
-import { Alert, Box, Button, Dialog, DialogTitle, TextField } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogTitle, Fade, Grow, TextField } from "@mui/material";
 import { useReducer, useState } from "react";
 import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 import BasicSelect from "../selector/selector";
@@ -61,7 +61,7 @@ const CommitteeDialog = (props) => {
         onClose();
     }
     return (
-        <Dialog fullWidth maxWidth='md' open={open} onClose={handleClose} sx={{ backdropFilter: 'blur(5px)' }}>
+        <Dialog TransitionComponent={Grow} fullWidth maxWidth='md' open={open} onClose={handleClose} sx={{ backdropFilter: 'blur(5px)' }}>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <DialogTitle sx={{ fontWeight: 'bold', fontSize: '3ex' }}>Create Committee</DialogTitle>
             </Box>

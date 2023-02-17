@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogTitle } from "@mui/material";
+import { Box, Button, Dialog, DialogTitle, Grow } from "@mui/material";
 
 const ConfirmDialog = (props) => {
     const {open, onClose, onConfirm} = props;
@@ -13,7 +13,7 @@ const ConfirmDialog = (props) => {
         onClose();
     }
     return(
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog TransitionComponent={Grow} open={open} onClose={handleClose}>
             <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
             <DialogTitle>Are you sure you want to delete?</DialogTitle>
             <Box sx={{display:'flex', justifyContent:'space-around'}}>
