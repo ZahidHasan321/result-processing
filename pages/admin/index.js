@@ -136,8 +136,8 @@ const Home = () => {
         .then(data => { setCommitteeList(data); setChecked(true) });
     }
     else if (semester == '') {
-      setCommitteeList([]);
       setChecked(false);
+      setCommitteeList([]);
     }
   }, [semester])
 
@@ -154,20 +154,14 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (session != '') {
       getSemesterList();
-    }
-    else if (session == '') {
-      setSemesterList([]);
-      setCommitteeList([])
-      setSemester('');
-    }
+      setSemester('')
   }, [session])
 
   if (loading) <div>loading</div>
 
   return (
-    <Paper variant="outlined" elevation={3} sx={{ m: 3, boxShadow: 3, height: '700px' }}>
+    <Paper variant="outlined" sx={{ m: 3, boxShadow: 3, height: '700px' }}>
 
       <Box sx={{ ml: 2, mr: 2 }}>
         <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
@@ -207,7 +201,7 @@ const Home = () => {
           </Box>
           <Box sx={{ ml: 'auto', }}>
 
-            <Slide in={checked} direction='right' mountOnEnter unmountOnExit easing={{
+            <Slide in={checked} direction='left' mountOnEnter unmountOnExit easing={{
               enter: "cubic-bezier(0, 1.2, .8, 1)",
               exit: "liner"
             }}>
@@ -218,10 +212,7 @@ const Home = () => {
 
         </Box>
         <Collapse in={checked}
-        timeout={{
-          enter:300,
-          exit:300,
-        }}>
+        >
           <Box sx={{ m: 2, mb: 4 }}>
             <DataGrid
               sx={{ boxShadow: 3 }}
