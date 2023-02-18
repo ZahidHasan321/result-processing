@@ -8,7 +8,10 @@ export default async function handler(req, res) {
   }
 
   const result = await pool.query(query)
-    .catch(err => console.log(err));
-
-  res.send(result);
+    .catch(err => err);
+  
+  if(result.severity == 'ERROR')
+    res.status(500).send(result);
+  else
+    res.status(200).send(result)
 }

@@ -1,8 +1,9 @@
 import TeacherDialog from "@/component/dialog/TeacherDialog";
 import Layout from "@/component/layout/layout";
 import { AdminPages } from "@/constants/routes";
+import Delete from "@mui/icons-material/Delete";
 import DeleteForever from "@mui/icons-material/DeleteForever";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Collapse, Fade, Grow, Paper, Slide, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { useEffect, useState } from "react";
 
@@ -10,12 +11,16 @@ const Teachers = () => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
-
+  const [checked, setChecked] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
 
   const getList = async () => {
     fetch('/api/admin/teacherList')
-      .then(res =>res.json())
-      .then(data => setList(data));
+      .then(res => res.json())
+      .then(data => {
+        setList(data);
+        setChecked(true);
+      });
   }
 
 
@@ -73,8 +78,8 @@ const Teachers = () => {
       width: 90,
       renderCell: (params) => {
         return (
-          <Button onClick={(event) => { handleDeleteRow(event, params) }}>
-            <DeleteForever sx={{ color: 'text.primary' }} />
+          <Button variant='contained' sx={{ bgcolor: '#b71c1c', ":hover": { bgcolor: '#b71c1c' } }} onClick={(event) => { handleDeleteRow(event, params) }}>
+            <DeleteForever />
           </Button>
         )
       }
@@ -85,19 +90,27 @@ const Teachers = () => {
   if (loading) return <div>loading</div>
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mt:4.5, ml:4,mr:4 }}>
-      <Button sx={{ ml: 'auto', mb: 2, boxShadow:1 }} variant="outlined" onClick={handleAddTeacher}>Add Teacher</Button>
-
-      <DataGrid
-        sx={{ boxShadow: 1, }}
-        columns={columns}
-        rows={list}
-        disableSelectionOnClick
-        hideFooter
-        autoHeight
-      />
-      {open && <TeacherDialog open={open} onClose={handleOnClose} />}
-    </Box>
+    <Paper  variant="outlined" sx={{ m: 3, boxShadow: 3}}>
+      <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Teachers</Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'column', ml: 4, mr: 4, mb: 3 }}>
+        <Button sx={{ ml: 'auto', mb: 3, boxShadow: 1 }} variant="outlined" onClick={handleAddTeacher}>Add Teacher</Button>
+        <Grow in={checked} 
+        >
+          <DataGrid
+            sx={{ boxShadow: 1 }}
+            columns={columns}
+            rows={list}
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            rowsPerPageOptions={[10, 20, 30]}
+            pagination
+            disableSelectionOnClick
+            autoHeight
+          />
+        </Grow>
+        {open && <TeacherDialog open={open} onClose={handleOnClose} />}
+      </Box>
+    </Paper>
   )
 }
 

@@ -1,7 +1,7 @@
 import DrawerLayout from "@/component/layout/drawerLayout";
 import Layout from "@/component/layout/layout";
 import { committeePages } from "@/constants/routes";
-import { Box } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -64,35 +64,41 @@ const Home = () => {
   if (!list) return <div> loading </div>
 
   return (
-    <Box sx={{display:'flex', justifyContent:'center'}}>
-      <Box sx={{m:2, width:'80%'}}>
-        <DataGrid
-        sx={{
-          '& .MuiDataGrid-cell:focus': {
-          outline: 'none',
-          },
-        }}
-          rows={list}
-          columns={columns}
-          autoHeight
-          disableSelectionOnClick
-          getRowId={(row) => row.id + row.exam_session + row.semester}
-          onRowDoubleClick={handleRowClick}
-          rowsPerPageOptions={[10]}
-          disableColumnSelector
-          disableDensitySelector
-          components={{ Toolbar: GridToolbar }}
-          componentsProps={{
-            toolbar: {
-              csvOptions: { disableToolbarButton: true },
-              printOptions: { disableToolbarButton: true },
-              showQuickFilter: true,
-              quickFilterProps: { debounceMs: 250 },
-            },
-          }}
-        />
+    <Paper variant="Outlined" sx={{m:3, boxShadow:3}}>
+      <Box>
+      <Typography fontSize={30} sx={{ml: 3, mt:3}}>In Progress</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ m: 3, width: '100%' }}>
+          <DataGrid
+            sx={{
+              '& .MuiDataGrid-cell:focus': {
+                outline: 'none',
+              },
+              boxShadow: 1
+            }}
+            rows={list}
+            columns={columns}
+            autoHeight
+            disableSelectionOnClick
+            getRowId={(row) => row.id + row.exam_session + row.semester}
+            onRowDoubleClick={handleRowClick}
+            rowsPerPageOptions={[10]}
+            disableColumnSelector
+            disableDensitySelector
+            components={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: {
+                csvOptions: { disableToolbarButton: true },
+                printOptions: { disableToolbarButton: true },
+                showQuickFilter: true,
+                quickFilterProps: { debounceMs: 250 },
+              },
+            }}
+          />
+        </Box>
       </Box>
-    </Box>
+      </Box>
+    </Paper>
   )
 
 }

@@ -3,9 +3,8 @@ import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
 import { AdminPages } from "@/constants/routes";
-import { Alert, Box, Button, Card, Collapse, Fade, FormControl, Grow, InputLabel, MenuItem, Paper, Select, Slide, Typography } from "@mui/material";
+import { Alert, Box, Button, Collapse, Fade, FormControl, InputLabel, MenuItem, Paper, Select, Slide, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 
@@ -90,30 +89,30 @@ const Home = () => {
   const columns = [
     {
       field: "name",
-      headerName: "NAME",
+      headerName: "Name",
       minWidth: 300,
     },
     {
       field: "email",
-      headerName: "EMAIL",
+      headerName: "Email",
       minWidth: 200,
       flex: 1
     },
     {
       field: "phone",
-      headerName: "PHONE",
+      headerName: "Phone",
       minWidth: 250,
     },
     {
       field: "department",
-      headerName: "DEPARTMENT",
+      headerName: "Department",
       minWidth: 200,
       flex: 1
     },
 
     {
       field: "role",
-      headerName: "ROLE",
+      headerName: "Role",
       minWidth: 200
     },
   ]
@@ -133,7 +132,10 @@ const Home = () => {
         body: JSON.stringify({ session, semester })
       })
         .then(res => res.json())
-        .then(data => { setCommitteeList(data); setChecked(true) });
+        .then(data => {
+          setCommitteeList(data);
+          setChecked(true)
+        });
     }
     else if (semester == '') {
       setChecked(false);
@@ -142,27 +144,28 @@ const Home = () => {
   }, [semester])
 
   const getSemesterList = async () => {
-    await fetch('/api/admin/semesterList', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(session)
-    })
-      .then(res => res.json())
-      .then(data => setSemesterList(data))
+    if (session != '') {
+      await fetch('/api/admin/semesterList', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(session)
+      })
+        .then(res => res.json())
+        .then(data => setSemesterList(data))
+    }
   }
 
   useEffect(() => {
-      getSemesterList();
-      setSemester('')
+    getSemesterList();
+    setSemester('')
   }, [session])
 
   if (loading) <div>loading</div>
 
   return (
-    <Paper variant="outlined" sx={{ m: 3, boxShadow: 3, height: '700px' }}>
-
+    <Paper variant="outlined" sx={{ m: 3, boxShadow: 3 }}>
       <Box sx={{ ml: 2, mr: 2 }}>
         <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
@@ -205,13 +208,16 @@ const Home = () => {
               enter: "cubic-bezier(0, 1.2, .8, 1)",
               exit: "liner"
             }}>
-              <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'darkred' } }}>Delete Committee</Button>
+              <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1}}>Delete Committee</Button>
             </Slide>
-            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23' }}>Create Committee</Button>
+            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover":{transform:'scale(1.1)', bgcolor:'red'} }}>Create Committee</Button>
           </Box>
 
         </Box>
-        <Collapse in={checked}
+        <Slide in={checked} direction='left'  easing={{
+              enter: "cubic-bezier(0, 1.2, .8, 1)",
+              exit: "liner"
+            }}
         >
           <Box sx={{ m: 2, mb: 4 }}>
             <DataGrid
@@ -222,12 +228,12 @@ const Home = () => {
               autoHeight
             />
           </Box>
-        </Collapse>
+        </Slide>
 
         {openConfirm && <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />}
-        
-          {open && <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />}
-        
+
+        {open && <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />}
+
       </Box>
     </Paper>
   )

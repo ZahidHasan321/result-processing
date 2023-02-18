@@ -3,7 +3,7 @@ const { createTheme } = require("@mui/material");
 const Theme = createTheme({
     palette:{
         primary:{
-            main:'#2c1630'
+            main:'#2c1630',
         }
     },
 
@@ -15,6 +15,7 @@ const Theme = createTheme({
               
             },
             columnHeaderTitle:{
+              fontWeight:'bold'
             },
             columnHeader:{
               backgroundColor:'#f2f2f2',

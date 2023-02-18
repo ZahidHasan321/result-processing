@@ -1,6 +1,6 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { Alert, Container, Dialog, DialogTitle, IconButton, InputAdornment } from '@mui/material';
+import { Alert, Container, Dialog, DialogTitle, Grow, IconButton, InputAdornment } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -36,6 +36,7 @@ const TeacherDialog = (props) => {
                 body: JSON.stringify({ email, password, name, phone, dept })
             })
                 .then(res => {
+                    console.log(res);
                     if (res.ok) {
                         setShowAlert(true);
                         event.target.reset();
@@ -61,7 +62,7 @@ const TeacherDialog = (props) => {
 
     return (
         <Box>
-            <Dialog open={open} onClose={handleClose} sx={{ backdropFilter: 'blur(5px)' }}>
+            <Dialog TransitionComponent={Grow} open={open} onClose={handleClose} sx={{ backdropFilter: 'blur(5px)' }}>
                 <Container component="main" maxWidth='lg'>
                     <Box
                         sx={{
@@ -80,6 +81,7 @@ const TeacherDialog = (props) => {
                                 id="email"
                                 label="Email Address"
                                 name="email"
+                                type='email'
                                 autoFocus
                             />
                             <TextField

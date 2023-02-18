@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Container, Dialog, DialogTitle, TextField } from "@mui/material";
+import { Alert, Box, Button, Container, Dialog, DialogTitle, Grow, TextField } from "@mui/material";
 import { useState } from "react";
 import BasicSelect from "../selector/selector";
 
@@ -63,7 +63,7 @@ const CourseDialog = (props) => {
 
 
     return (
-        <Dialog open={open} onClose={handleClose} sx={{ backdropFilter: 'blur(5px)' }}>
+        <Dialog TransitionComponent={Grow} open={open} onClose={handleClose} sx={{ backdropFilter: 'blur(5px)' }}>
             <Container component='main' maxWidth='lg'>
                 <Box sx={{ display: 'flex', alignItem: 'center', flexDirection: 'column', mt: 'auto' }}>
                     <Box sx={{ alignSelf: 'center' }}>

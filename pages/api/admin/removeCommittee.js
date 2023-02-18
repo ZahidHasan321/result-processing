@@ -11,5 +11,5 @@ export default async function handler(req, res)
 
     pool.query(query)
     .then(response => res.status(200).send(response))
-    .catch(err => res.status(505).send(err))
+    .catch(err => res.status(500).send(err))
 }
