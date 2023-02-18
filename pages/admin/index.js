@@ -3,6 +3,7 @@ import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
 import { AdminPages } from "@/constants/routes";
+import { formatOrdinals } from "@/helper/ordinal";
 import { Alert, Box, Button, Collapse, Fade, FormControl, InputLabel, MenuItem, Paper, Select, Slide, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { useEffect, useState } from "react";
@@ -35,7 +36,7 @@ const Home = () => {
     await fetch('/api/admin/teacherList')
       .then(res => res.json())
       .then(data => setTeacherList(data));
-    console.log('test');
+
     setOpen(true);
   }
 
@@ -202,7 +203,7 @@ const Home = () => {
                 {
                   semesterList.map((sem, idx) => {
                     return (
-                      <MenuItem key={idx} value={sem.semester}> {sem.semester} </MenuItem>
+                      <MenuItem key={idx} value={sem.semester}> {formatOrdinals(sem.semester)} </MenuItem>
                     )
                   })
                 }
@@ -237,9 +238,8 @@ const Home = () => {
           </Box>
         </Slide>
 
-        {openConfirm && <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />}
-
-        {open && <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />}
+        <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />
+        <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />
 
       </Box>
     </Paper>

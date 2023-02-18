@@ -1,6 +1,7 @@
 import CourseDialog from "@/component/dialog/CourseDialog";
 import Layout from "@/component/layout/layout";
 import { AdminPages } from "@/constants/routes";
+import { formatOrdinals } from "@/helper/ordinal";
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import { Box, Button, FormControl, Grow, InputLabel, MenuItem, Paper, Select, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -137,7 +138,7 @@ const Courses = () => {
                 {
                   semesterList.map((item, idx) => {
                     return (
-                      <MenuItem key={idx} value={item.semester}> {item.semester} </MenuItem>
+                      <MenuItem key={idx} value={item.semester}> {formatOrdinals(item.semester)} </MenuItem>
                     )
                   })
                 }

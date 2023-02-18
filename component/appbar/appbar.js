@@ -21,9 +21,7 @@ function MenuAppBar(props) {
   const router = useRouter();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [value, setValue] = useState(pages && pages.findIndex(object => {
-    return object.routepath === router.pathname
-  }));
+  const [value, setValue] = useState(0);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -42,6 +40,7 @@ function MenuAppBar(props) {
     }))
   }, [router.pathname])
 
+  
   return (
     <AppBar position="static" sx={{ bgcolor: 'inherit' }}>
       <Toolbar disableGutters variant='dense'>

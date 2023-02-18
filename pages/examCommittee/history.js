@@ -57,14 +57,19 @@ const History = () => {
       body: JSON.stringify(user.id)
     }).then(res => res.json())
       .then(data => {
-        setList(data)
+        setList(data.map(({semester, ...list})=> ({
+          ...list,
+          semester: formatOrdinals(semester)
+        })))   
         setChecked(true);
       });
   }
 
   function handleRowClick(event) {
     const rowData = event.row;
-    const url = `/examCommittee/${rowData.exam_session}/${rowData.semester}/`
+    let s = rowData.semester;
+    s = s.substring(0, s.length - 2)
+    const url = `/examCommittee/${rowData.exam_session}/${s}/`
     router.push(url);
   }
 
@@ -74,11 +79,11 @@ const History = () => {
 
   return (
     <Paper variant="Outlined" sx={{ m: 3, boxShadow: 3 }}>
-      <Typography fontSize={30} sx={{ ml: 3, pt: 3 }}>History</Typography>
-      <Typography variant="caption" sx={{ ml: 3 }}>Double click on row for more.</Typography>
+      <Typography fontSize={30} sx={{ ml: 5, pt: 3 }}>History</Typography>
+      <Typography variant="caption" sx={{ ml: 5 }}>Double click on row for more.</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Grow in={checked}>
-          <Box sx={{ ml: 3, mr: 3, mb: 3, width: '100%' }}>
+          <Box sx={{ ml: 5, mr: 5, mb: 3, width: '100%' }}>
             <DataGrid
               sx={{
                 '& .MuiDataGrid-cell:focus': {
