@@ -1,56 +1,54 @@
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
-import { Box } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Card, CardHeader, Paper, Typography } from "@mui/material";
+import Grid from '@mui/material/Unstable_Grid2';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const columns = [
-  {
-    field: "course_code",
-    headerName: "Course Code",
-    minWidth: 200
-  },
-  {
-    field: "course_name",
-    headerName: "Course Name",
-    minWidth: 200,
-    flex: 1
-  },
-  {
-    field: "submitted",
-    headerName: "Submitted",
-    minWidth: 200,
-    flex: 1
-  },
-  {
-    field: "assigned",
-    headerName: "Examiner Assigned",
-    minWidth: 200,
-    flex: 1
-  }
+const list = [
+  {id: 1, name: 'zahid'},
+  {id: 2, name: 'Miskat'},
+  {id: 3, name: 'Shopon'},
 ]
 
 const Dashboard = () => {
-  const [courseData, setCourseData] = useState([])
-  const getCourseData = async() => {
-    
+  const router = useRouter();
+  const query = router.query;
+  
+  const getCourseDataList = async () => {
+    console.log(query)
+    await fetch('/api/examCommittee/semester/courseData/courseDataList', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(query.semester)
+    })
+    .then(res => res.json())
+    .then(data => console.log(data));
   }
 
   useEffect(() => {
-    getCourseData();
-  })
+    getCourseDataList();
+  },[query.semester])
   
     return(
-      <Box sx={{m:3}}>
-        <DataGrid 
-        columns={columns}
-        rows={courseData}
-        density='compact'
-        hideFooter
-        autoHeight/>
-        
-      </Box>
+      <Paper elevation={3} sx={{m: 3, bgcolor:'#e7ebf0'}}>
+      <Typography fontSize={30} sx={{pt:3, ml:3}}>Courses</Typography>
+        <Grid
+        container
+        spacing={3}
+        sx={{m:2,pb:3}}
+      >
+        {list.map((item, index) => (
+          <Grid key={index}  minHeight={160} >
+            <Card elevation={3} sx={{minHeight:300, minWidth:275, ":hover":{scale:'1.04'}}}>
+                <CardHeader title={item.name}/>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      </Paper>
     )
 }
 

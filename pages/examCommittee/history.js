@@ -1,7 +1,7 @@
 import DrawerLayout from "@/component/layout/drawerLayout";
 import Layout from "@/component/layout/layout";
 import { committeePages } from "@/constants/routes";
-import { Box, Paper } from "@mui/material";
+import { Box, Collapse, Grow, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -43,7 +43,9 @@ const columns = [
 ]
 
 const History = () => {
-  const [list, setList] = useState(null);
+  const [list, setList] = useState([]);
+  const [checked, setChecked] = useState(false)
+
   const router = useRouter();
   async function getList() {
     const { user } = await getSession();
@@ -54,7 +56,10 @@ const History = () => {
       },
       body: JSON.stringify(user.id)
     }).then(res => res.json())
-      .then(data => setList(data));
+      .then(data => {
+        setList(data)
+        setChecked(true);
+      });
   }
 
   function handleRowClick(event) {
@@ -67,39 +72,41 @@ const History = () => {
     getList();
   }, [])
 
-  if (!list) return <div> loading </div>
-
   return (
     <Paper variant="Outlined" sx={{ m: 3, boxShadow: 3 }}>
+      <Typography fontSize={30} sx={{ ml: 3, pt: 3 }}>History</Typography>
+      <Typography variant="caption" sx={{ ml: 3 }}>Double click on row for more.</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Box sx={{ m: 2, width: '80%' }}>
-          <DataGrid
-            sx={{
-              '& .MuiDataGrid-cell:focus': {
-                outline: 'none',
-              },
-            }}
-            rows={list}
-            columns={columns}
-            pageSize={10}
-            autoHeight
-            disableSelectionOnClick
-            getRowId={(row) => row.id + row.exam_session + row.semester}
-            onRowDoubleClick={handleRowClick}
-            rowsPerPageOptions={[10]}
-            disableColumnSelector
-            disableDensitySelector
-            components={{ Toolbar: GridToolbar }}
-            componentsProps={{
-              toolbar: {
-                csvOptions: { disableToolbarButton: true },
-                printOptions: { disableToolbarButton: true },
-                showQuickFilter: true,
-                quickFilterProps: { debounceMs: 250 },
-              },
-            }}
-          />
-        </Box>
+        <Grow in={checked}>
+          <Box sx={{ ml: 3, mr: 3, mb: 3, width: '100%' }}>
+            <DataGrid
+              sx={{
+                '& .MuiDataGrid-cell:focus': {
+                  outline: 'none',
+                },
+              }}
+              rows={list}
+              columns={columns}
+              pageSize={10}
+              autoHeight
+              disableSelectionOnClick
+              getRowId={(row) => row.id + row.exam_session + row.semester}
+              onRowDoubleClick={handleRowClick}
+              rowsPerPageOptions={[10]}
+              disableColumnSelector
+              disableDensitySelector
+              components={{ Toolbar: GridToolbar }}
+              componentsProps={{
+                toolbar: {
+                  csvOptions: { disableToolbarButton: true },
+                  printOptions: { disableToolbarButton: true },
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 250 },
+                },
+              }}
+            />
+          </Box>
+        </Grow>
       </Box>
     </Paper>
   )

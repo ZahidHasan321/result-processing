@@ -2,11 +2,10 @@ import pool from "@/lib/db";
 
 export default async function handler(req, res) {
     const query = {
-        text:'SELECT DISTINCT semester FROM course'
+        text:'SELECT DISTINCT semester FROM courses'
     }
-    const result = await pool.query(query)
-    .then(res => res.rows)
-    .catch(err => err)
-
-    res.send(result);
+    
+    await pool.query(query)
+    .then(data => res.status(200).send(data.rows))
+    .catch(err => res.status(500).send(err))
 }

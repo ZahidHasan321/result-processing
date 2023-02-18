@@ -4,11 +4,10 @@ export default async function handler(req, res) {
     const param = req.body;
     console.log(param)
     const query = {
-        text: 'DELETE FROM course WHERE course_code = $1::int',
+        text: 'DELETE FROM course WHERE course_code = $1::text',
         values: [param]
     }
-    const result = await pool.query(query)
-        .then(res => res.rows)
-        .catch(err => err)
-    res.send(result);
+    await pool.query(query)
+    .then(data => res.status(200).send(data.rows))
+    .catch(err => res.status(500).send(err))
 }

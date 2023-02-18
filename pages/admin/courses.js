@@ -36,7 +36,7 @@ const Courses = () => {
       minWidth: 250
     },
     {
-      field: "type",
+      field: "course_type",
       headerName: "Course Type",
       minWidth: 200,
     },
@@ -80,7 +80,6 @@ const Courses = () => {
       .then(res => res.json())
       .then(data => {
         setSemesterList(data)
-
       })
     setLoading(false)
   }
@@ -154,7 +153,7 @@ const Courses = () => {
             sx={{ boxShadow: 1 }}
             columns={columns}
             rows={courseList}
-            getRowId={(row) => row.course_code}
+            getRowId={ row => row.course_code }
             autoHeight
             hideFooter
           />

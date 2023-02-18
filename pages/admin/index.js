@@ -35,7 +35,7 @@ const Home = () => {
     await fetch('/api/admin/teacherList')
       .then(res => res.json())
       .then(data => setTeacherList(data));
-
+    console.log('test');
     setOpen(true);
   }
 
@@ -158,8 +158,15 @@ const Home = () => {
   }
 
   useEffect(() => {
+    if(session == '')
+    {
+      setSemesterList([])
+      setSemester('')
+    }
+    else{
     getSemesterList();
     setSemester('')
+  }
   }, [session])
 
   if (loading) <div>loading</div>
@@ -210,7 +217,7 @@ const Home = () => {
             }}>
               <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1}}>Delete Committee</Button>
             </Slide>
-            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover":{transform:'scale(1.1)', bgcolor:'red'} }}>Create Committee</Button>
+            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover":{ bgcolor:'red'} }}>Create Committee</Button>
           </Box>
 
         </Box>
