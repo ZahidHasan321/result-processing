@@ -2,7 +2,7 @@ import ExaminerDialog from "@/component/dialog/examinerDialog";
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import Circle from "@mui/icons-material/Circle";
-import { Box, Card, CardActionArea, CardContent, CardHeader, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardContent, CardHeader, Paper, Stack, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,7 +14,8 @@ const Dashboard = () => {
   const [courseData, setCourseData] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const handleCardClick = () => {
+  const handleCardClick = (event) => {
+    console.log(event);
     setOpen(true);
   }
 
@@ -46,14 +47,14 @@ const Dashboard = () => {
         sx={{ mt:0.5, ml: 3,mr:3, pb: 3 }}
       >
         {courseData && courseData.map((item, index) => (
-          <Grid key={index} minHeight={160} >
-            <Card elevation={3} sx={{ minWidth: 275, ":hover": { scale: '1.04' } }}>
-              <CardActionArea onClick={handleCardClick}>
+          <Grid key={index}   minHeight={160}>
+            <Card elevation={3} id={item.course_code} sx={{ minWidth: 275, ":hover": { scale: '1.04' } }}>
+              <CardActionArea defaultValue={item.course_code} onClick={handleCardClick}>
                 <CardHeader
                   title={item.course_code}
                   subheader={item.course_name} />
-
                 <CardContent>
+                  
                   <Typography fontWeight='bold'>Examiners</Typography>
                   <Typography fontSize={14}>SET-A: {item.examiners[0]}</Typography>
                   <Typography fontSize={14}>SET-B: {item.examiners[1]}</Typography>
@@ -77,7 +78,7 @@ const Dashboard = () => {
           </Grid>
         ))}
       </Grid>
-      <ExaminerDialog open={open} onClose={() => setOpen(false)}/>
+      <ExaminerDialog open={open} onClose={() => setOpen(false)} semester={query.semester} session={query.session}/>
     </Paper>
   )
 }
