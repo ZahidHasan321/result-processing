@@ -1,8 +1,10 @@
 import ExaminerDialog from "@/component/dialog/examinerDialog";
+import SumSheetDialog from "@/component/dialog/sumSheetDialog";
+import TopsheetDialog from "@/component/dialog/topsheetDialog";
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import Circle from "@mui/icons-material/Circle";
-import { Box, Button, Card, CardActionArea, CardContent, CardHeader, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, Grow, Paper, Stack, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -12,11 +14,21 @@ const Dashboard = () => {
   const query = router.query;
 
   const [courseData, setCourseData] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [exmainerOpen, setExmainerOpen] = useState(false);
+  const [topsheetOpen, setTopsheetOpen] = useState(false);
+  const [sumSheetOpen, setSumSheetOpen] = useState(false);
+  const [courseCode, setCourseCode] = useState('');
 
   const handleCardClick = (event) => {
-    console.log(event);
-    setOpen(true);
+    event.stopPropagation();
+    setCourseCode(event.currentTarget.id);
+    setExmainerOpen(true);
+
+  }
+
+  const handleOnClose = () => {
+    getCourseDataList();
+    setExmainerOpen(false);
   }
 
   const getCourseDataList = async () => {
@@ -31,6 +43,7 @@ const Dashboard = () => {
         .then(res => res.json())
         .then(data => setCourseData(data));
     }
+    if(courseData.length < 1) setCourseCode([]);
   }
 
   useEffect(() => {
@@ -47,38 +60,54 @@ const Dashboard = () => {
         sx={{ mt:0.5, ml: 3,mr:3, pb: 3 }}
       >
         {courseData && courseData.map((item, index) => (
-          <Grid key={index}   minHeight={160}>
-            <Card elevation={3} id={item.course_code} sx={{ minWidth: 275, ":hover": { scale: '1.04' } }}>
-              <CardActionArea defaultValue={item.course_code} onClick={handleCardClick}>
+          <Grid key={index} accessKey={item.course_code}  minHeight={160}>
+            <Card elevation={3} sx={{ minWidth: 275, ":hover": { scale: '1.04' } }}>
+              <CardActionArea >
                 <CardHeader
                   title={item.course_code}
                   subheader={item.course_name} />
                 <CardContent>
                   
                   <Typography fontWeight='bold'>Examiners</Typography>
-                  <Typography fontSize={14}>SET-A: {item.examiners[0]}</Typography>
-                  <Typography fontSize={14}>SET-B: {item.examiners[1]}</Typography>
+                  <Typography variant="body2" fontSize={14}>SET-A: {item.examiners ? item.examiners[0] : <i>None</i>}</Typography>
+                  <Typography variant="body2" fontSize={14}>SET-B: {item.examiners ? item.examiners[1] : <i>None</i>}</Typography>
                   <Stack direction='row' marginTop={3}>
                     <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-                      <Circle fontSize="3px" sx={{mb:0.2, mr:0.3 ,color: item.assigned ? 'lightgreen' : '#bdbdbd' }} />
+                      <Circle fontSize="3px" sx={{ mr:0.3 ,color: item.assigned ? 'lightgreen' : '#bdbdbd' }} />
                       <Typography>Assigned</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-                      <Circle fontSize="3px" sx={{ mb:0.2, mr:0.3  ,color: item.submitted ? 'lightgreen' : '#bdbdbd' }} />
+                      <Circle fontSize="3px" sx={{ mr:0.3  ,color: item.submitted ? 'lightgreen' : '#bdbdbd' }} />
                       <Typography>Submitted</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Circle fontSize="3px" sx={{ mb:0.2, mr:0.3  ,color: item.decoded ? 'lightgreen' : '#bdbdbd' }} />
+                      <Circle fontSize="3px" sx={{ mr:0.3  ,color: item.decoded ? 'lightgreen' : '#bdbdbd' }} />
                       <Typography>Decoded</Typography>
                     </Box>
                   </Stack>
                 </CardContent>
               </CardActionArea>
+              <CardActions>
+                <Button id={item.course_code} onClick={handleCardClick}  size='small'>
+                  Examiners
+                </Button >
+
+                <Button onClick={() => setTopsheetOpen(true)} size='small'>
+                  TopSheet
+                </Button>
+                
+                <Button onClick={() => setSumSheetOpen(true)} size='small'>
+                  SummationSheet
+                </Button>
+                
+              </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
-      <ExaminerDialog open={open} onClose={() => setOpen(false)} semester={query.semester} session={query.session}/>
+      {exmainerOpen && <ExaminerDialog open={exmainerOpen} onClose={handleOnClose} semester={query.semester} session={query.session} course={courseCode}/>}
+      {topsheetOpen && <TopsheetDialog open={topsheetOpen} onClose={() => setTopsheetOpen(false)} semester={query.semester} session={query.session} course={courseCode} /> }
+      {sumSheetOpen && <SumSheetDialog open={sumSheetOpen} onClose={() => setSumSheetOpen(false)} semester={query.semester} session={query.session} course={courseCode} /> }
     </Paper>
   )
 }

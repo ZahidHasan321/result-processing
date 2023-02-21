@@ -35,9 +35,10 @@ function MenuAppBar(props) {
     pages = [];
 
   useEffect(() => {
-    setValue(pages && pages.findIndex(object => {
+    const idx = (pages && pages.findIndex(object => {
       return object.routepath === router.pathname
     }))
+    setValue(idx == -1 ? 0 : idx);
   }, [router.pathname])
 
   

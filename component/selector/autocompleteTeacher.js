@@ -2,10 +2,12 @@ import { Autocomplete, TextField } from "@mui/material";
 import { useState } from "react";
 
 const AutoCompleteTeacher = (props) => {
-    const {list ,label, onChange, sx} = props;
-    const [selectValue, setSelectValue] = useState(null);
+    const {list ,label, onChange, sx, value, editable} = props;
+    const [selectValue, setSelectValue] = useState(value != null  && value != '' ? value : null);
+
     return(
         <Autocomplete
+        disabled={editable == null || editable == undefined ? false : editable}
         value={selectValue}
         onChange={(event, newValue) => {
           onChange(newValue == null ? '' : newValue.id)
@@ -13,6 +15,7 @@ const AutoCompleteTeacher = (props) => {
         }}
         options={list}
         getOptionLabel={(option) => option.name}
+        isOptionEqualToValue={(option, value) => option.id == value.id}
         id={`${label}-autocomplete`}
         sx={sx}
         renderInput={(params) => <TextField {...params} label={label} />}
