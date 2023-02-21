@@ -4,7 +4,7 @@ import TopsheetDialog from "@/component/dialog/topsheetDialog";
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import Circle from "@mui/icons-material/Circle";
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, Grow, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, Paper, Stack, Typography } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -23,7 +23,18 @@ const Dashboard = () => {
     event.stopPropagation();
     setCourseCode(event.currentTarget.id);
     setExmainerOpen(true);
+  }
 
+  const handleTopsheetClick = (event) => {
+    event.stopPropagation();
+    setCourseCode(event.currentTarget.id);
+    setTopsheetOpen(true)
+  }
+
+  const handleSumSheetClick = (event) => {
+    event.stopPropagation();
+    setCourseCode(event.currentTarget.id);
+    setSumSheetOpen(true)
   }
 
   const handleOnClose = () => {
@@ -92,11 +103,11 @@ const Dashboard = () => {
                   Examiners
                 </Button >
 
-                <Button onClick={() => setTopsheetOpen(true)} size='small'>
+                <Button id={item.course_code} onClick={handleTopsheetClick} size='small'>
                   TopSheet
                 </Button>
                 
-                <Button onClick={() => setSumSheetOpen(true)} size='small'>
+                <Button onClick={handleSumSheetClick} size='small'>
                   SummationSheet
                 </Button>
                 

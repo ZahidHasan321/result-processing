@@ -1,8 +1,8 @@
-import { Box, Button, Chip, Snackbar, SnackbarContent, TextField } from "@mui/material";
+import { Box, Button, Chip, Snackbar, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const ChipArray = (props) => {
-    const { list, updateData, sx } = props;
+    const { list, updateData, sx, onDelete } = props;
     const [input, setInput] = useState('');
     const [array, setArray] = useState(list);
     const [open, setOpen] = useState({ open: false, messsage: '' });
@@ -13,7 +13,7 @@ const ChipArray = (props) => {
         var isPresent = array.some((item) => item.roll === input);
 
         if (isPresent)
-            setOpen({ open: true, messsage: 'Number is already Present' });
+            setOpen({ open: true, messsage: 'Number is already present' });
         else if (input.length > 9)
             setOpen({ open: true, messsage: 'Number is too big' });
         else if (!isPresent && input != '') {
@@ -24,16 +24,16 @@ const ChipArray = (props) => {
 
     const handleDelete = (item) => {
         setArray((students) => students.filter((student) => student.roll !== item.roll));
+        onDelete(item.roll);
     }
 
     useEffect(() => {
         updateData(array);
     }, [array])
 
-
     return (
         <Box sx={{ display: 'flex' }}>
-            <Box component='form' onSubmit={handleSubmit} noValidate sx={{ m: 3, display: 'flex', mt: 5 }}>
+            <Box noValidate sx={{ m: 3, display: 'flex', mt: 5 }}>
                 <Box>
                     <TextField
                         fullWidth
@@ -41,30 +41,30 @@ const ChipArray = (props) => {
                         id="presentRolls"
                         type='number'
                         value={input}
-                        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                         onChange={(e) => { e.preventDefault(); setInput(e.target.value) }}
                     />
                 </Box>
                 <Box sx={{ ml: 2 }}>
-                    <Button variant="contained" type="submit">Enter</Button>
-                    <Button onClick={() => setArray([])} sx={{ ml: 2 }}>Clear</Button>
+                    <Button variant="contained" onClick={handleSubmit}>Enter</Button>
+                    <Button onClick={() => { setArray([]); updateData(array) }} sx={{ ml: 2 }}>Clear</Button>
                 </Box>
 
             </Box>
 
             <Box
-            
-            sx={{
-                ...sx,
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignContent: 'flex-start',
-                flexWrap: 'wrap',
-                border: 1,
-                p: .2,
-                m: 3,
 
-            }}>
+                sx={{
+                    ...sx,
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignContent: 'flex-start',
+                    flexWrap: 'wrap',
+                    border: 1,
+                    p: .2,
+                    m: 3,
+
+
+                }}>
 
                 {array && array.map((item) => {
                     return (
