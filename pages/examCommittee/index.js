@@ -87,13 +87,13 @@ const Home = () => {
     }
   ]
   return (
-    <Paper variant="Outlined" sx={{ m: 3, boxShadow: 3 }}>
-      <Box>
-        <Typography fontSize={30} sx={{ ml: 5, pt: 3 }}>In Progress</Typography>
-        <Typography variant="caption" sx={{ ml: 5}}>Double click on row for more.</Typography>
+    <Paper variant="Outlined" sx={{ m: 6, boxShadow: 3 }}>
+      <Box >
+        <Typography fontSize={30} sx={{ ml: 11, pt: 3 }}>In Progress</Typography>
+        <Typography variant="caption" sx={{ ml: 11}}>Double click on row for more.</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Grow in={checked}>
-            <Box sx={{ ml: 5, mr: 5, mb: 3, width: '100%' }}>
+            <Box sx={{ ml: 5, mr: 5, mb: 3, width: '90%' }}>
               <DataGrid
                 sx={{
                   '& .MuiDataGrid-cell:focus': {

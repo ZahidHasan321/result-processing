@@ -9,7 +9,7 @@ const ExaminerDialog = (props) => {
     const [examinerB, setExaminerB] = useState('')
     const [loading, setLoading] = useState(true);
     const [List, setList] = useState([]);
-    const [barOpen, setBarOpen] = useState({open:false, message:''});
+    const [barOpen, setBarOpen] = useState({ open: false, color:'', message: '' });
 
 
 
@@ -67,13 +67,15 @@ const ExaminerDialog = (props) => {
                     },
                     body: JSON.stringify({ id, session, course, set, number: 2 })
                 })
+                setBarOpen({ open: true, message: 'Examiners Assigned' });
+
             }
-            else{
-                setBarOpen({open:true, message:'Examiners have to different'});
+            else {
+                setBarOpen({ open: true, message: 'Examiners have to different' });
             }
         }
         else {
-            setBarOpen({open:true, message:'Cannot be empty'});
+            setBarOpen({ open: true, message: 'Cannot be empty' });
         }
     }
     useEffect(() => {

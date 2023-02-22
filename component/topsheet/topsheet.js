@@ -1,5 +1,5 @@
 import { formatOrdinals } from "@/helper/ordinal";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Snackbar, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ChipArray from "../chipComponent/chipArray";
 
@@ -11,6 +11,7 @@ const Topsheet = (props) => {
     const [absentData, setAbsentData] = useState(null);
     const [expelledData, setExpelledData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [open, setOpen] = useState({open:false, message:''});
 
     const getList = async () => {
         await fetch('/api/examCommittee/semester/getTopsheet', {
@@ -70,8 +71,10 @@ const Topsheet = (props) => {
         })
 
         const list = present.concat(absent, expelled)
-
-        console.log(list);
+        if(list.length < 1) {
+            setOpen({open:true, message:'Cannot submit empty topsheet'})
+            return;
+        };
 
         await fetch('/api/examCommittee/semester/addTotopsheet', {
             method: 'POST',
@@ -81,7 +84,12 @@ const Topsheet = (props) => {
             body: JSON.stringify(list)
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                if(data == 'ok')
+                {
+                    setOpen({open:true, message:'Submitted Topsheet'})
+                }
+            })
     }
 
     const handlePresentDelete = (data, type) => {
@@ -100,21 +108,37 @@ const Topsheet = (props) => {
 
     setTimeout(() => {
         setLoading(false)
-    }, 500)
+    }, 200)
 
     if (loading) {
         return (
-            <div>
-                <h1>...loading</h1>
-            </div>)
+            <Box height={700} width={1200}>
+                
+            </Box>
+        )
     }
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography fontSize={20} fontWeight="bold" sx={{ borderBottom: 1 }}>{formatOrdinals(semester)} Semester, {course}, SET-{set}</Typography>
+            <Box sx={{display:'flex',alignSelf:'flex-start'}}>
+            <Typography variant="overline"  sx={{mr:1}}>Total Answer Sheet:</Typography>
+            <TextField 
+            type='number'
+            variant="standard"
+            />
+            </Box>
+
+            <Box sx={{display:'flex',alignSelf:'flex-start'}}>
+            <Typography variant="overline"  sx={{mr:1}}>Total Extra Sheet:</Typography>
+            <TextField 
+            type='number'
+            variant="standard"
+            />
+            </Box>
+            <Button sx={{ml:'auto',mr:2, bgcolor:'#67be23', ":hover":{bgcolor:'#67be23'}}} variant='contained' onClick={handleClick}>Submit</Button>
 
             <Paper sx={{ border: 1, m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>ID's of Present Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Present Students</Typography>
                 {presentData && <ChipArray list={presentData} onDelete={(data) => handlePresentDelete(data, 'present')} updateData={updatePresentData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',
@@ -123,7 +147,7 @@ const Topsheet = (props) => {
             </Paper>
 
             <Paper sx={{ border: 1, m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>ID's of Absent Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Absent Students</Typography>
                 {absentData && <ChipArray list={absentData} onDelete={(data) => handlePresentDelete(data, 'absent')} updateData={updateAbsentData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',
@@ -132,14 +156,15 @@ const Topsheet = (props) => {
             </Paper>
 
             <Paper sx={{ border: 1, m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>ID's of Expelled Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Expelled Students</Typography>
                 {expelledData && <ChipArray list={expelledData} onDelete={(data) => handlePresentDelete(data, 'expelled')} updateData={updateExpelledData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',
                     minHeight: '100px'
                 }} />}
             </Paper>
-            <Button onClick={handleClick}>Submit</Button>
+            <Snackbar open={open.open} onClose={() => setOpen({open:false, message:''})} message={open.message} />
+            
         </Box>
     )
 }

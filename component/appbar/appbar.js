@@ -74,7 +74,7 @@ function MenuAppBar(props) {
           </Tabs>
         </Box>
 
-        <Box sx={{ flexGrow: 0, mr: 1 }}>
+        <Box sx={{ flexGrow: 0, mr: 1,ml:'auto' }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar alt="Avatar" src="" />
