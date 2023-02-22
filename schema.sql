@@ -11,16 +11,6 @@ CREATE TABLE IF NOT EXISTS public.users
     CONSTRAINT users_email_key UNIQUE (email)
 )
 
-CREATE TABLE IF NOT EXISTS public.course
-(
-    course_code integer NOT NULL,
-    course_name text COLLATE pg_catalog."default" NOT NULL,
-    course_credit integer NOT NULL,
-    type text COLLATE pg_catalog."default" NOT NULL,
-    semester integer NOT NULL,
-    CONSTRAINT course_pkey PRIMARY KEY (course_code)
-)
-
 
 CREATE TABLE IF NOT EXISTS public.student
 (
@@ -32,6 +22,17 @@ CREATE TABLE IF NOT EXISTS public.student
     CONSTRAINT student_pkey PRIMARY KEY (roll_number)
 )
 
+CREATE TABLE IF NOT EXISTS public.courses
+(
+    course_code text COLLATE pg_catalog."default" NOT NULL,
+    course_name text COLLATE pg_catalog."default" NOT NULL,
+    course_credit smallint NOT NULL,
+    course_type text COLLATE pg_catalog."default" NOT NULL,
+    semester smallint NOT NULL,
+    CONSTRAINT courses_pkey PRIMARY KEY (course_code)
+)
+
+
 
 
 CREATE TABLE IF NOT EXISTS public.exam_committee
@@ -39,89 +40,17 @@ CREATE TABLE IF NOT EXISTS public.exam_committee
     id uuid NOT NULL,
     semester integer NOT NULL,
     exam_session integer NOT NULL,
-    role text COLLATE pg_catalog."default" NOT NULL,
+    role text COLLATE pg_catalog."default" NOT NULL DEFAULT 'Member'::text,
     published boolean NOT NULL DEFAULT false,
     publish_date date,
     CONSTRAINT exam_committee_pkey PRIMARY KEY (id, semester, exam_session),
     CONSTRAINT unq_sem_session UNIQUE (id, semester, exam_session),
     CONSTRAINT com_ref_user_fk FOREIGN KEY (id)
         REFERENCES public.users (id) MATCH FULL
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-
-
-CREATE TABLE IF NOT EXISTS public.course_teacher
-(
-    id uuid NOT NULL,
-    exam_session integer NOT NULL,
-    course_code integer NOT NULL,
-    submitted boolean,
-    CONSTRAINT course_teacher_pkey PRIMARY KEY (id, exam_session, course_code),
-    CONSTRAINT ct_ref_course_fk FOREIGN KEY (course_code)
-        REFERENCES public.course (course_code) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
-        NOT VALID,
-    CONSTRAINT ct_ref_user_fk FOREIGN KEY (id)
-        REFERENCES public.users (id) MATCH FULL
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+        NOT VALID
 )
-
-CREATE TABLE IF NOT EXISTS public.examiner
-(
-    id uuid NOT NULL,
-    exam_session integer NOT NULL,
-    course_code integer NOT NULL,
-    set text COLLATE pg_catalog."default" NOT NULL,
-    submitted boolean NOT NULL DEFAULT false,
-    decoded boolean NOT NULL DEFAULT false,
-    submit_date date,
-    sheet_id integer NOT NULL DEFAULT nextval('examiner_sheet_id_seq'::regclass),
-    CONSTRAINT examiner_pkey PRIMARY KEY (id, exam_session),
-    CONSTRAINT examiner_sheet_id_key UNIQUE (sheet_id),
-    CONSTRAINT exm_ref_crs_fk FOREIGN KEY (course_code)
-        REFERENCES public.course (course_code) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT exm_ref_usr_fk FOREIGN KEY (id)
-        REFERENCES public.users (id) MATCH FULL
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-)
-
-CREATE TABLE IF NOT EXISTS public.mark
-(
-    sheet_id integer NOT NULL,
-    paper_code integer NOT NULL,
-    q_no integer NOT NULL,
-    q_mark integer NOT NULL,
-    CONSTRAINT mark_pkey PRIMARY KEY (sheet_id, paper_code, q_no),
-    CONSTRAINT mark_sheet_id_fkey FOREIGN KEY (sheet_id)
-        REFERENCES public.examiner (sheet_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-)
-
-
-CREATE TABLE IF NOT EXISTS public.stud_mark
-(
-    sheet_id integer NOT NULL,
-    paper_code integer NOT NULL,
-    roll_number integer NOT NULL,
-    total_mark integer NOT NULL,
-    CONSTRAINT stud_mark_pkey PRIMARY KEY (sheet_id, paper_code, roll_number),
-    CONSTRAINT stud_mark_roll_number_fkey FOREIGN KEY (roll_number)
-        REFERENCES public.student (roll_number) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT stud_mark_sheet_id_fkey FOREIGN KEY (sheet_id)
-        REFERENCES public.examiner (sheet_id) MATCH FULL
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-)
-
 
 
 CREATE OR REPLACE FUNCTION public.insert_into_sem_course(
@@ -169,21 +98,6 @@ ALTER TABLE IF EXISTS public.sem_course
 
 
 
-CREATE TABLE IF NOT EXISTS public.courses
-(
-    course_code text COLLATE pg_catalog."default" NOT NULL,
-    course_name text COLLATE pg_catalog."default" NOT NULL,
-    course_credit smallint NOT NULL,
-    course_type text COLLATE pg_catalog."default" NOT NULL,
-    semester smallint NOT NULL,
-    CONSTRAINT courses_pkey PRIMARY KEY (course_code)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.courses
-    OWNER to admin;
-
 
 
 -- Table: public.examiner
@@ -215,5 +129,20 @@ CREATE TABLE IF NOT EXISTS public.examiner
 
 TABLESPACE pg_default;
 
+
 ALTER TABLE IF EXISTS public.examiner
     OWNER to admin;
+
+CREATE TABLE IF NOT EXISTS public.topsheet
+(
+    exam_session integer NOT NULL,
+    course_code text COLLATE pg_catalog."default" NOT NULL,
+    set text COLLATE pg_catalog."default" NOT NULL,
+    type text COLLATE pg_catalog."default" NOT NULL,
+    code integer NOT NULL,
+    CONSTRAINT topsheet_pkey PRIMARY KEY (exam_session, course_code, set, type, code),
+    CONSTRAINT topsheet_course_code_fkey FOREIGN KEY (course_code)
+        REFERENCES public.courses (course_code) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
