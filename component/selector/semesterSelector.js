@@ -1,11 +1,10 @@
+import { formatOrdinals } from "@/helper/ordinal";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 
-const BasicSelect = (props) => {
+const SemesterSelector = (props) => {
 
     const {list, value ,onChange, label, sx} = props;
-
-    console.log(list);
 
     function handleChange(e)
     {
@@ -27,7 +26,7 @@ const BasicSelect = (props) => {
                   {
                     ((list).map((item, idx) => {
                           return(
-                          <MenuItem key={idx} value={item.semester}> {item.semester}</MenuItem>
+                          <MenuItem key={idx} value={item.semester}> {formatOrdinals(item.semester)}</MenuItem>
                           )
                           }))}
                   
@@ -37,4 +36,4 @@ const BasicSelect = (props) => {
     )
 }
 
-export default BasicSelect;
+export default SemesterSelector;

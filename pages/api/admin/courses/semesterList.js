@@ -2,7 +2,7 @@ import pool from "@/lib/db";
 
 export default async function handler(req, res) {
     const query = {
-        text:'SELECT DISTINCT semester FROM courses'
+        text:'SELECT DISTINCT semester FROM courses ORDER BY semester ASC'
     }
     
     await pool.query(query)

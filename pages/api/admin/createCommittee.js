@@ -3,8 +3,9 @@ import pool from "@/lib/db";
 export default async function (req, res) {
     const param = req.body;
 
-    if (param.session == '' || param.semester == '') {
-        req.status(505).send("session or semester can't be empty");
+    if (param.session == '' || param.semester == '' || isNaN(param.session)) {
+        res.status(505).send("session or semester can't be empty");
+        return;
     }
     else {
         const text = 'INSERT INTO exam_committee VALUES($1, $2, $3, $4)'

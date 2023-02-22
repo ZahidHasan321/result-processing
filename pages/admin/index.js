@@ -2,6 +2,7 @@ import CommitteeDialog from "@/component/dialog/committeeDialog";
 import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
+import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import { Alert, Box, Button, Collapse, Fade, FormControl, InputLabel, MenuItem, Paper, Select, Slide, Typography } from "@mui/material";
@@ -173,7 +174,7 @@ const Home = () => {
   if (loading) <div>loading</div>
 
   return (
-    <Paper variant="outlined" sx={{ m: 3, boxShadow: 3 }}>
+    <Paper variant="outlined" sx={{ m: 6, boxShadow: 3 }}>
       <Box sx={{ ml: 2, mr: 2 }}>
         <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
@@ -189,36 +190,17 @@ const Home = () => {
         <Typography variant="caption" sx={{ ml: 2 }}>Choose a session and a semester</Typography>
         <Box sx={{ mt: 1, ml: 2, mr: 2, mb: 3, display: 'flex', alignItems: 'end' }}>
           <AutoCompleteSession sx={{ width: '180px', mr: 3 }} list={sessionList} onChange={(value) => { setSession(value) }} label='Session' />
-          <Box sx={{ width: '180px' }}>
-            <FormControl fullWidth>
-              <InputLabel id="Semester-select-label">Semester</InputLabel>
-              {semesterList && <Select
-                labelId="Semester-select-label"
-                id="semester-select"
-                label="Semester"
-                value={semester || ''}
-                onChange={handleSemesterChange}
-              >
-                <MenuItem key={'none'} value=''><em>None</em></MenuItem>
-                {
-                  semesterList.map((sem, idx) => {
-                    return (
-                      <MenuItem key={idx} value={sem.semester}> {formatOrdinals(sem.semester)} </MenuItem>
-                    )
-                  })
-                }
-              </Select>}
-            </FormControl>
-          </Box>
+          <SemesterSelector sx={{width:'180px'}} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester'/>
+
           <Box sx={{ ml: 'auto', }}>
 
             <Slide in={checked} direction='left' mountOnEnter unmountOnExit easing={{
               enter: "cubic-bezier(0, 1.2, .8, 1)",
               exit: "liner"
             }}>
-              <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1}}>Delete Committee</Button>
+              <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover":{bgcolor:'red'}}}>Delete Committee</Button>
             </Slide>
-            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover":{ bgcolor:'red'} }}>Create Committee</Button>
+            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover":{ bgcolor:'#67be23'} }}>Create Committee</Button>
           </Box>
 
         </Box>

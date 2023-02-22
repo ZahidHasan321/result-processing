@@ -104,9 +104,9 @@ const Topsheet = (props) => {
 
     if (loading) {
         return (
-        <div>
-            <h1>...loading</h1>
-        </div>)
+            <div>
+                <h1>...loading</h1>
+            </div>)
     }
 
     return (

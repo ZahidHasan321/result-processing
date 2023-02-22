@@ -1,10 +1,11 @@
 import CourseDialog from "@/component/dialog/CourseDialog";
 import Layout from "@/component/layout/layout";
+import BasicSelect from "@/component/selector/selector";
+import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import DeleteForever from "@mui/icons-material/DeleteForever";
 import { Box, Button, FormControl, Grow, InputLabel, MenuItem, Paper, Select, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { useEffect, useState } from "react";
 
@@ -48,8 +49,8 @@ const Courses = () => {
       width: 90,
       renderCell: (params) => {
         return (
-          <Button onClick={(event) => { handleDeleteRow(event, params) }}>
-            <DeleteForever sx={{ color: 'text.primary' }} />
+          <Button variant="contained" sx={{ bgcolor: '#b71c1c', ":hover": { bgcolor: '#b71c1c' } }} onClick={(event) => {event.preventDefault(); handleDeleteRow(event, params) }}>
+            <DeleteForever />
           </Button>
         )
       }
@@ -118,35 +119,15 @@ const Courses = () => {
 
 
   return (
-    <Paper variant="outlined" sx={{ m: 3, boxShadow: 3 }}>
+    <Paper variant="outlined" sx={{ m: 6, boxShadow: 3 }}>
       <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Courses</Typography>
       
       <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mr: 4, ml: 4, mb:3}}>
       <Typography variant="caption" sx={{ mb:1 }}>Choose a session and a semester</Typography>
         <Box sx={{ display: 'flex', mb: 2 }}>
-          <Box sx={{ width: '180px' }}>
-            <FormControl fullWidth>
-              <InputLabel id="Semester-select-label">Semester</InputLabel>
-              {semesterList && <Select
-                labelId="Semester-select-label"
-                id="semester-select"
-                label="Semester"
-                value={semester || ''}
-                onChange={handleSemesterChange}
-              >
-                <MenuItem key={'none'} value=''><em>None</em></MenuItem>
-                {
-                  semesterList.map((item, idx) => {
-                    return (
-                      <MenuItem key={idx} value={item.semester}> {formatOrdinals(item.semester)} </MenuItem>
-                    )
-                  })
-                }
-              </Select>}
-            </FormControl>
-          </Box>
+          <SemesterSelector sx={{width:'180px'}} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester'/>
 
-          <Button variant="outlined" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end', boxShadow: 1, border: `1px solid ${grey[300]}`,borderRadius: '0.75em'}}>Add Course</Button>
+          <Button variant="contained" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end', bgcolor:'#67be23', ":hover":{bgcolor:'#67be23'}}}>Add Course</Button>
         </Box>
         <Grow in={checked}
         >

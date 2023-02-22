@@ -12,5 +12,5 @@ export default async function handler(req, res) {
         .then(data => res.rows)
         .catch(err => err)
     
-    res.send(200).send(result);
+    res.status(200).send(result);
 }

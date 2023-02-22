@@ -1,40 +1,14 @@
-import DrawerLayout from "@/component/layout/drawerLayout";
 import Layout from "@/component/layout/layout";
 import { committeePages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import { Box, Grow, Paper, Typography } from "@mui/material";
+import { Box, Button, Grow, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
-const columns = [
-  {
-    field: "exam_session",
-    headerName: "Exam Session",
-    minWidth: 200,
-    flex: 1
-  },
-  {
-    field: "semester",
-    headerName: "Semester",
-    minWidth: 200,
-    flex: 1
-  },
-  {
-    field: "role",
-    headerName: "Role",
-    minWidth: 200,
-    flex: 1
-  },
-  {
-    field: "published",
-    headerName: "Published",
-    type: "boolean",
-    minWidth: 200,
-    flex: 1
-  }
-]
+
 
 const Home = () => {
   const [list, setList] = useState([]);
@@ -69,12 +43,49 @@ const Home = () => {
     router.push(url);
   }
 
-
   useEffect(() => {
     getList();
   }, [])
 
-
+  const columns = [
+    {
+      field: "exam_session",
+      headerName: "Exam Session",
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: "semester",
+      headerName: "Semester",
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: "published",
+      headerName: "Published",
+      type: "boolean",
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: "enter",
+      headerName: "Enter",
+      width: 90,
+      renderCell: (params) => {
+        return (
+          <Button onClick={(event) => { event.preventDefault();handleRowClick(params)}}>
+          <NavigateNextIcon />
+          </Button>
+        )
+      }
+    }
+  ]
   return (
     <Paper variant="Outlined" sx={{ m: 3, boxShadow: 3 }}>
       <Box>

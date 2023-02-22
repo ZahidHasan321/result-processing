@@ -1,4 +1,4 @@
-import { Box, Button, Container, Dialog, DialogTitle, Fade, Grow } from "@mui/material";
+import { Box, Button, Container, Dialog, DialogTitle, Fade, Grow, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 
@@ -9,6 +9,7 @@ const ExaminerDialog = (props) => {
     const [examinerB, setExaminerB] = useState('')
     const [loading, setLoading] = useState(true);
     const [List, setList] = useState([]);
+    const [barOpen, setBarOpen] = useState({open:false, message:''});
 
 
 
@@ -31,7 +32,7 @@ const ExaminerDialog = (props) => {
         })
             .then(res => res.json())
             .then(data => {
-                if(data){
+                if (data) {
                     setExaminerA(data[0])
                     setExaminerB(data[1])
                 }
@@ -43,33 +44,36 @@ const ExaminerDialog = (props) => {
     const handleSubmit = async (e) => {
         e.stopPropagation();
         e.preventDefault();
-        if (examinerA != '' & examinerB != '' && examinerA != examinerB) {
-            var id = examinerA;
-            var set = "A";
-            await fetch('/api/examCommittee/semester/addExaminer', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id, session, course, set })
-            })
-                .then(res => res.json())
-                .then(data => console.log())
+        console.log(examinerA)
+        console.log(examinerB)
+        if (examinerA != '' && examinerB != '' && examinerA != null && examinerB != null) {
+            if (examinerA !== examinerB) {
+                var id = examinerA;
+                var set = "A";
+                await fetch('/api/examCommittee/semester/addExaminer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, session, course, set, number: 1 })
+                })
 
-            var set = "B";
-            var id = examinerB;
-            await fetch('/api/examCommittee/semester/addExaminer', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id, session, course, set })
-            })
-                .then(res => res.json())
-                .then(data => console.log())
+                var set = "B";
+                var id = examinerB;
+                await fetch('/api/examCommittee/semester/addExaminer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, session, course, set, number: 2 })
+                })
+            }
+            else{
+                setBarOpen({open:true, message:'Examiners have to different'});
+            }
         }
         else {
-            console.log('Error');
+            setBarOpen({open:true, message:'Cannot be empty'});
         }
     }
     useEffect(() => {
@@ -92,15 +96,15 @@ const ExaminerDialog = (props) => {
 
                     {loading &&
                         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                            <AutoCompleteTeacher editable={examinerA? true : false} value={examinerA} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-A Examiner" />
-                            <AutoCompleteTeacher editable={examinerB? true : false} value={examinerB} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
-                            {!(examinerA && examinerB) ? <Button type='submit' variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3 }}>Submit</Button>
-                            : <Button variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3 }}>Clear</Button>}
+                            <AutoCompleteTeacher value={examinerA} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-A Examiner" />
+                            <AutoCompleteTeacher value={examinerB} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
+                            <Button type='submit' variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3 }}>Submit</Button>
 
                         </Box>
                     }
                 </Container>
             </Box>
+            <Snackbar open={barOpen.open} autoHideDuration={5000} onClose={() => setBarOpen(false)} message={barOpen.message} />
         </Dialog>
     )
 }

@@ -78,7 +78,7 @@ const Teachers = () => {
       width: 90,
       renderCell: (params) => {
         return (
-          <Button variant='contained' sx={{ bgcolor: '#b71c1c', ":hover": { bgcolor: '#b71c1c' } }} onClick={(event) => { handleDeleteRow(event, params) }}>
+          <Button variant='contained' sx={{ bgcolor: '#b71c1c', ":hover": { bgcolor: '#b71c1c' } }} onClick={(event) => {  event.preventDefault(); handleDeleteRow(event, params) }}>
             <DeleteForever />
           </Button>
         )
@@ -90,10 +90,10 @@ const Teachers = () => {
   if (loading) return <div>loading</div>
 
   return (
-    <Paper  variant="outlined" sx={{ m: 3, boxShadow: 3}}>
+    <Paper  variant="outlined" sx={{ m: 6, boxShadow: 3}}>
       <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Teachers</Typography>
       <Box sx={{ display: 'flex', flexDirection: 'column', ml: 4, mr: 4, mb: 3 }}>
-        <Button sx={{ ml: 'auto', mb: 3, boxShadow: 1 }} variant="outlined" onClick={handleAddTeacher}>Add Teacher</Button>
+        <Button sx={{ ml: 'auto', mb: 3, boxShadow: 1, bgcolor:'#67be23', ":hover":{bgcolor:'#67be23'} }} variant="contained" onClick={handleAddTeacher}>Add Teacher</Button>
         <Grow in={checked} 
         >
           <DataGrid

@@ -7,7 +7,6 @@ const AutoCompleteTeacher = (props) => {
 
     return(
         <Autocomplete
-        disabled={editable == null || editable == undefined ? false : editable}
         value={selectValue}
         onChange={(event, newValue) => {
           onChange(newValue == null ? '' : newValue.id)

@@ -5,12 +5,13 @@ const ChipArray = (props) => {
     const { list, updateData, sx, onDelete } = props;
     const [input, setInput] = useState('');
     const [array, setArray] = useState(list);
-    const [open, setOpen] = useState({ open: false, messsage: '' });
+    const [open, setOpen] = useState({ open: false, messsage: '' })
+    
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        var isPresent = array.some((item) => item.roll === input);
+        var isPresent = array.some((item) => item.roll == input);
 
         if (isPresent)
             setOpen({ open: true, messsage: 'Number is already present' });

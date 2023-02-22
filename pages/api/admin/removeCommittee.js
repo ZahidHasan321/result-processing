@@ -1,7 +1,6 @@
 import pool from "@/lib/db";
 
-export default async function handler(req, res)
-{
+export default async function handler(req, res) {
     const param = req.body;
 
     const query = {
@@ -9,9 +8,13 @@ export default async function handler(req, res)
         values: [param.session, param.semester]
     }
 
-    await pool.query(query)
-    .then(response => res.status(200).send(response))
-    .catch(err => res.status(500).send(err))
+    const result = await pool.query(query)
+        .catch(err => err);
+
+    if (result.severity == 'ERROR')
+        res.status(500).send(result);
+    else
+        res.status(200).send(result)
 
     const query2 = {
         text: 'DELETE FROM sem_course WHERE exam_session = $1',
@@ -19,5 +22,5 @@ export default async function handler(req, res)
     }
 
     await pool.query(query2)
-    .catch(err => console.log(err));
+        .catch(err => console.log(err));
 }

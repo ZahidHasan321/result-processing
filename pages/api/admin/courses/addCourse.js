@@ -7,9 +7,13 @@ export default async function handler(req, res) {
         text: 'INSERT INTO courses VALUES($1::text, $2::text, $3::int, $4::text, $5::int)',
         values: [param.code, param.name, param.credit, param.type, param.semester]
     }
-    pool.query(query)
-        .then(data => res.status(200).send(data.rows))
-        .catch(err => res.status(500).send(err))
-    
+    const result = await pool.query(query)
+        .catch(err => err);
+        
+    if (result.severity == 'ERROR')
+        res.status(500).send(result);
+    else
+        res.status(200).send(result)
+
 }
 

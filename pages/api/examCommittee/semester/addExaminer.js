@@ -3,7 +3,8 @@ import pool from "@/lib/db";
 export default async function handler(req, res) {
     const param = req.body;
     const query = {
-        text: 'INSERT INTO examiner(id, exam_session, course_code, set) VALUES ($1, $2, $3, $4) RETURNING id',
+        text: 'INSERT INTO examiner(id, exam_session, course_code, set) VALUES ($1, $2, $3, $4) ON CONFLICT(exam_session, course_code, set)'
+            + 'DO UPDATE SET id = ($1)::uuid RETURNING id',
         values: [param.id, param.session, param.course, param.set]
     }
 
@@ -16,25 +17,21 @@ export default async function handler(req, res) {
                 }
 
                 pool.query(query1)
-                .then(examiner => {
-                    const query2 = {
-                        text: 'UPDATE sem_course SET assigned = true, examiners = ARRAY_APPEND(examiners, $1::text) WHERE exam_session = $2::int AND course_code = $3::text',
-                        values: [examiner.rows[0].name, param.session, param.course]
-                    }
-                    
-                    pool.query(query2)
-                    .then(result => console.log(result))
-                    .catch(err => console.log(err))
-                })
-                .catch(err =>  console.log(err))
-                
+                    .then(examiner => {
+                        const query2 = {
+                            text: 'UPDATE sem_course SET assigned = true,examiners[$1::int] = $2::text WHERE exam_session = $3::int AND course_code = $4::text',
+                            values: [param.number, examiner.rows[0].name, param.session, param.course]
+                        }
+
+                        pool.query(query2)
+                            .catch(err => console.log("Already exists"))
+                    })
+                    .catch(err => console.log("No such user found"))
+
             }
-            res.status(200).send(data.rows)
+            res.status(200).send({messege:'updated'})
         }
         )
-        .catch(err => res.status(500).send(err));
-
-
-
+        .catch(err => res.status(500).send({messege:'Already exists'}));
 
 }

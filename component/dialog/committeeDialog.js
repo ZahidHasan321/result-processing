@@ -1,8 +1,9 @@
 import { INITIAL_STATE, memberReducer } from "@/helper/memberReducer";
-import { Alert, Box, Button, Dialog, DialogTitle, Fade, Grow, TextField } from "@mui/material";
-import { useReducer, useState } from "react";
+import { Alert, Box, Button, Dialog, DialogTitle, Fade, Grow, TextField, Typography } from "@mui/material";
+import { useEffect, useReducer, useState } from "react";
 import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 import BasicSelect from "../selector/selector";
+import SemesterSelector from "../selector/semesterSelector";
 
 const roles = [
     { id: 'Chairman', name: 'Chairman' },
@@ -16,8 +17,17 @@ const CommitteeDialog = (props) => {
     const [showError, setShowError] = useState(null);
     const [session, setSession] = useState('');
     const [semester, setSemester] = useState('');
+    const [semesterList, setSemesterList] = useState([])
 
     const [state, dispatch] = useReducer(memberReducer, INITIAL_STATE);
+
+    const getSemesterList = async () => {
+        await fetch('/api/admin/courses/semesterList')
+          .then(res => res.json())
+          .then(data => {
+            setSemesterList(data)
+          })
+      }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -57,6 +67,10 @@ const CommitteeDialog = (props) => {
         })
     }
 
+    useEffect(()=>{
+        getSemesterList()
+    },[])
+
     function handleClose() {
         onClose();
     }
@@ -76,9 +90,10 @@ const CommitteeDialog = (props) => {
             >
 
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Typography>Select exam session and semester</Typography>
                     <Box sx={{ display: 'flex', mb: 5 }}>
                         <TextField
-                            sx={{ mr: 2 }}
+                            sx={{ mr: 4 }}
                             margin="normal"
                             required
                             id="session"
@@ -89,19 +104,11 @@ const CommitteeDialog = (props) => {
                             autoFocus
                         />
 
-                        <TextField
-                            margin="normal"
-                            required
-                            id="semester"
-                            label="Semester"
-                            name="semester"
-                            value={semester}
-                            onChange={(e) => { setSemester(e.target.value); e.preventDefault() }}
-                            autoFocus
-                        />
+                        <SemesterSelector  sx={{ width: '180px', mt:2 }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
                     </Box>
 
-                    <Box sx={{ display: 'flex', mb: 2 }}>
+                    <Typography variant="caption" >Select committee members.(If role left empty by default they will be a member)</Typography>
+                    <Box sx={{ display: 'flex', mb: 2,mt:1 }}>
                         <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member1} onChange={(value) => { dispatch({ type: 'MEMBER1', payload: value }) }} label={'Member'} />
                         <BasicSelect sx={{ width: '200px' }} list={roles} value={state.role1} onChange={(value) => { dispatch({ type: 'ROLE1', payload: value }) }} label={'Role'} />
                     </Box>
@@ -126,25 +133,25 @@ const CommitteeDialog = (props) => {
                         <BasicSelect sx={{ width: '200px' }} list={roles} value={state.role5} onChange={(value) => { dispatch({ type: 'ROLE5', payload: value }) }} label={'Role'} />
                     </Box>
                     <Box sx={{ display: 'table', m: '0 auto' }}>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                    >
-                        SUBMIT
-                    </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            SUBMIT
+                        </Button>
                     </Box>
+                </Box>
+                <Box width={300} sx={{ alignSelf: 'center' }}>
+                    {
+                        showAlert && <Alert severity='success'>Committee created successfully</Alert>
+                    }
+                    {
+                        showError && <Alert severity='error'>ERROR has occured!!</Alert>
+                    }
+                </Box>
             </Box>
-            <Box width={300} sx={{ alignSelf: 'center' }}>
-                {
-                    showAlert && <Alert severity='success'>Committee created successfully</Alert>
-                }
-                {
-                    showError && <Alert severity='error'>ERROR has occured!!</Alert>
-                }
-            </Box>
-        </Box>
-                
+
         </Dialog >
     )
 }
