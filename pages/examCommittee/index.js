@@ -1,12 +1,12 @@
 import Layout from "@/component/layout/layout";
 import { committeePages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Box, Button, Grow, Paper, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 
 
@@ -25,11 +25,11 @@ const Home = () => {
       body: JSON.stringify(user.id)
     }).then(res => res.json())
       .then(data => {
-        
-        setList(data.map(({semester, ...list})=> ({
+
+        setList(data.map(({ semester, ...list }) => ({
           ...list,
           semester: formatOrdinals(semester)
-        })))    
+        })))
         setChecked(true);
       });
   }
@@ -79,8 +79,8 @@ const Home = () => {
       width: 90,
       renderCell: (params) => {
         return (
-          <Button onClick={(event) => { event.preventDefault();handleRowClick(params)}}>
-          <NavigateNextIcon />
+          <Button sx={{ bgcolor: 'lightgreen', ":hover": { bgcolor: 'lightgreen' } }} onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
+            <NavigateNextIcon />
           </Button>
         )
       }
@@ -90,7 +90,7 @@ const Home = () => {
     <Paper variant="Outlined" sx={{ m: 6, boxShadow: 3 }}>
       <Box >
         <Typography fontSize={30} sx={{ ml: 11, pt: 3 }}>In Progress</Typography>
-        <Typography variant="caption" sx={{ ml: 11}}>Double click on row for more.</Typography>
+        <Typography variant="caption" sx={{ ml: 11 }}>Double click on row for more.</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Grow in={checked}>
             <Box sx={{ ml: 5, mr: 5, mb: 3, width: '90%' }}>

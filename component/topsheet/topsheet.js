@@ -1,8 +1,13 @@
-import { formatOrdinals } from "@/helper/ordinal";
 import { Box, Button, Paper, Snackbar, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ChipArray from "../chipComponent/chipArray";
+import BasicSelect from "../selector/selector";
 
+
+const periodList = [
+    { id: "Morning", name: "Morning" },
+    { id: "Afternoon", name: "Afternoon" }
+]
 
 const Topsheet = (props) => {
     const { set, course, semester, session } = props;
@@ -11,7 +16,8 @@ const Topsheet = (props) => {
     const [absentData, setAbsentData] = useState(null);
     const [expelledData, setExpelledData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [open, setOpen] = useState({open:false, message:''});
+    const [open, setOpen] = useState({ open: false, message: '' });
+    const [period, setPeriod] = useState('');
 
     const getList = async () => {
         await fetch('/api/examCommittee/semester/getTopsheet', {
@@ -71,8 +77,8 @@ const Topsheet = (props) => {
         })
 
         const list = present.concat(absent, expelled)
-        if(list.length < 1) {
-            setOpen({open:true, message:'Cannot submit empty topsheet'})
+        if (list.length < 1) {
+            setOpen({ open: true, message: 'Cannot submit empty topsheet' })
             return;
         };
 
@@ -85,9 +91,8 @@ const Topsheet = (props) => {
         })
             .then(res => res.json())
             .then(data => {
-                if(data == 'ok')
-                {
-                    setOpen({open:true, message:'Submitted Topsheet'})
+                if (data == 'ok') {
+                    setOpen({ open: true, message: 'Submitted Topsheet' })
                 }
             })
     }
@@ -108,34 +113,49 @@ const Topsheet = (props) => {
 
     setTimeout(() => {
         setLoading(false)
-    }, 200)
+    }, 300)
 
     if (loading) {
         return (
             <Box height={700} width={1200}>
-                
+
             </Box>
         )
     }
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <Box sx={{display:'flex',alignSelf:'flex-start'}}>
-            <Typography variant="overline"  sx={{mr:1}}>Total Answer Sheet:</Typography>
-            <TextField 
-            type='number'
-            variant="standard"
-            />
+            <Button sx={{ ml: 'auto', mr: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant='contained' onClick={handleClick}>Submit</Button>
+            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2, mb: 2 }}>
+
+                <Typography fontSize={15} sx={{ mr: 1, mt:3}}>DEPARTMENT:</Typography>
+                <TextField
+                    sx={{mt:3}}
+                    variant="standard"
+                />
+
+                <BasicSelect sx={{ width: 180, alignSelf: 'flex-start', ml: 3 }} list={periodList} value={period} onChange={(value) => setPeriod(value)} label="Time Period" />
             </Box>
 
-            <Box sx={{display:'flex',alignSelf:'flex-start'}}>
-            <Typography variant="overline"  sx={{mr:1}}>Total Extra Sheet:</Typography>
-            <TextField 
-            type='number'
-            variant="standard"
-            />
+
+            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2, mb: 2 }}>
+
+                <Typography fontSize={15} sx={{ mr: 1 }}>TOTAL ANSWER SHEET:</Typography>
+                <TextField
+                    sx={{ width: 80 }}
+                    type='number'
+                    variant="standard"
+                />
             </Box>
-            <Button sx={{ml:'auto',mr:2, bgcolor:'#67be23', ":hover":{bgcolor:'#67be23'}}} variant='contained' onClick={handleClick}>Submit</Button>
+
+            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2, mb: 2 }}>
+                <Typography fontSize={15} sx={{ mr: 1 }}>TOTAL EXTRA SHEET:</Typography>
+                <TextField
+                    sx={{ width: 80 }}
+                    type='number'
+                    variant="standard"
+                />
+            </Box>
 
             <Paper sx={{ border: 1, m: 2, boxShadow: 2 }}>
                 <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Present Students</Typography>
@@ -163,8 +183,8 @@ const Topsheet = (props) => {
                     minHeight: '100px'
                 }} />}
             </Paper>
-            <Snackbar open={open.open} onClose={() => setOpen({open:false, message:''})} message={open.message} />
-            
+            <Snackbar open={open.open} onClose={() => setOpen({ open: false, message: '' })} message={open.message} />
+
         </Box>
     )
 }

@@ -1,4 +1,4 @@
-import { Box, Button, Container, Dialog, DialogTitle, Fade, Grow, Snackbar } from "@mui/material";
+import { Box, Button, Container, Dialog, DialogTitle, Fade, Grow, Snackbar, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 
@@ -7,9 +7,10 @@ const ExaminerDialog = (props) => {
 
     const [examinerA, setExaminerA] = useState('')
     const [examinerB, setExaminerB] = useState('')
+    const [courseTeacher, setCourseTeacher] = useState('');
     const [loading, setLoading] = useState(true);
     const [List, setList] = useState([]);
-    const [barOpen, setBarOpen] = useState({ open: false, color:'', message: '' });
+    const [barOpen, setBarOpen] = useState({ open: false, color: '', message: '' });
 
 
 
@@ -38,15 +39,29 @@ const ExaminerDialog = (props) => {
                 }
             }
             )
+
+        await fetch('/api/examCommittee/semester/getCourseTeacher', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ session, course })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data) {
+                    setCourseTeacher(data[0])
+                }
+            }
+            )
+
         setLoading(true);
     }
 
     const handleSubmit = async (e) => {
-        e.stopPropagation();
         e.preventDefault();
-        console.log(examinerA)
-        console.log(examinerB)
-        if (examinerA != '' && examinerB != '' && examinerA != null && examinerB != null) {
+
+        if (examinerA != '' && examinerB != '' && examinerA != null && examinerB != null && courseTeacher != '' && courseTeacher != null) {
             if (examinerA !== examinerB) {
                 var id = examinerA;
                 var set = "A";
@@ -67,6 +82,15 @@ const ExaminerDialog = (props) => {
                     },
                     body: JSON.stringify({ id, session, course, set, number: 2 })
                 })
+
+                await fetch('/api/examCommittee/semester/addCourseTeacher', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: courseTeacher, session, course })
+                })
+
                 setBarOpen({ open: true, message: 'Examiners Assigned' });
 
             }
@@ -92,16 +116,17 @@ const ExaminerDialog = (props) => {
     }
     return (
         <Dialog TransitionComponent={Grow} fullWidth open={open} onClose={handleOnClose} sx={{ backdropFilter: 'blur(5px)' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 300 }}>
-                <DialogTitle>Add examiner</DialogTitle>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 400 }}>
+                <DialogTitle>Add examiners</DialogTitle>
                 <Container component='main' maxWidth='lg'>
 
                     {loading &&
                         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                             <AutoCompleteTeacher value={examinerA} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-A Examiner" />
                             <AutoCompleteTeacher value={examinerB} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
+                            <Typography fontWeight={'bold'}>Add Course Teacher</Typography>
+                            <AutoCompleteTeacher value={courseTeacher} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setCourseTeacher(value)} label="Course Teacher" />
                             <Button type='submit' variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3 }}>Submit</Button>
-
                         </Box>
                     }
                 </Container>

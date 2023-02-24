@@ -3,7 +3,7 @@ import pool from "@/lib/db";
 export default async function handler(req, res) {
     const param = req.body;
     const query = {
-        text: 'INSERT INTO examiner(id, exam_session, course_code, set) VALUES ($1, $2, $3, $4) ON CONFLICT(exam_session, course_code, set)'
+        text: 'INSERT INTO examiner(id, exam_session, course_code, set) VALUES (($1)::uuid, $2, $3, $4) ON CONFLICT(exam_session, course_code, set)'
             + 'DO UPDATE SET id = ($1)::uuid RETURNING id',
         values: [param.id, param.session, param.course, param.set]
     }
@@ -32,6 +32,6 @@ export default async function handler(req, res) {
             res.status(200).send({messege:'updated'})
         }
         )
-        .catch(err => res.status(500).send({messege:'Already exists'}));
+        .catch(err => res.status(500).send(err));
 
 }
