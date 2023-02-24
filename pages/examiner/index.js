@@ -76,7 +76,6 @@ const Home = () => {
       field: "enter",
       headerName: "Enter",
       width: 100,
-
       renderCell: (params) => {
         return (
           <Button sx={{ bgcolor: 'lightgreen', ":hover": { bgcolor: 'lightgreen' } }} onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
@@ -91,7 +90,7 @@ const Home = () => {
   return (
     <Box>
       <Paper sx={{ boxShadow: 3, m: 6, minWidth: 700 }}>
-        <Box sx={{ m: 3, pt: 3, pb:3 }}>
+        <Box sx={{ m: 5, pt: 5, pb:5 }}>
           <AntDesignGrid
             sx={{ boxShadow: 3 }}
             autoHeight
