@@ -1,9 +1,10 @@
+import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import Layout from "@/component/layout/layout";
 import { committeePages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Box, Button, Grow, Paper, Typography } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { Box, Button, Paper, Typography } from "@mui/material";
+import { GridToolbar } from "@mui/x-data-grid";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -92,24 +93,24 @@ const Home = () => {
         <Typography fontSize={30} sx={{ ml: 11, pt: 3 }}>In Progress</Typography>
         <Typography variant="caption" sx={{ ml: 11 }}>Double click on row for more.</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Grow in={checked}>
+          
             <Box sx={{ ml: 5, mr: 5, mb: 3, width: '90%' }}>
-              <DataGrid
+              <AntDesignGrid
                 sx={{
                   '& .MuiDataGrid-cell:focus': {
                     outline: 'none',
                   },
-                  boxShadow: 1
+                  boxShadow: 3
                 }}
                 rows={list}
                 columns={columns}
+                checked={checked}
                 autoHeight
-                disableSelectionOnClick
                 getRowId={(row) => row.id + row.exam_session + row.semester}
                 onRowDoubleClick={handleRowClick}
                 disableColumnSelector
                 disableDensitySelector
-                components={{ Toolbar: GridToolbar }}
+                component={{ Toolbar: GridToolbar }}
                 componentsProps={{
                   toolbar: {
                     csvOptions: { disableToolbarButton: true },
@@ -121,7 +122,6 @@ const Home = () => {
               />
 
             </Box>
-          </Grow>
         </Box>
       </Box>
     </Paper>

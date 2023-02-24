@@ -1,12 +1,11 @@
+import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import CommitteeDialog from "@/component/dialog/committeeDialog";
 import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
 import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
-import { formatOrdinals } from "@/helper/ordinal";
-import { Alert, Box, Button, Collapse, Fade, FormControl, InputLabel, MenuItem, Paper, Select, Slide, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid/DataGrid";
+import { Alert, Box, Button, Paper, Slide, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 
@@ -210,10 +209,11 @@ const Home = () => {
             }}
         >
           <Box sx={{ m: 2, mb: 4 }}>
-            <DataGrid
+            <AntDesignGrid
               sx={{ boxShadow: 3 }}
               columns={columns}
               rows={committeeList}
+              checked = {checked}
               hideFooter
               autoHeight
             />

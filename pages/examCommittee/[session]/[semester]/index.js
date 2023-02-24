@@ -129,15 +129,15 @@ const Dashboard = () => {
                   </CardContent>
                 </CardActionArea>
                 <CardActions>
-                  <Button id={item.course_code} onClick={handleExaminerClick} size='small'>
+                  <Button id={item.course_code} onClick={handleExaminerClick} size='small' color='secondary'>
                     Examiners
                   </Button >
 
-                  <Button id={item.course_code} onClick={handleTopsheetClick} size='small'>
+                  <Button id={item.course_code} onClick={handleTopsheetClick} size='small' color='secondary'>
                     TopSheet
                   </Button>
 
-                  <Button onClick={handleSumSheetClick} size='small'>
+                  <Button onClick={handleSumSheetClick} size='small' color='secondary'>
                     SummationSheet
                   </Button>
 

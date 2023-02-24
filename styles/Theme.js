@@ -1,7 +1,9 @@
 const { createTheme } = require("@mui/material");
 
 const Theme = createTheme({
+  
   palette: {
+    mode: 'light',
     primary: {
       main: '#2c1630',
     }

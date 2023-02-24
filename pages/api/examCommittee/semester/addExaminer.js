@@ -3,8 +3,8 @@ import pool from "@/lib/db";
 export default async function handler(req, res) {
     const param = req.body;
     const query = {
-        text: 'INSERT INTO examiner(id, exam_session, course_code, set) VALUES (($1)::uuid, $2, $3, $4) ON CONFLICT(exam_session, course_code, set)'
-            + 'DO UPDATE SET id = ($1)::uuid RETURNING id',
+        text: 'INSERT INTO examiner(id, exam_session, course_code, set_number) VALUES (($1)::uuid, $2, $3, $4) ON CONFLICT ON CONSTRAINT examiner_unq '
+            + 'DO UPDATE SET id = examiner.id RETURNING id',
         values: [param.id, param.session, param.course, param.set]
     }
 

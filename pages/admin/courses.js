@@ -1,12 +1,10 @@
+import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import CourseDialog from "@/component/dialog/CourseDialog";
 import Layout from "@/component/layout/layout";
-import BasicSelect from "@/component/selector/selector";
 import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
-import { formatOrdinals } from "@/helper/ordinal";
 import DeleteForever from "@mui/icons-material/DeleteForever";
-import { Box, Button, FormControl, Grow, InputLabel, MenuItem, Paper, Select, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid/DataGrid";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 
@@ -49,7 +47,7 @@ const Courses = () => {
       width: 90,
       renderCell: (params) => {
         return (
-          <Button variant="contained" sx={{ bgcolor: '#b71c1c', ":hover": { bgcolor: '#b71c1c' } }} onClick={(event) => {event.preventDefault(); handleDeleteRow(event, params) }}>
+          <Button variant="contained" sx={{ bgcolor: '#b71c1c', ":hover": { bgcolor: '#b71c1c' } }} onClick={(event) => { event.preventDefault(); handleDeleteRow(event, params) }}>
             <DeleteForever />
           </Button>
         )
@@ -97,16 +95,15 @@ const Courses = () => {
       .then(res => res.json())
       .then(data => {
         setCourseList(data)
-        setChecked(true)
       })
+    setChecked(true);
   }
 
-  function handleSemesterChange(e) {
-    setSemester(e.target.value)
-  }
   useEffect(() => {
-    if (semester != '')
+    if (semester != '') {
       getCourseList();
+
+    }
     else {
       setCourseList([])
       setChecked(false)
@@ -119,27 +116,26 @@ const Courses = () => {
 
 
   return (
-    <Paper variant="outlined" sx={{ m: 6, boxShadow: 3 }}>
+    <Paper variant="outlined" sx={{ m: 6, boxShadow: 3, minHeight: 400 }}>
       <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Courses</Typography>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mr: 4, ml: 4, mb:3}}>
-      <Typography variant="caption" sx={{ mb:1 }}>Choose a session and a semester</Typography>
-        <Box sx={{ display: 'flex', mb: 2 }}>
-          <SemesterSelector sx={{width:'180px'}} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester'/>
 
-          <Button variant="contained" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end', bgcolor:'#67be23', ":hover":{bgcolor:'#67be23'}}}>Add Course</Button>
+      <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mr: 4, ml: 4, mb: 3 }}>
+        <Typography variant="caption" sx={{ mb: 1 }}>Choose a session and a semester</Typography>
+        <Box sx={{ display: 'flex', mb: 2 }}>
+          <SemesterSelector sx={{ width: '180px' }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
+
+          <Button variant="contained" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}>Add Course</Button>
         </Box>
-        <Grow in={checked}
-        >
-          <DataGrid
-            sx={{ boxShadow: 1 }}
-            columns={columns}
-            rows={courseList}
-            getRowId={ row => row.course_code }
-            autoHeight
-            hideFooter
-          />
-        </Grow>
+
+        <AntDesignGrid
+          sx={{ boxShadow: 3}}
+          columns={columns}
+          checked={checked}
+          rows={courseList}
+          getRowId={row => row.course_code}
+          autoHeight
+          hideFooter
+        />
         <CourseDialog open={open} onClose={handleClose} />
       </Box>
     </Paper>

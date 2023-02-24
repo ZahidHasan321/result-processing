@@ -1,10 +1,9 @@
+import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import TeacherDialog from "@/component/dialog/TeacherDialog";
 import Layout from "@/component/layout/layout";
 import { AdminPages } from "@/constants/routes";
-import Delete from "@mui/icons-material/Delete";
 import DeleteForever from "@mui/icons-material/DeleteForever";
-import { Box, Button, Collapse, Fade, Grow, Paper, Slide, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid/DataGrid";
+import { Box, Button, Grow, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const Teachers = () => {
@@ -12,7 +11,6 @@ const Teachers = () => {
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [pageSize, setPageSize] = useState(10);
 
   const getList = async () => {
     fetch('/api/admin/teacherList')
@@ -90,24 +88,19 @@ const Teachers = () => {
   if (loading) return <div>loading</div>
 
   return (
-    <Paper  variant="outlined" sx={{ m: 6, boxShadow: 3}}>
+    <Paper  variant="outlined" sx={{ m: 6, boxShadow: 3, minHeight:400}}>
       <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Teachers</Typography>
       <Box sx={{ display: 'flex', flexDirection: 'column', ml: 4, mr: 4, mb: 3 }}>
         <Button sx={{ ml: 'auto', mb: 3, boxShadow: 1, bgcolor:'#67be23', ":hover":{bgcolor:'#67be23'} }} variant="contained" onClick={handleAddTeacher}>Add Teacher</Button>
-        <Grow in={checked} 
-        >
-          <DataGrid
-            sx={{ boxShadow: 1 }}
+       
+         <AntDesignGrid
+            sx={{ boxShadow: 3 }}
+            checked={checked}
             columns={columns}
             rows={list}
-            pageSize={pageSize}
-            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            rowsPerPageOptions={[10, 20, 30]}
-            pagination
             disableSelectionOnClick
             autoHeight
           />
-        </Grow>
         {open && <TeacherDialog open={open} onClose={handleOnClose} />}
       </Box>
     </Paper>
