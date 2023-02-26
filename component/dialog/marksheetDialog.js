@@ -1,19 +1,18 @@
-import styled from '@emotion/styled';
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert, Box, Button, Dialog, DialogTitle, Grow, Snackbar, Tooltip, tooltipClasses } from "@mui/material";
-import { GridEditInputCell } from '@mui/x-data-grid';
+import { Alert, Backdrop, Box, Button, CircularProgress, Dialog, DialogTitle, Grow, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
 
 
 
 const MarksheetDialog = (props) => {
-    const { open, onClose, data } = props;
+    const { open, onClose, data, editableData, sx } = props;
     const [paperCodes, setPaperCodes] = useState([]);
     const [marks, setMarks] = useState(null);
     const [checked, setChecked] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState(null);
+    const [submittedData, setSubmittedData] = useState(null);
+    const [openBackdrop, setOpenBackdrop] = useState(true);
 
     const handleCloseSnackbar = () => setSnackbar(null);
 
@@ -21,6 +20,32 @@ const MarksheetDialog = (props) => {
         onClose();
     }
 
+    const handleOnSubmit = () => {
+        if (marks) {
+            marks.map((item => {
+                var f =  false;
+                Object.entries(item).forEach(([key, value]) => {
+                    if (value != null && key != 'code' && key != 'Total' && item.code) {
+                        fetch('/api/examiner/setMark', {
+                            method: 'POST',
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number, paperCode: item.code, question: key, mark: value })
+                        })
+                    }
+                })
+            }))
+            fetch('/api/examiner/updateSubmitted', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
+            })
+            localStorage.removeItem(JSON.stringify(data) + 'marksheet');
+        }
+    }
     const getMarsheetData = async () => {
         await fetch('/api/examiner/getPaperCodes', {
             method: 'POST',
@@ -31,38 +56,63 @@ const MarksheetDialog = (props) => {
         })
             .then(res => res.json())
             .then(data => {
-                setPaperCodes(data);
+                if (data) {
+                    const list = data.map((mark) => {
+                        return mark = { ...mark, Q1: null, Q2: null, Q3: null, Q4: null, Q5: null, Q6: null, Q7: null, Q8: null, Q9: null, Q10: null }
+                    })
+                }
+                setMarks(data);
             });
-
     }
 
     useEffect(() => {
-        const list = paperCodes.map((mark) => {
-            return mark = { ...mark, Q1: null, Q2: null, Q3: null, Q4: null, Q5: null, Q6: null, Q7: null, Q8: null, Q9: null, Q10: null }
-        })
+        var list = [];
+        if (submittedData) {
+            submittedData.map((item) => {
+                const found = list.findIndex(element => element.code === item.paper_code)
+
+                if (found != -1) list[found][item.question] = item.mark
+                else {
+                    const object = { code: item.paper_code, [item.question]: item.mark }
+                    list.push(object)
+                }
+            })
+        }
         setMarks(list);
-        setLoading(false);
-    }, [paperCodes])
+    }, [submittedData])
 
     useEffect(() => {
-        if (marks != null) {
-            localStorage.setItem(JSON.stringify(data), JSON.stringify(marks));
-            setChecked(true);
+        if (marks != null && editableData == true) {
+            localStorage.setItem(JSON.stringify(data) + 'marksheet', JSON.stringify(marks));
         }
     }, [marks])
 
+    setTimeout(() => {
+        setOpenBackdrop(false);
+        setChecked(true)
+    }, 500)
 
     useEffect(() => {
-        const items = JSON.parse(localStorage.getItem(JSON.stringify(data)))
-        console.log(items);
-        if (!items)
-            getMarsheetData();
+        if (editableData === false) {
+            fetch('/api/examiner/getMarks', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
+            })
+                .then(res => res.json())
+                .then(data => setSubmittedData(data))
+        }
         else {
-            setMarks(items);
+            const items = JSON.parse(localStorage.getItem(JSON.stringify(data) + 'marksheet'))
+            if (items && items.length > 0)
+                setMarks(items)
+            else {
+                getMarsheetData()
+            }
         }
     }, []);
-
-    if (loading) return <h1></h1>
 
     const ProcessRowUpdate = async (newRow, oldRow) => {
 
@@ -75,7 +125,6 @@ const MarksheetDialog = (props) => {
             })
             setMarks(temp);
         }
-
         return newRow;
     }
 
@@ -91,14 +140,14 @@ const MarksheetDialog = (props) => {
     }
 
     const getTotal = (params) => {
-        if((params.row.Q1)||(params.row.Q2)||(params.row.Q3)||(params.row.Q4)||(params.row.Q5)||(params.row.Q6)||(params.row.Q7)||(params.row.Q8)||(params.row.Q9)||(params.row.Q10)){
-            return (+params.row.Q1)+(+params.row.Q2)+(+params.row.Q3)+(+params.row.Q4)+(+params.row.Q5)+(+params.row.Q6)+(+params.row.Q7)+(+params.row.Q8)+(+params.row.Q9)+(+params.row.Q10);
+        if ((params.row.Q1) || (params.row.Q2) || (params.row.Q3) || (params.row.Q4) || (params.row.Q5) || (params.row.Q6) || (params.row.Q7) || (params.row.Q8) || (params.row.Q9) || (params.row.Q10)) {
+            const total = (+(params.row.Q1 ? params.row.Q1 : null)) + (+(params.row.Q2 ? params.row.Q2 : null)) + (+(params.row.Q3 ? params.row.Q3 : null)) + (+(params.row.Q4 ? params.row.Q4 : null)) + (+(params.row.Q5 ? params.row.Q5 : null)) + (+(params.row.Q6 ? params.row.Q6 : null)) + (+(params.row.Q7 ? params.row.Q7 : null)) + (+(params.row.Q8 ? params.row.Q8 : null)) + (+(params.row.Q9 ? params.row.Q9 : null)) + (+(params.row.Q10 ? params.row.Q10 : null));
+            return total;
         }
-        else{
+        else {
             return null;
         }
     }
-
 
     const columns = [
         {
@@ -112,7 +161,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q1",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -120,7 +169,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q2",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -128,7 +177,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q3",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -136,7 +185,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q4",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -144,7 +193,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q5",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -152,7 +201,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q6",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -160,7 +209,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q7",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -168,7 +217,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q8",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -176,7 +225,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q9",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -184,7 +233,7 @@ const MarksheetDialog = (props) => {
             headerName: "Q10",
             minWidth: 70,
             flex: 1,
-            editable: true,
+            editable: editableData,
             preProcessEditCellProps
         },
         {
@@ -198,7 +247,7 @@ const MarksheetDialog = (props) => {
 
     return (
         <Box>
-            <Dialog TransitionComponent={Grow} fullWidth maxWidth='xl' open={open} sx={{ backdropFilter: 'blur(5px)' }}>
+            <Dialog TransitionComponent={Grow} fullWidth maxWidth='xl' open={open} sx={{ ...sx, backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 500 } }}>
                 <Box sx={{ display: 'flex' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <DialogTitle fontSize={25} fontWeight={'bold'}>Marksheet</DialogTitle>
@@ -206,7 +255,7 @@ const MarksheetDialog = (props) => {
                     <Button size='small' sx={{ width: 30, m: 1, ml: 'auto' }} onClick={handleOnClose}><CloseIcon htmlColor='red' /></Button>
                 </Box>
                 <Box sx={{ ml: 3, mr: 3, mb: 3, display: 'flex', flexDirection: 'column' }}>
-                    <Button variant='contained' sx={{ ml: 'auto', mb: 2 }}>Submit</Button>
+                    {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2 }} onClick={handleOnSubmit}>Submit</Button>}
                     {marks &&
                         <AntDesignGrid
                             sx={{ boxShadow: 3 }}
@@ -220,6 +269,12 @@ const MarksheetDialog = (props) => {
                             onProcessRowUpdateError={handleProcessRowUpdateError}
                         />}
                 </Box>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={openBackdrop}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
                 {!!snackbar && (
                     <Snackbar
                         open
