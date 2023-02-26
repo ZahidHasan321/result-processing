@@ -40,7 +40,7 @@ const CATMdialog = (props) => {
 
         localStorage.removeItem(JSON.stringify(data) + 'catm')
         setSnackbar({ children: "Submitted Successfully", serverity: 'success' })
-        onClose();
+        onClose({ children: "Submitted Successfully", serverity: 'success' });
     }
 
     const handleCloseSnackbar = () => setSnackbar(null);
@@ -67,6 +67,10 @@ const CATMdialog = (props) => {
     }
     
     const ProcessRowUpdate = (newRow, oldRow) => {
+        if(newRow.ct > 13.5 || newRow.attendance > 7.5){
+            setSnackbar({children:"Out of Range number", serverity:'error'})
+            return oldRow;
+        }
         updateMarks(newRow);
         return newRow;
     }
@@ -95,24 +99,24 @@ const CATMdialog = (props) => {
         },
         {
             field: "ct",
-            headerName: "ClassTest",
-            minWidth: 100,
+            headerName: "ClassTest(13.5)",
+            minWidth: 120,
             flex: 1,
             editable: editableData,
             preProcessEditCellProps
         },
         {
             field: "attendance",
-            headerName: "Attendace",
-            minWidth: 100,
+            headerName: "Attendace(7.5)",
+            minWidth: 120,
             flex: 1,
             editable: editableData,
             preProcessEditCellProps
         },
         {
             field: "total",
-            headerName: "Total",
-            minWidth: 100,
+            headerName: "Total(32)",
+            minWidth: 120,
             flex: 1,
             valueGetter: getTotal
         }

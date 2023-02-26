@@ -100,7 +100,6 @@ const Home = () => {
             columns={columns}
             checked={checked}
             rows={list}
-
             getRowId={(row) => row.id + row.exam_session + row.course_code + row.set}
           />
         </Box>

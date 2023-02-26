@@ -16,6 +16,7 @@
     "@mui/material": "^5.11.6",
     "@mui/x-data-grid": "^5.17.22",
     "@next/font": "13.1.6",
+    "dayjs": "^1.11.7",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.6",
     "iron-session": "^6.3.1",

@@ -3,7 +3,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CATMdialog from "@/component/dialog/catmDialog";
 import Layout from "@/component/layout/layout";
 import { courseTeacher } from "@/constants/routes";
-import { Box, Button, Paper } from "@mui/material";
+import { Alert, Box, Button, Paper, Snackbar } from "@mui/material";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { formatOrdinals } from "@/helper/ordinal";
@@ -12,7 +12,10 @@ const Home = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [list, setList] = useState([]);
     const [checked, setChecked ] = useState(false);
+    const [snackbar, setSnackbar] = useState(null);
     const [clickedRow, setClickedRow] = useState(null);
+
+    const handleCloseSnackbar = () => setSnackbar(null);
 
     const handleRowClick = (params) => {
         setClickedRow(params.row)
@@ -94,7 +97,17 @@ const Home = () => {
                     />
                 </Box>
             </Paper>
-            {openDialog && <CATMdialog open={openDialog} onClose={() => {setOpenDialog(false); getList()}} data={clickedRow} editableData={true}/>}
+            {openDialog && <CATMdialog open={openDialog} onClose={(snackbar) => {setSnackbar(snackbar); getList() ;setOpenDialog(false)}} data={clickedRow} editableData={true}/>}
+            {!!snackbar && (
+                <Snackbar
+                    open
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    onClose={handleCloseSnackbar}
+                    autoHideDuration={3000}
+                >
+                    <Alert {...snackbar} onClose={handleCloseSnackbar} />
+                </Snackbar>
+            )}
         </Box>
     )
 }
