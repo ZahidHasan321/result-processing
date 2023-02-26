@@ -13,6 +13,21 @@ export const examinerPages = [
   }
 ]
 
+export const courseTeacher = [
+  {
+    routename: "Home",
+    routepath: "/",
+  },
+  {
+    routename: "Current",
+    routepath: "/courseTeacher"
+  },
+  {
+    routename: "History",
+    routepath: "/courseTeacher/history"
+  }
+]
+
 
 export const committeePages = [
   {
@@ -33,6 +48,10 @@ export const semesterPages = [
   {
     routename: "Home",
     routepath: "/",
+  },
+  {
+    routename: "Exam Committee",
+    routepath: "/examCommittee",
   },
   {
     routename: "Dashboard",

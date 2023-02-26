@@ -19,7 +19,7 @@ export default async function handler(req, res) {
                 pool.query(query1)
                     .then(examiner => {
                         const query2 = {
-                            text: 'UPDATE sem_course SET assigned = true,examiners[$1::int] = $2::text WHERE exam_session = $3::int AND course_code = $4::text',
+                            text: 'UPDATE sem_course SET examiners[$1::int] = $2::text WHERE exam_session = $3::int AND course_code = $4::text',
                             values: [param.number, examiner.rows[0].name, param.session, param.course]
                         }
 

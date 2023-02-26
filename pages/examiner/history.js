@@ -2,6 +2,7 @@ import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import MarksheetDialog from "@/component/dialog/marksheetDialog";
 import Layout from "@/component/layout/layout";
 import { examinerPages } from "@/constants/routes";
+import { formatOrdinals } from "@/helper/ordinal";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Box, Button, Paper } from "@mui/material";
 import { getSession } from "next-auth/react";
@@ -58,7 +59,8 @@ const History = () => {
       field: "semester",
       headerName: "Semester",
       minWidth: 200,
-      flex: 1
+      flex: 1,
+      valueFormatter: ({value}) => formatOrdinals(value)
     },
     {
       field: "exam_session",
@@ -96,13 +98,14 @@ const History = () => {
             autoHeight
             columns={columns}
             checked={checked}
+            onRowDoubleClick={handleRowClick}
             rows={list}
-
             getRowId={(row) => row.id + row.exam_session + row.course_code + row.set}
           />
         </Box>
       </Paper>
-      {openDialog && <MarksheetDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowData} />}
+      
+      {openDialog && <MarksheetDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowData} editableData={false}/>}
     </Box>
   )
 }

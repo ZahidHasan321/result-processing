@@ -88,6 +88,7 @@ function CustomFooter(pageSize) {
 
     const rowsize = [
         { id: 10, name: '10' },
+        { id: 20, name: '20' },
         { id: 30, name: '30' },
         { id: 50, name: '50' },
         { id: 10000, name: 'All' }
@@ -115,6 +116,7 @@ export default function AntDesignGrid(props) {
         <div style={{ width: '100%' }}>
             <Grow in={checked}>
                 <StyledDataGrid
+
                     {...restProps}
                     disableSelectionOnClick
                     components={{

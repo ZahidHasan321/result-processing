@@ -87,8 +87,8 @@ const Dashboard = () => {
                     <Typography variant="body2" fontSize={14}>SET-B: {item.examiners ? item.examiners[1] : <i>None</i>}</Typography>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', mr: 2, mt:1}}>
-                      <Circle fontSize="3px" sx={{ mr: 0.2, color: item.assigned ? 'lightgreen' : '#bdbdbd' }} />
-                      <Typography fontSize={13}>ASSIGNED</Typography>
+                      <Circle fontSize="3px" sx={{ mr: 0.2, color: item.catm ? 'lightgreen' : '#bdbdbd' }} />
+                      <Typography fontSize={13}>CATM</Typography>
                     </Box>
 
                     <Stack direction={'row'}>
