@@ -1,6 +1,7 @@
 import { INITIAL_STATE, memberReducer } from "@/helper/memberReducer";
 import { Alert, Box, Button, Dialog, DialogTitle, Fade, Grow, Snackbar, TextField, Typography } from "@mui/material";
 import { useEffect, useReducer, useState } from "react";
+import AutoCompleteSession from "../selector/autocompleteSession";
 import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 import BasicSelect from "../selector/selector";
 import SemesterSelector from "../selector/semesterSelector";
@@ -16,6 +17,7 @@ const CommitteeDialog = (props) => {
     const [session, setSession] = useState('');
     const [semester, setSemester] = useState('');
     const [semesterList, setSemesterList] = useState([])
+    const [sessionList, setSessionList] = useState([])
     const [snackbar, setSnackbar] = useState(null);
 
     const [state, dispatch] = useReducer(memberReducer, INITIAL_STATE);
@@ -26,6 +28,12 @@ const CommitteeDialog = (props) => {
             .then(data => {
                 setSemesterList(data)
             })
+    }
+
+    const getSessionList = () => {
+        fetch('/api/admin/student/getStudentSession')
+            .then(res => res.json())
+            .then(data => setSessionList(data))
     }
 
     const handleSubmit = async (e) => {
@@ -55,6 +63,7 @@ const CommitteeDialog = (props) => {
     }
 
     useEffect(() => {
+        getSessionList()
         getSemesterList()
     }, [])
 
@@ -77,21 +86,12 @@ const CommitteeDialog = (props) => {
             >
 
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
                     <Typography>Select exam session and semester</Typography>
                     <Box sx={{ display: 'flex', mb: 5 }}>
-                        <TextField
-                            sx={{ mr: 4 }}
-                            margin="normal"
-                            required
-                            id="session"
-                            label="Session"
-                            name="session"
-                            value={session}
-                            onChange={(e) => { setSession(e.target.value); e.preventDefault() }}
-                            autoFocus
-                        />
+                        <AutoCompleteSession sx={{ width: '180px' }} value={{exam_session: session}} list={sessionList} onChange={(value) => setSession(value)} label='Exam Session' />
 
-                        <SemesterSelector sx={{ width: '180px', mt: 2 }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
+                        <SemesterSelector sx={{ width: '180px', ml: 5 }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
                     </Box>
 
                     <Typography variant="caption" >Select committee members.(If role left empty by default they will be a member)</Typography>

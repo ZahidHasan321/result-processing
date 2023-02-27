@@ -43,6 +43,7 @@ const MarksheetDialog = (props) => {
                 body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
             })
             localStorage.removeItem(JSON.stringify(data) + 'marksheet');
+            onClose({children:'Successfully submitted', serverity:'success'});
         }
     }
     const getMarsheetData = async () => {
@@ -114,7 +115,6 @@ const MarksheetDialog = (props) => {
     }, []);
 
     const ProcessRowUpdate = async (newRow, oldRow) => {
-
         if (marks) {
             const temp = marks.map((item) => {
                 if (item.code == newRow.code) {

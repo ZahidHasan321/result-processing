@@ -9,4 +9,5 @@ export default async function handler(req, res) {
     pool.query(query)
         .catch(err => console.log(err))
     res.status(200).send({message:'submitted'});
+    
 }

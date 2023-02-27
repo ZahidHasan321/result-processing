@@ -2,7 +2,7 @@ import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import { Box, Button, Paper } from "@mui/material";
+import { Alert, Box, Button, Paper, Snackbar } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -17,6 +17,7 @@ const Submitted = () => {
   const [checked, setChecked] = useState(false);
   const [rowClick, setRowClick] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [snackbar, setSnackbar] = useState(null);
 
 
   const handleRowClick = (params) => {
@@ -96,14 +97,24 @@ const Submitted = () => {
           <AntDesignGrid
             sx={{ boxShadow: 3 }}
             autoHeight
-            getRowId={(row) => row.course_code + row.semester + row.exam_session}
+            getRowId={(row) => row.course_code + row.semester + row.exam_session + row.set_number}
             checked={checked}
             columns={columns}
             rows={rows}
           />
         </Box>
       </Paper >
-      {openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={true} showName={true}/>}
+      {openDialog && <DecodeDialog open={openDialog} onClose={(notice) => { setOpenDialog(false); notice && setSnackbar(notice); notice && getRows() }} data={rowClick} editableData={true} showName={true} />}
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={() => { setSnackbar(null) }}
+          autoHideDuration={3000}
+        >
+          <Alert {...snackbar} onClose={(() => { setSnackbar(null) })} />
+        </Snackbar>
+      )}
     </Box>
   )
 }

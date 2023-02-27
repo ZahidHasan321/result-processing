@@ -84,6 +84,10 @@ export const AdminPages = [
     routename: "Courses",
     routepath: "/admin/courses",
   },
+  {
+    routename: "Students",
+    routepath: "/admin/students",
+  },
 
 
 ]

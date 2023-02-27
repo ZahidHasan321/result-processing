@@ -139,8 +139,9 @@ const CATMdialog = (props) => {
             });
     }
 
+
     const getStudentID = async () => {
-        await fetch('/api/courseTeacher/getstudents', {
+        await fetch('/api/admin/student/getStudentData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -200,6 +201,7 @@ const CATMdialog = (props) => {
                     experimentalFeatures={{ newEditingApi: true }}
                     processRowUpdate={ProcessRowUpdate}
                     onProcessRowUpdateError={handleProcessRowUpdateError}
+                    disableIgnoreModificationsIfProcessingProps
                 />
             </Box>
             <Backdrop
@@ -214,7 +216,6 @@ const CATMdialog = (props) => {
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                     onClose={handleCloseSnackbar}
                     autoHideDuration={3000}
-                    disableIgnoreModificationsIfProcessingProps
                 >
                     <Alert {...snackbar} onClose={handleCloseSnackbar} />
                 </Snackbar>

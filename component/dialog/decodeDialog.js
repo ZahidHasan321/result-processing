@@ -7,7 +7,6 @@ import AntDesignGrid from "../customDatagrid/customDatagrid";
 
 const DecodeDialog = (props) => {
     const { open, onClose, data, editableData, sx, showName} = props;
-    const [paperCodes, setPaperCodes] = useState([]);
     const [marks, setMarks] = useState(null);
     const [checked, setChecked] = useState(false);
     const [snackbar, setSnackbar] = useState(null);
@@ -19,11 +18,11 @@ const DecodeDialog = (props) => {
     const handleOnClose = () => {
         onClose();
     }
-
+    console.log(marks);
     const handleOnSubmit = () => {
+        
         if (marks) {
             marks.map((item => {
-
                 var total = 0;
                 Object.entries(item).forEach(([key, value]) => {
                     if (value != null && value != '0' && key != 'roll' && key != 'code' && key != 'Total') {
@@ -52,6 +51,8 @@ const DecodeDialog = (props) => {
                 body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
             })
         }
+
+        onClose({children:'Succesfully Decoded', serverity:'success'})
     }
 
 
@@ -59,11 +60,11 @@ const DecodeDialog = (props) => {
         var list = [];
         if (submittedData) {
             submittedData.map((item) => {
-                const found = list.findIndex(element => element.code === item.paper_code)
+                const found = list.findIndex(element => element.code === item.code)
 
                 if (found != -1) list[found][item.question] = item.mark
                 else {
-                    const object = { code: item.paper_code, name: item.name , roll: item.roll, [item.question]: item.mark, }
+                    const object = { code: item.code, name: item.name , roll: item.roll, [item.question]: item.mark, }
                     list.push(object)
                 }
             })
@@ -98,6 +99,7 @@ const DecodeDialog = (props) => {
                 else return item;
             })
             setMarks(temp);
+            setSnackbar({children:'Saved', serverity:'sucesss'})
         }
         return newRow;
     }

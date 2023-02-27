@@ -8,7 +8,9 @@ export default async function handler(req, res) {
         values: [param.session, param.course, param.set, 'present']
     }
     const result = await pool.query(query)
-        .then(data =>    res.status(200).send(data.rows))
+        .then(data => data.rows)
         .catch(err => console.log(err));
+
+        res.status(200).send(result)
 
 }

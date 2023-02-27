@@ -11,16 +11,18 @@ export default async function handler(req, res) {
     const result = await pool.query(query)
         .catch(err => err);
 
-    if (result.severity == 'ERROR')
-        res.status(500).send(result);
-    else
-        res.status(200).send(result)
 
     const query2 = {
-        text: 'DELETE FROM sem_course WHERE exam_session = $1',
-        values: [param.session]
+        text: 'DELETE FROM sem_course WHERE exam_session = $1 AND semester = $2',
+        values: [param.session, param.semester]
     }
 
     await pool.query(query2)
         .catch(err => console.log(err));
+
+
+    if (result.severity == 'ERROR')
+        res.status(500).send(result);
+    else
+        res.status(200).send(result)
 }

@@ -41,7 +41,6 @@ export default async function (req, res) {
                     values: [param.semester, param.session]
                 }
             ).catch(err => console.log(err));
-            console.log('worked');
             await client.query('COMMIT')
             res.status(200).send({ message: 'Committee Created' })
             

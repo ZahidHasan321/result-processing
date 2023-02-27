@@ -4,7 +4,7 @@ import Layout from "@/component/layout/layout";
 import { examinerPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Box, Button, Paper } from "@mui/material";
+import { Alert, Box, Button, Paper, Snackbar } from "@mui/material";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
@@ -15,6 +15,7 @@ const Home = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [rowData, setRowData] = useState(null);
   const [checked, setChecked] = useState(false);
+  const [snackbar, setSnackbar] = useState(null);
 
   const getList = async () => {
     const { user } = await getSession();
@@ -104,7 +105,17 @@ const Home = () => {
           />
         </Box>
       </Paper>
-      {openDialog && <MarksheetDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowData} editableData={true}/>}
+      {openDialog && <MarksheetDialog open={openDialog} onClose={(notice) => { setOpenDialog(false); notice && setSnackbar(notice); notice && getList() }}data={rowData} editableData={true}/>}
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={() => { setSnackbar(null) }}
+          autoHideDuration={3000}
+        >
+          <Alert {...snackbar} onClose={(() => { setSnackbar(null) })} />
+        </Snackbar>
+      )}
     </Box>
   )
 }

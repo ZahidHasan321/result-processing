@@ -21,11 +21,11 @@ const TeacherDialog = (props) => {
         event.preventDefault();
         const formdata = new FormData(event.currentTarget);
 
-        const email = formdata.get('email');
-        const password = formdata.get('password');
-        const name = formdata.get('name');
-        const phone = formdata.get('phone');
-        const dept = formdata.get('department');
+        const email = formdata.get('email').trim();
+        const password = formdata.get('password').trim();
+        const name = formdata.get('name').trim();
+        const phone = formdata.get('phone').trim();
+        const dept = formdata.get('department').trim();
 
         if (email && password && name && dept) {
             await fetch('/api/admin/addTeacher', {

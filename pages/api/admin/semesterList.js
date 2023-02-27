@@ -8,6 +8,6 @@ export default async function handler(req, res) {
   
   const result = await pool.query(query)
   .then(res => res.rows)
-  .then(err => err);
+  .catch(err => err);
   res.send(result);
 }

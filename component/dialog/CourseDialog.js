@@ -39,7 +39,7 @@ const CourseDialog = (props) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ code, name, credit, type, semester })
+            body: JSON.stringify({ code : code.trim(), name: name.trim(), credit, type, semester })
         }).then(res => {
             if (res.ok) {
                 setShowAlert(true);

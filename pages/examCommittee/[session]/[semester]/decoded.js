@@ -102,7 +102,7 @@ const Decoded = () => {
           <AntDesignGrid
             sx={{ boxShadow: 3 }}
             autoHeight
-            getRowId={(row) => row.course_code + row.semester + row.exam_session}
+            getRowId={(row) => row.course_code + row.semester + row.exam_session+row.set_number}
             checked={checked}
             columns={columns}
             rows={rows}
