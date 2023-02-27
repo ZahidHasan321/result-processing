@@ -96,7 +96,7 @@ function MenuAppBar(props) {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <Link href='/' style={{ textDecoration: 'none', color: 'black' }}><MenuItem>Profile</MenuItem></Link>
+            <Link href='/profile' style={{ textDecoration: 'none', color: 'black' }}><MenuItem>Profile</MenuItem></Link>
             <Link href='/admin/' style={{ textDecoration: 'none', color: 'black' }}><MenuItem>Admin Panel</MenuItem></Link>
             <MenuItem onClick={() => { signOut({ callbackUrl: '/auth/signin' }) }}>Logout</MenuItem>
           </Menu>

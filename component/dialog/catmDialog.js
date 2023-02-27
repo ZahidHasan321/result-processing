@@ -1,6 +1,5 @@
-import AddIcon from '@mui/icons-material/Add';
 import { Alert, Backdrop, Box, Button, CircularProgress, Dialog, DialogTitle, Grow, Snackbar } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
 
 const CATMdialog = (props) => {
@@ -52,9 +51,9 @@ const CATMdialog = (props) => {
         return { ...params.props, error: hasError };
     }
 
-    const handleProcessRowUpdateError = () => {
-        setSnackbar({ children: "Enter roll number", serverity: 'error' })
-    };
+    const handleProcessRowUpdateError = useCallback((error) => {
+        setSnackbar({ children: error.message, severity: 'error' });
+      }, []);
 
     const updateMarks = (newRow) => {
         const temp = marks.map((item) => {
@@ -215,6 +214,7 @@ const CATMdialog = (props) => {
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                     onClose={handleCloseSnackbar}
                     autoHideDuration={3000}
+                    disableIgnoreModificationsIfProcessingProps
                 >
                     <Alert {...snackbar} onClose={handleCloseSnackbar} />
                 </Snackbar>

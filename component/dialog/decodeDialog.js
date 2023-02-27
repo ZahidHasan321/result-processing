@@ -6,7 +6,7 @@ import AntDesignGrid from "../customDatagrid/customDatagrid";
 
 
 const DecodeDialog = (props) => {
-    const { open, onClose, data, editableData, sx } = props;
+    const { open, onClose, data, editableData, sx, showName} = props;
     const [paperCodes, setPaperCodes] = useState([]);
     const [marks, setMarks] = useState(null);
     const [checked, setChecked] = useState(false);
@@ -23,13 +23,23 @@ const DecodeDialog = (props) => {
     const handleOnSubmit = () => {
         if (marks) {
             marks.map((item => {
-                if (item.roll != null) {
+
+                var total = 0;
+                Object.entries(item).forEach(([key, value]) => {
+                    if (value != null && value != '0' && key != 'roll' && key != 'code' && key != 'Total') {
+                        total = total + (+value);
+                    }
+                })
+
+                if(total == 0) total = null;
+
+                if ( item.roll != null) {
                     fetch('/api/examCommittee/semester/submitDecode', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json'
                         },
-                        body: JSON.stringify({ roll: item.roll, session: data.exam_session, course: data.course_code, set: data.set_number, paperCode: item.code })
+                        body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number, paperCode: item.code, roll: item.roll, total: total })
                     })
                 }
             }))
@@ -51,10 +61,9 @@ const DecodeDialog = (props) => {
             submittedData.map((item) => {
                 const found = list.findIndex(element => element.code === item.paper_code)
 
-
                 if (found != -1) list[found][item.question] = item.mark
                 else {
-                    const object = { code: item.paper_code, roll: item.roll, [item.question]: item.mark, }
+                    const object = { code: item.paper_code, name: item.name , roll: item.roll, [item.question]: item.mark, }
                     list.push(object)
                 }
             })
@@ -69,7 +78,7 @@ const DecodeDialog = (props) => {
     }, 500)
 
     useEffect(() => {
-        fetch('/api/examiner/getMarks', {
+        fetch('/api/examCommittee/semester/getMarks', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -121,6 +130,7 @@ const DecodeDialog = (props) => {
             minWidth: 150,
             flex: 1
         },
+        
         {
             field: "roll",
             headerName: "Roll No",
@@ -128,6 +138,13 @@ const DecodeDialog = (props) => {
             flex: 1,
             editable: editableData,
             preProcessEditCellProps
+        },
+        {
+            field: "name",
+            headerName: "Student Name",
+            minWidth: 200,
+            flex: 1,
+            hide: showName
         },
         {
             field: "Q1",

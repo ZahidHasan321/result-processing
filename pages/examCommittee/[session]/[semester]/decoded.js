@@ -108,11 +108,13 @@ const Decoded = () => {
             rows={rows}
           />
         </Box>
-      </Paper >{openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={false} />}
+      </Paper >{openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={false} showName = {false} />}
 
     </Box >
   )
 }
+
+
 
 Decoded.getLayout = function getLayout(page) {
   const router = useRouter();

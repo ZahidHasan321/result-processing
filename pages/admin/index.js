@@ -5,8 +5,8 @@ import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
 import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
-import { Alert, Box, Button, Paper, Slide, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Alert, Box, Button, Paper, Slide, Snackbar, Typography } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 
 
 
@@ -22,8 +22,9 @@ const Home = () => {
   const [teacherlist, setTeacherList] = useState([]);
 
   const [checked, setChecked] = useState(false);
-  const [showAlert, setShowAlert] = useState(null);
-  const [showError, setShowError] = useState(null);
+  const [snackbar, setSnackbar] = useState(null);
+
+  const handleCloseSnackbar = () => setSnackbar(null);
 
   function handleClose() {
     getSessionList();
@@ -67,24 +68,42 @@ const Home = () => {
       body: JSON.stringify({ session, semester })
     }).then(
       res => {
+        setSnackbar({ children: 'Removed committee successfully', severity: 'success' })
         if (res.ok) {
           setSession('')
           setSemester('')
           getSessionList()
-          setShowAlert(true);
 
-          setTimeout(() => {
-            setShowAlert(false)
-          }, 4000)
         }
         else {
-          setShowError(true);
-
-          setTimeout(() => {
-            setShowError(false)
-          }, 4000)
+          setSnackbar({ children: 'Failed to remove committee', severity: 'error' })
         }
       })
+  }
+
+  const processRowUpdate = (newRow, oldRow) => {
+    if (session != '' && semester != null) {
+      fetch('/api/admin/updateCommitteeRole', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ role: newRow.role, id: newRow.id, session, semester })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.command == "UPDATE") {
+            setSnackbar({ children: 'Role Updated', severity: "success" })
+          }
+          else{
+            setSnackbar({ children: 'Failed to update row', severity: "error" })
+          }
+        });
+
+      return newRow;
+    }
+    else
+      return oldRow;
   }
 
   const columns = [
@@ -107,15 +126,17 @@ const Home = () => {
     {
       field: "department",
       headerName: "Department",
-      minWidth: 200,
+      minWidth: 300,
       flex: 1
     },
 
     {
       field: "role",
-      headerName: "Role",
-      minWidth: 200
-    },
+      editable: true,
+      type: "singleSelect",
+      valueOptions: ["Chairman", "Tabulator", "Member"],
+      minWidth: 150
+    }
   ]
 
 
@@ -159,16 +180,19 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if(session == '')
-    {
+    if (session == '') {
       setSemesterList([])
       setSemester('')
     }
-    else{
-    getSemesterList();
-    setSemester('')
-  }
+    else {
+      getSemesterList();
+      setSemester('')
+    }
   }, [session])
+
+  const handleProcessRowUpdateError = useCallback((error) => {
+    setSnackbar({ children: error.message, severity: 'error' });
+  }, []);
 
   if (loading) <div>loading</div>
 
@@ -176,20 +200,11 @@ const Home = () => {
     <Paper variant="outlined" sx={{ m: 6, boxShadow: 3 }}>
       <Box sx={{ ml: 2, mr: 2 }}>
         <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-          <Box width={300} sx={{ zIndex: 99, position: 'absolute', }}>
-            {
-              showAlert && <Alert severity='success'>Deleted Successfully</Alert>
-            }
-            {
-              showError && <Alert severity='error'>ERROR!! Cannot be deleted</Alert>
-            }
-          </Box>
-        </Box>
+
         <Typography variant="caption" sx={{ ml: 2 }}>Choose a session and a semester</Typography>
         <Box sx={{ mt: 1, ml: 2, mr: 2, mb: 3, display: 'flex', alignItems: 'end' }}>
           <AutoCompleteSession sx={{ width: '180px', mr: 3 }} list={sessionList} onChange={(value) => { setSession(value) }} label='Session' />
-          <SemesterSelector sx={{width:'180px'}} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester'/>
+          <SemesterSelector sx={{ width: '180px' }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
 
           <Box sx={{ ml: 'auto', }}>
 
@@ -197,25 +212,28 @@ const Home = () => {
               enter: "cubic-bezier(0, 1.2, .8, 1)",
               exit: "liner"
             }}>
-              <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover":{bgcolor:'red'}}}>Delete Committee</Button>
+              <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'red' } }}>Delete Committee</Button>
             </Slide>
-            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover":{ bgcolor:'#67be23'} }}>Create Committee</Button>
+            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}>Create Committee</Button>
           </Box>
 
         </Box>
-        <Slide in={checked} direction='left'  easing={{
-              enter: "cubic-bezier(0, 1.2, .8, 1)",
-              exit: "liner"
-            }}
+        <Slide in={checked} direction='left' easing={{
+          enter: "cubic-bezier(0, 1.2, .8, 1)",
+          exit: "liner"
+        }}
         >
           <Box sx={{ m: 2, mb: 4 }}>
             <AntDesignGrid
               sx={{ boxShadow: 3 }}
               columns={columns}
               rows={committeeList}
-              checked = {checked}
+              checked={checked}
               hideFooter
               autoHeight
+              experimentalFeatures={{ newEditingApi: true }}
+              processRowUpdate={processRowUpdate}
+              onProcessRowUpdateError={handleProcessRowUpdateError}
             />
           </Box>
         </Slide>
@@ -224,6 +242,16 @@ const Home = () => {
         <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />
 
       </Box>
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={6000}
+        >
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )}
     </Paper>
   )
 }

@@ -266,6 +266,7 @@ const MarksheetDialog = (props) => {
                             experimentalFeatures={{ newEditingApi: true }}
                             processRowUpdate={ProcessRowUpdate}
                             onProcessRowUpdateError={handleProcessRowUpdateError}
+                            disableIgnoreModificationsIfProcessingProps
                         />}
                 </Box>
                 

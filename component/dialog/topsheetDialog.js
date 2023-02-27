@@ -1,5 +1,5 @@
 import { formatOrdinals } from "@/helper/ordinal";
-import { Box, Dialog, DialogTitle, Grow, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Backdrop, Box, CircularProgress, Dialog, DialogTitle, Grow, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
 import TabPanel from "../tab/tabPanel";
 import Topsheet from "../topsheet/topsheet";
@@ -8,10 +8,17 @@ import Topsheet from "../topsheet/topsheet";
 const TopsheetDialog = (props) => {
     const { open, onClose, semester, session, course } = props;
     const [tab, setTab] = useState(0);
+    const [checked, setChecked] = useState(false);
+    const [openBackdrop, setOpenBackdrop] = useState(true);
 
     const handleOnClose = () => {
         onClose();
     }
+
+    setTimeout(() => {
+        setOpenBackdrop(false);
+        setChecked(true)
+    }, 500)
 
     return (
         <Dialog TransitionComponent={Grow} maxWidth='xl' fullWidth open={open} onClose={handleOnClose} sx={{ backdropFilter: 'blur(5px)' }}>
@@ -43,6 +50,12 @@ const TopsheetDialog = (props) => {
                         </TabPanel>
                     </Box>
             </Box>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={openBackdrop}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Dialog>
     )
 }

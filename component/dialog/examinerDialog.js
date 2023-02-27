@@ -1,4 +1,4 @@
-import { Box, Button, Container, Dialog, DialogTitle, Fade, Grow, Snackbar, Typography } from "@mui/material";
+import { Alert, Box, Button, Container, Dialog, DialogTitle, Fade, Grow, Snackbar, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 
@@ -10,7 +10,7 @@ const ExaminerDialog = (props) => {
     const [courseTeacher, setCourseTeacher] = useState('');
     const [loading, setLoading] = useState(true);
     const [List, setList] = useState([]);
-    const [barOpen, setBarOpen] = useState({ open: false, color: '', message: '' });
+    const [snackbar, setSnackbar] = useState(null);
 
 
 
@@ -23,6 +23,7 @@ const ExaminerDialog = (props) => {
     }
 
     const getAssignedList = async (e) => {
+        var f = false;
         setLoading(false);
         await fetch('/api/examCommittee/semester/getExaminer', {
             method: 'POST',
@@ -60,46 +61,66 @@ const ExaminerDialog = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        var f = false;
+        if (examinerA != '' && examinerB != '' && examinerA != null && examinerB != null) {
+            var id_a = examinerA;
+            var id_b = examinerB;
 
-        if (examinerA != '' && examinerB != '' && examinerA != null && examinerB != null && courseTeacher != '' && courseTeacher != null) {
-            if (examinerA !== examinerB) {
-                var id = examinerA;
-                var set = "A";
+            if (typeof examinerA === 'object' && examinerA !== null) {
+                id_a = examinerA.id;
+            }
+
+            if (typeof examinerB === 'object' && examinerB !== null) {
+                id_b = examinerB.id;
+            }
+
+            if (id_a !== id_b) {
+                f == true;
                 await fetch('/api/examCommittee/semester/addExaminer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ id, session, course, set, number: 1 })
+                    body: JSON.stringify({ id: id_a, session, course, set: 'A' })
                 })
 
-                var set = "B";
-                var id = examinerB;
+
                 await fetch('/api/examCommittee/semester/addExaminer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ id, session, course, set, number: 2 })
+                    body: JSON.stringify({ id: id_b, session, course, set: 'B' })
                 })
-
-                await fetch('/api/examCommittee/semester/addCourseTeacher', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: courseTeacher, session, course })
-                })
-
-                setBarOpen({ open: true, message: 'Examiners Assigned' });
-
+                
+                setSnackbar({ children: "Examiners assigned to course", severity: 'success' })
+                
             }
             else {
-                setBarOpen({ open: true, message: 'Examiners have to different' });
+                f == true;
+                setSnackbar({ children: "Both sets cannot have same examiner", severity: 'error' })
+                
             }
         }
-        else {
-            setBarOpen({ open: true, message: 'Cannot be empty' });
+
+        var id = courseTeacher;
+        if (typeof courseTeacher === 'object' && courseTeacher !== null) {
+            id = courseTeacher.id;
+        }
+
+        if (id !== '' && id !== null && courseTeacher != null) {
+            await fetch('/api/examCommittee/semester/addCourseTeacher', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id, session, course })
+            })
+
+             if(f == true) setSnackbar({ children: "Course Teacher assigned", severity: 'success' })
+        }
+        else{
+            setSnackbar({ children: "Examiner cannot be left empty", severity: 'error' })
         }
     }
     useEffect(() => {
@@ -122,7 +143,7 @@ const ExaminerDialog = (props) => {
 
                     {loading &&
                         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                            <AutoCompleteTeacher value={examinerA} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-A Examiner" />
+                            <AutoCompleteTeacher value={examinerA} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-B Examiner" />
                             <AutoCompleteTeacher value={examinerB} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
                             <Typography fontWeight={'bold'}>Add Course Teacher</Typography>
                             <AutoCompleteTeacher value={courseTeacher} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setCourseTeacher(value)} label="Course Teacher" />
@@ -131,7 +152,16 @@ const ExaminerDialog = (props) => {
                     }
                 </Container>
             </Box>
-            <Snackbar open={barOpen.open} autoHideDuration={5000} onClose={() => setBarOpen(false)} message={barOpen.message} />
+            {!!snackbar && (
+                <Snackbar
+                    open
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    onClose={() => { setSnackbar(null) }}
+                    autoHideDuration={5000}
+                >
+                    <Alert {...snackbar} onClose={(() => { setSnackbar(null) })} />
+                </Snackbar>
+            )}
         </Dialog>
     )
 }

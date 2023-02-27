@@ -83,47 +83,47 @@ const Dashboard = () => {
                     subheader={item.course_name} />
 
                   <CardContent>
-                    <Typography variant="body2" fontSize={14}>SET-A: {item.examiners ? item.examiners[0] : <i>None</i>}</Typography>
-                    <Typography variant="body2" fontSize={14}>SET-B: {item.examiners ? item.examiners[1] : <i>None</i>}</Typography>
+                    <Typography variant="body2" fontSize={14}>SET-A: {item.examiner_a_name ? item.examiner_a_name  : <i>None</i>}</Typography>
+                    <Typography variant="body2" fontSize={14}>SET-B: {item.examiner_b_name  ? item.examiner_b_name  : <i>None</i>}</Typography>
 
                     <Box sx={{ display: 'flex', alignItems: 'center', mr: 2, mt:1}}>
                       <Circle fontSize="3px" sx={{ mr: 0.2, color: item.catm ? 'lightgreen' : '#bdbdbd' }} />
-                      <Typography fontSize={13}>CATM</Typography>
+                      <Typography variant="body2" fontSize={13}>CATM</Typography>
                     </Box>
 
                     <Stack direction={'row'}>
-                      <Typography sx={{ mr: 1 }} fontSize={13}>SUBMITTED: </Typography>
+                      <Typography variant="body2" sx={{ mr: 1 }} fontSize={14}>SUBMITTED: </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
                         <Circle fontSize="3px" sx={{ mr: 0.2, color: item.submitted_a? 'lightgreen' : '#bdbdbd' }} />
-                        <Typography fontSize={13}>SET-A</Typography>
+                        <Typography fontSize={14}>SET-A</Typography>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center', }}>
                         <Circle fontSize="3px" sx={{ mr: 0.2, color: item.submitted_b ? 'lightgreen' : '#bdbdbd' }} />
-                        <Typography fontSize={13}>SET-B</Typography>
+                        <Typography fontSize={14}>SET-B</Typography>
                       </Box>
                     </Stack>
 
                     <Stack direction={'row'}>
-                    <Typography sx={{mr:1}} fontSize={13}>DECODED: </Typography>
+                    <Typography variant="body2"  sx={{mr:2.5}} fontSize={14}>DECODED: </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
                       <Circle fontSize="3px" sx={{ mr: 0.2, color: item.decoded_a ? 'lightgreen' : '#bdbdbd' }} />
-                      <Typography fontSize={13}>SET-A</Typography>
+                      <Typography fontSize={14}>SET-A</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', }}>
                       <Circle fontSize="3px" sx={{ mr: 0.2, color: item.decoded_b ? 'lightgreen' : '#bdbdbd' }} />
-                      <Typography fontSize={13}>SET-B</Typography>
+                      <Typography fontSize={14}>SET-B</Typography>
                     </Box>
                   </Stack>
 
                     <Stack direction={'row'}>
-                      <Typography sx={{ mr: 1 }} fontSize={13}>TOPSHEET: </Typography>
+                      <Typography variant="body2" sx={{ mr: 2 }} fontSize={14}>TOPSHEET: </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
                         <Circle fontSize="3px" sx={{ mr: 0.2, color: item.set_a ? 'lightgreen' : '#bdbdbd' }} />
-                        <Typography fontSize={13}>SET-A</Typography>
+                        <Typography fontSize={14}>SET-A</Typography>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center', }}>
                         <Circle fontSize="3px" sx={{ mr: 0.2, color: item.set_b ? 'lightgreen' : '#bdbdbd' }} />
-                        <Typography fontSize={13}>SET-B</Typography>
+                        <Typography fontSize={14}>SET-B</Typography>
                       </Box>
                     </Stack>
                   </CardContent>

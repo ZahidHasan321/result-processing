@@ -103,7 +103,7 @@ const Submitted = () => {
           />
         </Box>
       </Paper >
-      {openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={true} />}
+      {openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={true} showName={true}/>}
     </Box>
   )
 }
