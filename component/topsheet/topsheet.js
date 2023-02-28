@@ -166,7 +166,7 @@ const Topsheet = (props) => {
 
             <Paper sx={{ border: 1, m: 2, boxShadow: 2 }}>
                 <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Present Students</Typography>
-                {presentData && <ChipArray list={presentData} onDelete={(data) => handlePresentDelete(data, 'present')} updateData={updatePresentData} sx={{
+                {presentData && <ChipArray show={true} list={presentData} onDelete={(data) => handlePresentDelete(data, 'present')} updateData={updatePresentData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',
                     minHeight: '200px'

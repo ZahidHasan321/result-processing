@@ -57,6 +57,9 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     '& .MuiPaginationItem-root': {
         borderRadius: 5,
     },
+    '& .MuiDataGrid-cell--editing': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#376331' : 'rgb(217 243 190)',
+    }
 }));
 
 function CustomPagination() {
@@ -113,7 +116,7 @@ export default function AntDesignGrid(props) {
     const { checked, rows, columns, component, ...restProps } = props;
 
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%', height: '100%'}}>
             <Grow in={checked}>
                 <StyledDataGrid
 

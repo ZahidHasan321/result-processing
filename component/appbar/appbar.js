@@ -43,7 +43,7 @@ function MenuAppBar(props) {
 
   
   return (
-    <AppBar position="static" sx={{ bgcolor: 'inherit' }}>
+    <AppBar position="static" sx={{ bgcolor: 'white' }}>
       <Toolbar disableGutters variant='dense'>
         <Link href='/' style={{marginLeft:5}}>
           <Image

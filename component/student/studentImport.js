@@ -90,7 +90,7 @@ const StudentImporter = () => {
   }
 
   return (
-    <Box sx={{flexGrow:1, flexShrink:0}}>
+    <Box sx={{flexGrow:3}}>
         <Box sx={{ pt:3, pb:3, display:'flex', flexDirection:'column' }}>
           <Box sx={{display:'flex'}}>
           <Button

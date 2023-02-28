@@ -126,7 +126,7 @@ const CATMdialog = (props) => {
         },
         {
             field: "total",
-            headerName: "Total(32)",
+            headerName: "Total(21)",
             minWidth: 120,
             flex: 1,
             valueGetter: getTotal

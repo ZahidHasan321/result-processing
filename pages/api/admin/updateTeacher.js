@@ -7,6 +7,8 @@ export default async function handler(req, res) {
     values: [param.email, param.name, param.phone, param.dept, param.id]
   }
 
+  console.log(param);
+
   const result = await pool.query(query)
     .catch(err => err);
 

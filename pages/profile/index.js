@@ -15,7 +15,7 @@ const Profile = () => {
 
     useEffect(() => {
         getProfileData();
-    })
+    },[])
     return (
         <Box sx={{display:'flex', flexDirection:'column'}}>
             <Typography>Name: {userData.name}</Typography>

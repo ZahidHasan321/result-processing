@@ -101,7 +101,7 @@ const Home = () => {
           if (data.command == "UPDATE") {
             setSnackbar({ children: 'Role Updated', severity: "success" })
           }
-          else{
+          else {
             setSnackbar({ children: 'Failed to update row', severity: "error" })
           }
         });
@@ -203,62 +203,64 @@ const Home = () => {
   if (loading) <div>loading</div>
 
   return (
-    <Paper variant="outlined" sx={{ m: 6, boxShadow: 3 }}>
-      <Box sx={{ ml: 2, mr: 2 }}>
-        <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
+    <Box>
+      <Paper variant="outlined" sx={{ m: 6, boxShadow: 3 }}>
+        <Box sx={{ ml: 2, mr: 2 }}>
+          <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
 
-        <Typography variant="caption" sx={{ ml: 2 }}>Choose a session and a semester</Typography>
-        <Box sx={{ mt: 1, ml: 2, mr: 2, mb: 3, display: 'flex', alignItems: 'end' }}>
-          <AutoCompleteSession sx={{ width: '180px', mr: 3 }} list={sessionList} onChange={(value) => { setSession(value) }} label='Session' />
-          <SemesterSelector sx={{ width: '180px' }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
+          <Typography variant="caption" sx={{ ml: 2 }}>Choose a session and a semester</Typography>
+          <Box sx={{ mt: 1, ml: 2, mr: 2, mb: 3, display: 'flex', alignItems: 'end' }}>
+            <AutoCompleteSession sx={{ width: '180px', mr: 3 }} list={sessionList} onChange={(value) => { setSession(value) }} label='Session' />
+            <SemesterSelector sx={{ width: '180px' }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
 
-          <Box sx={{ ml: 'auto', }}>
+            <Box sx={{ ml: 'auto', }}>
 
-            <Slide in={checked} direction='left' mountOnEnter unmountOnExit easing={{
-              enter: "cubic-bezier(0, 1.2, .8, 1)",
-              exit: "liner"
-            }}>
-              <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'red' } }}>Delete Committee</Button>
-            </Slide>
-            <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}>Create Committee</Button>
+              <Slide in={checked} direction='left' mountOnEnter unmountOnExit easing={{
+                enter: "cubic-bezier(0, 1.2, .8, 1)",
+                exit: "liner"
+              }}>
+                <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'red' } }}>Delete Committee</Button>
+              </Slide>
+              <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}>Create Committee</Button>
+            </Box>
+
           </Box>
+          <Slide in={checked} direction='left' easing={{
+            enter: "cubic-bezier(0, 1.2, .8, 1)",
+            exit: "liner"
+          }}
+          >
+            <Box sx={{ m: 2, mb: 4 }}>
+              <AntDesignGrid
+                sx={{ boxShadow: 3 }}
+                columns={columns}
+                rows={committeeList}
+                checked={checked}
+                hideFooter
+                autoHeight
+                experimentalFeatures={{ newEditingApi: true }}
+                processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
+              />
+            </Box>
+          </Slide>
+
+          <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />
+          <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />
 
         </Box>
-        <Slide in={checked} direction='left' easing={{
-          enter: "cubic-bezier(0, 1.2, .8, 1)",
-          exit: "liner"
-        }}
-        >
-          <Box sx={{ m: 2, mb: 4 }}>
-            <AntDesignGrid
-              sx={{ boxShadow: 3 }}
-              columns={columns}
-              rows={committeeList}
-              checked={checked}
-              hideFooter
-              autoHeight
-              experimentalFeatures={{ newEditingApi: true }}
-              processRowUpdate={processRowUpdate}
-              onProcessRowUpdateError={handleProcessRowUpdateError}
-            />
-          </Box>
-        </Slide>
-
-        <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />
-        <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />
-
-      </Box>
-      {!!snackbar && (
-        <Snackbar
-          open
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          onClose={handleCloseSnackbar}
-          autoHideDuration={6000}
-        >
-          <Alert {...snackbar} onClose={handleCloseSnackbar} />
-        </Snackbar>
-      )}
-    </Paper>
+        {!!snackbar && (
+          <Snackbar
+            open
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            onClose={handleCloseSnackbar}
+            autoHideDuration={6000}
+          >
+            <Alert {...snackbar} onClose={handleCloseSnackbar} />
+          </Snackbar>
+        )}
+      </Paper>
+    </Box>
   )
 }
 

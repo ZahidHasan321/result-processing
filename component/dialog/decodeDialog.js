@@ -28,14 +28,13 @@ const DecodeDialog = (props) => {
     const handleOnClose = () => {
         onClose();
     }
-    console.log(marks);
     const handleOnSubmit = () => {
         
         if (marks) {
             marks.map((item => {
                 var total = 0;
                 Object.entries(item).forEach(([key, value]) => {
-                    if (value != null && value != '0' && key != 'roll' && key != 'code' && key != 'Total') {
+                    if (value != null && !isNaN(value) && key != 'roll' && key != 'code' && key != 'Total') {
                         total = total + (+value);
                     }
                 })

@@ -6,8 +6,13 @@ const Theme = createTheme({
     mode: 'light',
     primary: {
       main: '#2c1630',
+    },
+    background:{
+      default:'#f0f0f0'
     }
   },
+
+  
 
   typography: {
     fontFamily: [

@@ -94,26 +94,27 @@ const Teachers = () => {
   ]
 
   const processRowUpdate = (newRow, oldRow) => {
+    if(JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
+
     if (newRow.name != '') {
       fetch('/api/admin/updateTeacher', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email:newRow.email, name: newRow.name, phone: newRow.phone, dept: newRow.dept, id:newRow.id })
+        body: JSON.stringify({ email:newRow.email, name: newRow.name, phone: newRow.phone, dept: newRow.department, id:newRow.id })
       })
         .then(res => res.json())
         .then(data => {
-          console.log(data)
           if (data.command == "UPDATE") {
             setSnackbar({ children: 'Teacher data updated', severity: "success" })
-            return newRow;
           }
           else{
             setSnackbar({ children: 'Failed to update', severity: "error" })
-            return newRow;
           }
         });
+
+        return newRow;
     }
     else{
       setSnackbar({ children: 'Name cannot be empty', severity: "error" })

@@ -4,15 +4,26 @@ import StudentList from "@/component/student/studentList";
 import { AdminPages } from "@/constants/routes";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import Grow from "@mui/material/Grow";
+import { useState } from "react";
+import { Container } from "@mui/system";
 
 
 const Student = () => {
+  const [show, setShow] = useState(false);
   return (
     <Box>
-      <Paper sx={{ m: 6, boxShadow: 3 }}>
-        <Box sx={{ m: 4, pt: 3, pb: 3, display: 'flex', justifyContent:'center'}}>
+      <Paper sx={{ m: 6, boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
+        <Button sx={{ ml: 'auto', mr: 3, mt: 3 }} onClick={() => setShow(!show)} variant={'contained'}>Import Student</Button>
+        <Box sx={{ m: 4, pb: 3, display: 'flex', justifyContent: 'center' }}>
           <StudentList />
-          <StudentImporter />
+          {show &&
+            <Grow in={show}>
+              <Container  >
+                <StudentImporter />
+              </Container>
+            </Grow>}
         </Box>
       </Paper>
     </Box>
