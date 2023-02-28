@@ -124,8 +124,8 @@ const Topsheet = (props) => {
 
     if (loading) {
         return (
-            <Box height={700} width={1200}>
-
+            <Box  height={700} width={1200}>
+                
             </Box>
         )
     }

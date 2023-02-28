@@ -17,7 +17,8 @@ const UploadStudentDialog = (props) => {
     const [semesterList, setSemesterList] = useState([]);
     const [snackbar, setSnackbar] = useState(null);
 
-
+    console.log(list);
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         if(session == '' || semester == ''){
@@ -38,8 +39,7 @@ const UploadStudentDialog = (props) => {
         })
             .then(res => {
                 if (res.ok) {
-                    setSnackbar({children:'Upload to database', severity:"success"})
-                    onClose();
+                    onClose({children:'Upload to database', severity:"success"});
                 }
                 else {
                     setSnackbar({children:'Failed to upload', severity:"error"})
@@ -73,7 +73,7 @@ const UploadStudentDialog = (props) => {
                         <SemesterSelector sx={{ width: '180px', ml: 5, mt: 2 }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
 
                     </Box>
-                    <Typography sx={{ mt: 3 }} fontWeight={'bold'}>File Name:</Typography>
+                    {filename && <Typography sx={{ mt: 3 }} fontWeight={'bold'}>File Name:</Typography>}
                     <Typography>{filename}</Typography>
 
                     <Box sx={{ display: 'table', m: '0 auto' }}>

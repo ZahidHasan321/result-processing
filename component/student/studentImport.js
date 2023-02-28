@@ -115,7 +115,7 @@ const StudentImporter = () => {
             columns={columns}
           />
         </Box>
-        {csvData.length > 0 &&  openDialog && <UploadStudentDialog list={csvData} open={openDialog} onClose={() => {setOpenDialog(false)}} filename = {filename}/>}
+        {csvData.length > 0 &&  openDialog && <UploadStudentDialog list={csvData} open={openDialog} onClose={(value) => {setOpenDialog(false); setSnackbar(value)}} filename = {filename}/>}
         {!!snackbar && (
                     <Snackbar
                         open

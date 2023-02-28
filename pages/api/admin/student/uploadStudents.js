@@ -16,7 +16,8 @@ export default async function handler(req, res) {
                 .catch(err => {
                     throw err;
                 })
-            await client.query(text2, [item.id, session, semester])
+
+            await client.query(text2, [item.id || item.roll, session, semester])
                 .catch(err => {
                     throw err;
                 })
