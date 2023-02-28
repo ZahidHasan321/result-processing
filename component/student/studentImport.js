@@ -1,7 +1,10 @@
 import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import Close from "@mui/icons-material/Close";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { Alert, Box, Button, Snackbar } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
 import { parse } from "csv-parse/browser/esm/sync";
 import { useEffect, useRef, useState } from "react";
 import UploadStudentDialog from "../dialog/uploadStudentDialog";

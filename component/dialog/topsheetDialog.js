@@ -1,5 +1,15 @@
 import { formatOrdinals } from "@/helper/ordinal";
-import { Backdrop, Box, CircularProgress, Dialog, DialogTitle, Grow, Stack, Tab, Tabs, Typography } from "@mui/material";
+import Tab from "@mui/material/Tab"
+import Box from "@mui/material/Box"
+import Tabs from "@mui/material/Tabs"
+import Backdrop from "@mui/material/Backdrop"
+import CircularProgress from "@mui/material/CircularProgress"
+import Stack from "@mui/material/Stack"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import Grow from "@mui/material/Grow"
+import Typography from "@mui/material/Typography";
+
 import { useState } from "react";
 import TabPanel from "../tab/tabPanel";
 import Topsheet from "../topsheet/topsheet";

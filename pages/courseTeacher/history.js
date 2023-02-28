@@ -1,12 +1,14 @@
 import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import CATMdialog from "@/component/dialog/catmDialog";
 import Layout from "@/component/layout/layout";
 import { courseTeacher } from "@/constants/routes";
-import { Box, Button, Paper } from "@mui/material";
+import { formatOrdinals } from "@/helper/ordinal";
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
 import { getSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { formatOrdinals } from "@/helper/ordinal";
 
 const History = () => {
     const [openDialog, setOpenDialog] = useState(false);

@@ -1,4 +1,11 @@
-import { Box, Button, Dialog, DialogTitle, Grow } from "@mui/material";
+
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import Grow from "@mui/material/Grow"
+
+
 
 const ConfirmDialog = (props) => {
     const {open, onClose, onConfirm} = props;

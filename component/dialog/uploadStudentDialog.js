@@ -1,6 +1,14 @@
-import { Alert, Box, Button, Dialog, DialogTitle, Snackbar, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import SemesterSelector from "../selector/semesterSelector";
+import Alert from "@mui/material/Alert"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import Snackbar from "@mui/material/Snackbar"
+import TextField from "@mui/material/TextField"
+import Typography from "@mui/material/Typography"
+
+import { useEffect, useState } from "react"
+import SemesterSelector from "../selector/semesterSelector"
 
 const UploadStudentDialog = (props) => {
     const { open, onClose, list, filename } = props;

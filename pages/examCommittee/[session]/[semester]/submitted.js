@@ -1,12 +1,16 @@
 import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
+import DecodeDialog from "@/component/dialog/decodeDialog";
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import { Alert, Box, Button, Paper, Snackbar } from "@mui/material";
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Snackbar from "@mui/material/Snackbar";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import DecodeDialog from "@/component/dialog/decodeDialog";
 const dayjs = require('dayjs')
 
 const Submitted = () => {

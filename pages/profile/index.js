@@ -1,7 +1,9 @@
 import Layout from "@/component/layout/layout";
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
 import { getSession } from "next-auth/react";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 const Profile = () => {
     const [userData, setUserData ] = useState({});

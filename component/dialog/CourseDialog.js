@@ -1,6 +1,17 @@
-import { Alert, Box, Button, Container, Dialog, DialogTitle, Grow, TextField } from "@mui/material";
-import { useState } from "react";
-import BasicSelect from "../selector/selector";
+
+
+import Alert from "@mui/material/Alert"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Container from "@mui/material/Container"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import Grow from "@mui/material/Grow"
+import TextField from "@mui/material/TextField"
+
+
+import { useState } from "react"
+import BasicSelect from "../selector/selector"
 
 
 const typeList = [

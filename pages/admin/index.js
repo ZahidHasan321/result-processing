@@ -5,7 +5,13 @@ import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
 import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
-import { Alert, Box, Button, Paper, Slide, Snackbar, Typography } from "@mui/material";
+import Alert from "@mui/material/Alert"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Paper from "@mui/material/Paper"
+import Slide from "@mui/material/Slide"
+import Snackbar from "@mui/material/Snackbar"
+import Typography from "@mui/material/Typography"
 import { useCallback, useEffect, useState } from "react";
 
 

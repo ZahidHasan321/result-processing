@@ -1,4 +1,10 @@
-import { Box, Dialog, DialogTitle, Grow } from "@mui/material";
+
+import Box from "@mui/material/Box"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import Grow from "@mui/material/Grow"
+
+
 
 const SumSheetDialog = (props) => {
     const { open, onClose, semester, session, course } = props;

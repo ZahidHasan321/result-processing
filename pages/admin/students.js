@@ -2,7 +2,8 @@ import Layout from "@/component/layout/layout";
 import StudentImporter from "@/component/student/studentImport";
 import StudentList from "@/component/student/studentList";
 import { AdminPages } from "@/constants/routes";
-import { Box, Paper } from "@mui/material";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 
 
 const Student = () => {

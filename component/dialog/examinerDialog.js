@@ -1,4 +1,14 @@
-import { Alert, Box, Button, Container, Dialog, DialogTitle, Fade, Grow, Snackbar, Typography } from "@mui/material";
+import Alert from "@mui/material/Alert"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Container from "@mui/material/Container"
+import Typography from "@mui/material/Typography"
+import Snackbar from "@mui/material/Snackbar"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import Grow from "@mui/material/Grow"
+
+
 import { useEffect, useState } from "react";
 import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 

@@ -4,7 +4,12 @@ import Layout from "@/component/layout/layout";
 import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
 import DeleteForever from "@mui/icons-material/DeleteForever";
-import { Box, Button, Paper, Typography } from "@mui/material";
+
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Paper from "@mui/material/Paper"
+import Typography from "@mui/material/Typography"
+
 import { useEffect, useState } from "react";
 
 

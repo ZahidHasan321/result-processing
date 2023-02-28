@@ -3,7 +3,12 @@ import TeacherDialog from "@/component/dialog/TeacherDialog";
 import Layout from "@/component/layout/layout";
 import { AdminPages } from "@/constants/routes";
 import DeleteForever from "@mui/icons-material/DeleteForever";
-import { Alert, Box, Button, Grow, Paper, Snackbar, Typography } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Snackbar from "@mui/material/Snackbar";
+import Typography from "@mui/material/Typography";
 import { useCallback, useEffect, useState } from "react";
 
 const Teachers = () => {

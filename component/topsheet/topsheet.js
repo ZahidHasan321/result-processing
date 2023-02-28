@@ -1,7 +1,14 @@
-import { Box, Button, Paper, Snackbar, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import ChipArray from "../chipComponent/chipArray";
-import BasicSelect from "../selector/selector";
+
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Paper from "@mui/material/Paper"
+import Snackbar from "@mui/material/Snackbar"
+import TextField from "@mui/material/TextField"
+import Typography from "@mui/material/Typography"
+
+import { useEffect, useState } from "react"
+import ChipArray from "../chipComponent/chipArray"
+import BasicSelect from "../selector/selector"
 
 
 const periodList = [

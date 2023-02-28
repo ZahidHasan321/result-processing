@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
 
 export default function TabPanel(props) {
     const { children, value, index, ...other } = props;

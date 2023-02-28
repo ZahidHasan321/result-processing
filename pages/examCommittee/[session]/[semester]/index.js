@@ -5,7 +5,18 @@ import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import Circle from "@mui/icons-material/Circle";
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardHeader, Grow, Paper, Slide, Stack, Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Stack from "@mui/material/Stack";
+import Card from "@mui/material/Card"
+import CardActionArea from "@mui/material/CardActionArea"
+import CardActions from "@mui/material/CardActions"
+import CardContent from "@mui/material/CardContent"
+import CardHeader from "@mui/material/CardHeader"
+import Slide from "@mui/material/Slide"
+
 import Grid from '@mui/material/Unstable_Grid2';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
