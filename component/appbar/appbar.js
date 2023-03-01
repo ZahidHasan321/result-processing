@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 
 
 function MenuAppBar(props) {
-  var { pages, query, open, onClick } = props;
+  var { pages, query, open, onAppbarClick } = props;
   const router = useRouter();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -43,13 +43,13 @@ function MenuAppBar(props) {
 
 
   return (
-    <AppBar position="fixed" open={open} sx={{ bgcolor: 'white' }}>
+    <AppBar position="fixed" open={open} color="transparent">
       <Toolbar disableGutters variant='dense'>
         <Box sx={{ flexGrow: 0, pl: 2 }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={() => {onClick()}}
+            onClick={() => {onAppbarClick()}}
             edge="start"
             sx={{ mr: 2, ...(open && { display: 'none' }) }}
           >

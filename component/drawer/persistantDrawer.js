@@ -1,23 +1,22 @@
-import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MuiAppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import { styled, useTheme } from '@mui/material/styles';
+import Link from "next/link";
+import * as React from 'react';
 import MenuAppBar from '../appbar/appbar';
 
 const drawerWidth = 240;
@@ -67,14 +66,18 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-export default function PersistentDrawerLeft(props) {
-  var { pages, query } = props;
+const linkStyle = {
+  textDecoration: "none",
+  color: "black"
+}
+
+export default function PersistentDrawerLeft({ children, pages, query }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  const [openCommittee, setOpenCommittee] = React.useState(true);
+  const [openExaminer, setOpenExaminer] = React.useState(true);
+  const [openTeacher, setOpenTeacher] = React.useState(true);
+  const [openAdmin, setOpenAdmin] = React.useState(false);
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -83,7 +86,7 @@ export default function PersistentDrawerLeft(props) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-          <MenuAppBar onClick={handleDrawerOpen} pages={pages} query={query} open={open} />
+      <MenuAppBar onAppbarClick={() => setOpen(true)} pages={pages} query={query} open={open} />
       <Drawer
         sx={{
           width: drawerWidth,
@@ -103,61 +106,146 @@ export default function PersistentDrawerLeft(props) {
           </IconButton>
         </DrawerHeader>
         <Divider />
+
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <ListItemButton onClick={() => setOpenCommittee(!openCommittee)}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Exam Committee" />
+            {openCommittee ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={openCommittee} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <Link style={linkStyle} href='/examCommittee' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='Current' />
+                </ListItemButton>
+              </Link>
+
+              <Link style={linkStyle} href='/examCommittee/history' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='History' />
+                </ListItemButton>
+              </Link>
+
+            </List>
+          </Collapse>
+
+
+          <ListItemButton onClick={() => setOpenExaminer(!openExaminer)}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Examiner" />
+            {openExaminer ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={openExaminer} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+            <Link style={linkStyle} href='/examiner' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='Current' />
+                </ListItemButton>
+              </Link>
+
+              <Link style={linkStyle} href='/examiner/history' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='History' />
+                </ListItemButton>
+              </Link>
+
+            </List>
+          </Collapse>
+
+
+          <ListItemButton onClick={() => setOpenTeacher(!openTeacher)}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Course Teacher" />
+            {openTeacher ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={openTeacher} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+            <Link style={linkStyle} href='/courseTeacher' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='Current' />
+                </ListItemButton>
+              </Link>
+
+              <Link style={linkStyle} href='/courseTeacher/history' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='History' />
+                </ListItemButton>
+              </Link>
+            </List>
+          </Collapse>
+
+          <ListItemButton onClick={() => setOpenAdmin(!openAdmin)}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Admin Panel" />
+            {openAdmin ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={openAdmin} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+            <Link style={linkStyle} href='/admin' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='Exam Committee' />
+                </ListItemButton>
+              </Link>
+
+              <Link style={linkStyle} href='/admin/teachers' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='Teachers' />
+                </ListItemButton>
+              </Link>
+
+              <Link style={linkStyle} href='/admin/students' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='Students' />
+                </ListItemButton>
+              </Link>
+
+              <Link style={linkStyle} href='/admin/courses' >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary='Courses' />
+                </ListItemButton>
+              </Link>
+            </List>
+          </Collapse>
+
+
+
         </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+
+
+
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        {children}
       </Main>
     </Box>
   );
