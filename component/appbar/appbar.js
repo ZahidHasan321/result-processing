@@ -1,23 +1,23 @@
-import { Tab, Tabs } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import { signOut } from 'next-auth/react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import IconImage from '../../public/icon2.png';
 
 
 
 function MenuAppBar(props) {
-  var { pages, query } = props;
+  var { pages, query, open, onClick } = props;
   const router = useRouter();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -41,18 +41,21 @@ function MenuAppBar(props) {
     setValue(idx == -1 ? 0 : idx);
   }, [router.pathname])
 
-  
+
   return (
-    <AppBar position="static" sx={{ bgcolor: 'white' }}>
+    <AppBar position="fixed" open={open} sx={{ bgcolor: 'white' }}>
       <Toolbar disableGutters variant='dense'>
-        <Link href='/' style={{marginLeft:5}}>
-          <Image
-            src={IconImage}
-            alt="ICON"
-            height={40}
-            width={40}
-          />
-        </Link>
+        <Box sx={{ flexGrow: 0, pl: 2 }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={() => {onClick()}}
+            edge="start"
+            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Box>
 
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}>
           <Tabs
@@ -74,7 +77,7 @@ function MenuAppBar(props) {
           </Tabs>
         </Box>
 
-        <Box sx={{ flexGrow: 0, mr: 1,ml:'auto' }}>
+        <Box sx={{ flexGrow: 0, mr: 1, ml: 'auto' }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar alt="Avatar" src="" />

@@ -76,7 +76,7 @@ const Home = () => {
       res => {
         setSnackbar({ children: 'Removed committee successfully', severity: 'success' })
         if (res.ok) {
-          setSession('')
+          setSession(null)
           setSemester('')
           getSessionList()
 

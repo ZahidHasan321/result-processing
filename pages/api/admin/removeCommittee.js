@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
 
     const query2 = {
-        text: 'DELETE FROM sem_course WHERE exam_session = $1 AND semester = $2',
+        text: 'DELETE FROM sem_course USING courses WHERE sem_course.exam_session = $1 AND semester = $2',
         values: [param.session, param.semester]
     }
 

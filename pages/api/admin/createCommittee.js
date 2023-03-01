@@ -14,25 +14,25 @@ export default async function (req, res) {
             await client.query('BEGIN')
             const text = 'INSERT INTO exam_committee(id, semester, exam_session, role) VALUES($1, $2, $3, $4)'
 
-            if (param.member1 != '') {
-                await client.query(text, [param.member1, param.semester, param.session, param.role1])
+            if (param.member1 != null) {
+                await client.query(text, [param.member1.id, param.semester, param.session, param.role1 || 'Member'])
             }
 
-            if (param.member2 != '') {
-                await client.query(text, [param.member2, param.semester, param.session, param.role2])
+            if (param.member2 != null) {
+                await client.query(text, [param.member2.id, param.semester, param.session, param.role2 || 'Member'])
             }
 
 
-            if (param.member3 != '') {
-                await client.query(text, [param.member3, param.semester, param.session, param.role3])
+            if (param.member3 != null) {
+                await client.query(text, [param.member3.id, param.semester, param.session, param.role3 || 'Member'])
             }
 
-            if (param.member4 != '') {
-                await client.query(text, [param.member4, param.semester, param.session, param.role4])
+            if (param.member4 != null) {
+                await client.query(text, [param.member4.id, param.semester, param.session,param.role4 || 'Member'])
 
             }
-            if (param.member5 != '') {
-                await client.query(text, [param.member5, param.semester, param.session, param.role5])
+            if (param.member5 != null) {
+                await client.query(text, [param.member5.id, param.semester, param.session, param.role5 || 'Member'])
             }
 
             await client.query(

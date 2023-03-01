@@ -15,15 +15,12 @@ import AutoCompleteTeacher from "../selector/autocompleteTeacher";
 const ExaminerDialog = (props) => {
     const { open, onClose, semester, session, course } = props;
 
-    const [examinerA, setExaminerA] = useState('')
-    const [examinerB, setExaminerB] = useState('')
+    const [examinerA, setExaminerA] = useState(null)
+    const [examinerB, setExaminerB] = useState(null)
     const [courseTeacher, setCourseTeacher] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [List, setList] = useState([]);
     const [snackbar, setSnackbar] = useState(null);
-
-
-
     const getList = async () => {
         fetch('/api/admin/teacherList')
             .then(res => res.json())
@@ -45,6 +42,7 @@ const ExaminerDialog = (props) => {
             .then(res => res.json())
             .then(data => {
                 if (data) {
+
                     setExaminerA(data[0])
                     setExaminerB(data[1])
                 }
@@ -71,27 +69,20 @@ const ExaminerDialog = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(examinerA === null && examinerB === null && courseTeacher === null){
+            setSnackbar({ children: "Examiner cannot be left empty", severity: 'error' });
+            return;
+        } 
         var f = false;
-        if (examinerA != '' && examinerB != '' && examinerA != null && examinerB != null) {
-            var id_a = examinerA;
-            var id_b = examinerB;
-
-            if (typeof examinerA === 'object' && examinerA !== null) {
-                id_a = examinerA.id;
-            }
-
-            if (typeof examinerB === 'object' && examinerB !== null) {
-                id_b = examinerB.id;
-            }
-
-            if (id_a !== id_b) {
-                f == true;
+        if (examinerA != null && examinerB != null) {
+            if (examinerA.id !== examinerB.id) {
+                f = true;
                 await fetch('/api/examCommittee/semester/addExaminer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ id: id_a, session, course, set: 'A' })
+                    body: JSON.stringify({ id: examinerA.id, session, course, set: 'A' })
                 })
 
 
@@ -100,47 +91,34 @@ const ExaminerDialog = (props) => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ id: id_b, session, course, set: 'B' })
+                    body: JSON.stringify({ id: examinerB.id, session, course, set: 'B' })
                 })
                 
                 setSnackbar({ children: "Examiners assigned to course", severity: 'success' })
                 
             }
             else {
-                f == true;
+                f = true;
                 setSnackbar({ children: "Both sets cannot have same examiner", severity: 'error' })
-                
             }
         }
 
-        var id = courseTeacher;
-        if (typeof courseTeacher === 'object' && courseTeacher !== null) {
-            id = courseTeacher.id;
-        }
-
-        if (id !== '' && id !== null && courseTeacher != null) {
+        if (courseTeacher != null) {
             await fetch('/api/examCommittee/semester/addCourseTeacher', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id, session, course })
+                body: JSON.stringify({ id: courseTeacher.id, session, course })
             })
 
-             if(f == true) setSnackbar({ children: "Course Teacher assigned", severity: 'success' })
-        }
-        else{
-            setSnackbar({ children: "Examiner cannot be left empty", severity: 'error' })
+            if(f=== false) setSnackbar({ children: "Course Teacher assigned", severity: 'success' })
         }
     }
     useEffect(() => {
         getList();
+        getAssignedList();
     }, [])
-
-    useEffect(() => {
-        if (open == true)
-            getAssignedList();
-    }, [open])
 
     const handleOnClose = () => {
         onClose();
@@ -153,10 +131,10 @@ const ExaminerDialog = (props) => {
 
                     {loading &&
                         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                            <AutoCompleteTeacher value={examinerA} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-B Examiner" />
-                            <AutoCompleteTeacher value={examinerB} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
+                            <AutoCompleteTeacher value={examinerA ? examinerA : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-B Examiner" />
+                            <AutoCompleteTeacher value={examinerB ? examinerB : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
                             <Typography fontWeight={'bold'}>Add Course Teacher</Typography>
-                            <AutoCompleteTeacher value={courseTeacher} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setCourseTeacher(value)} label="Course Teacher" />
+                            <AutoCompleteTeacher value={courseTeacher  ? courseTeacher : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setCourseTeacher(value)} label="Course Teacher" />
                             <Button type='submit' variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3 }}>Submit</Button>
                         </Box>
                     }

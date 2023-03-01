@@ -1,21 +1,17 @@
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
 
 const AutoCompleteTeacher = (props) => {
     const {list ,label, onChange, sx, value, editable} = props;
-    const [selectValue, setSelectValue] = useState(value != null  && value != '' ? value : null);
-
     return(
         <Autocomplete
-        value={selectValue}
+        value={value}
         onChange={(event, newValue) => {
-          onChange(newValue == null ? '' : newValue.id)
-          setSelectValue(newValue)
+          onChange(newValue)
         }}
         options={list}
         getOptionLabel={(option) => option.name}
-        isOptionEqualToValue={(option, value) => option.id == value.id}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         id={`${label}-autocomplete`}
         sx={sx}
         renderInput={(params) => <TextField {...params} label={label} />}

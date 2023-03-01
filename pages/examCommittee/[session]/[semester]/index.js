@@ -148,7 +148,7 @@ const Dashboard = () => {
                     TopSheet
                   </Button>
 
-                  <Button onClick={handleSumSheetClick} size='small' color='secondary'>
+                  <Button id={item.course_code} onClick={handleSumSheetClick} size='small' color='secondary'>
                     SummationSheet
                   </Button>
 

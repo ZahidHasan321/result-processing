@@ -30,6 +30,7 @@ const CommitteeDialog = (props) => {
 
     const [state, dispatch] = useReducer(memberReducer, INITIAL_STATE);
 
+
     const getSemesterList = async () => {
         await fetch('/api/admin/courses/semesterList')
             .then(res => res.json())
@@ -46,7 +47,7 @@ const CommitteeDialog = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (session == '' || semester == '') {
+        if (session === null || session === '' || semester === '') {
             setSnackbar({ children: 'Semester or session cannot be empty', severity: 'error' })
             return;
         }
@@ -60,7 +61,7 @@ const CommitteeDialog = (props) => {
         }).then(res => {
             if (res.ok) {
                 setSnackbar({ children: 'Committee Created Successfully', severity: 'success' })
-                setSession('');
+                setSession(null);
                 setSemester('');
                 dispatch({ type: 'RESET' });
             }
@@ -96,7 +97,7 @@ const CommitteeDialog = (props) => {
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 
                     <Typography>Select exam session and semester</Typography>
-                    <Box sx={{ display: 'flex', mb: 5 }}>
+                    <Box sx={{ display: 'flex', mb: 5, mt:1}}>
                         <AutoCompleteSession sx={{ width: '180px' }} value={{exam_session: session}} list={sessionList} onChange={(value) => setSession(value)} label='Exam Session' />
 
                         <SemesterSelector sx={{ width: '180px', ml: 5 }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
@@ -104,27 +105,27 @@ const CommitteeDialog = (props) => {
 
                     <Typography variant="caption" >Select committee members.(If role left empty by default they will be a member)</Typography>
                     <Box sx={{ display: 'flex', mb: 2, mt: 1 }}>
-                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member1} onChange={(value) => { dispatch({ type: 'MEMBER1', payload: value }) }} label={'Member'} />
+                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member1 ? JSON.parse(JSON.stringify(state.member1)):null} onChange={(value) => { dispatch({ type: 'MEMBER1', payload: value }) }} label={'Member'} />
                         <BasicSelect sx={{ width: '200px' }} list={roles} value={state.role1} onChange={(value) => { dispatch({ type: 'ROLE1', payload: value }) }} label={'Role'} />
                     </Box>
 
                     <Box sx={{ display: 'flex', mb: 2 }}>
-                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member2} onChange={(value) => { dispatch({ type: 'MEMBER2', payload: value }) }} label={'Member'} />
+                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member2 ? JSON.parse(JSON.stringify(state.member2)) : null} onChange={(value) => { dispatch({ type: 'MEMBER2', payload: value }) }} label={'Member'} />
                         <BasicSelect sx={{ width: '200px' }} list={roles} value={state.role2} onChange={(value) => { dispatch({ type: 'ROLE2', payload: value }) }} label={'Role'} />
                     </Box>
 
                     <Box sx={{ display: 'flex', mb: 2 }}>
-                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member3} onChange={(value) => { dispatch({ type: 'MEMBER3', payload: value }) }} label={'Member'} />
+                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member3  ? JSON.parse(JSON.stringify(state.member3)) : null} onChange={(value) => { dispatch({ type: 'MEMBER3', payload: value }) }} label={'Member'} />
                         <BasicSelect sx={{ width: '200px' }} list={roles} value={state.role3} onChange={(value) => { dispatch({ type: 'ROLE3', payload: value }) }} label={'Role'} />
                     </Box>
 
                     <Box sx={{ display: 'flex', mb: 2 }}>
-                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member4} onChange={(value) => { dispatch({ type: 'MEMBER4', payload: value }) }} label={'Member'} />
+                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member4  ?JSON.parse(JSON.stringify(state.member4)) : null} onChange={(value) => { dispatch({ type: 'MEMBER4', payload: value }) }} label={'Member'} />
                         <BasicSelect sx={{ width: '200px' }} list={roles} value={state.role4} onChange={(value) => { dispatch({ type: 'ROLE4', payload: value }) }} label={'Role'} />
                     </Box>
 
                     <Box sx={{ display: 'flex', mb: 2 }}>
-                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member5} onChange={(value) => { dispatch({ type: 'MEMBER5', payload: value }) }} label={'Member'} />
+                        <AutoCompleteTeacher sx={{ width: '350px', mr: 4 }} list={list} value={state.member5 ? JSON.parse(JSON.stringify(state.member5)) : null} onChange={(value) => { dispatch({ type: 'MEMBER5', payload: value }) }} label={'Member'} />
                         <BasicSelect sx={{ width: '200px' }} list={roles} value={state.role5} onChange={(value) => { dispatch({ type: 'ROLE5', payload: value }) }} label={'Role'} />
                     </Box>
                     <Box sx={{ display: 'table', m: '0 auto' }}>
