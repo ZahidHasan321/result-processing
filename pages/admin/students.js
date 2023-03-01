@@ -14,7 +14,7 @@ const Student = () => {
   const [show, setShow] = useState(false);
   return (
     <Box>
-      <Paper sx={{ m: 6, boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
+      <Paper sx={{ boxShadow: 3, display: 'flex', flexDirection: 'column' }}>
         <Button size='medium' sx={{ ml: 'auto', mr: 3, mt: 3 }} onClick={() => setShow(!show)} variant={'contained'}> {show ? 'Close Import' : 'Import Student'}</Button>
         <Box sx={{ m: 4, pb: 3, display: 'flex', justifyContent: 'center' }}>
           <StudentList />

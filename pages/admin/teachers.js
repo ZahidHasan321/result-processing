@@ -129,7 +129,7 @@ const Teachers = () => {
   if (loading) return <div>loading</div>
 
   return (
-    <Paper variant="outlined" sx={{ m: 6, boxShadow: 3, minHeight: 400 }}>
+    <Paper variant="outlined" sx={{ boxShadow: 3, minHeight: 400 }}>
       <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Teachers</Typography>
       <Box sx={{ display: 'flex', flexDirection: 'column', ml: 4, mr: 4, mb: 3 }}>
         <Button sx={{ ml: 'auto', mb: 3, boxShadow: 1, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant="contained" onClick={handleAddTeacher}>Add Teacher</Button>

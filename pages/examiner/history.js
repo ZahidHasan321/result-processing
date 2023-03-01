@@ -93,10 +93,10 @@ const History = () => {
 
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, m: 6, minWidth: 700 }}>
-        <Box sx={{ m: 5, pt: 5, pb:5 }}>
+      <Paper sx={{ boxShadow: 3, minWidth: 700 }}>
+        <Box sx={{ pt: 2, pb:2 }}>
           <AntDesignGrid
-            sx={{ boxShadow: 3 }}
+            sx={{ m:4, boxShadow: 3 }}
             autoHeight
             columns={columns}
             checked={checked}

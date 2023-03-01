@@ -3,19 +3,19 @@ import { deepPurple } from "@mui/material/colors";
 const { createTheme } = require("@mui/material");
 
 const Theme = createTheme({
-  
+
   palette: {
     mode: 'light',
     primary: deepPurple,
     secondary: {
       main: '#9c27b0',
     },
-    background:{
-      default:'#f0f0f0'
+    background: {
+      default: '#f0f0f0'
     }
   },
 
-  
+
 
   typography: {
     fontFamily: [
@@ -37,29 +37,31 @@ const Theme = createTheme({
   components: {
     MuiButton: {
       styleOverrides: {
-        contained:{
-          backgroundColor:'#2c1630'
+        contained: {
+          backgroundColor: '#2c1630',
+          ":hover": {
+            backgroundColor: '#2c1630'
+          }
         },
         root: {
-          color:"white",
           '&:hover': {
             scale: '1.04',
-            backgroundColor:'#2c1630'
+
           }
         }
       }
     },
-    MuiPaper:{
+    MuiPaper: {
       styleOverrides: {
-        root:{
-          boxShadow:3
+        root: {
+          boxShadow: 3
         }
       }
     },
     MuiDataGrid: {
       styleOverrides: {
         root: {
-          boxShadow:3
+          boxShadow: 3
         },
         columnHeaderTitle: {
           fontWeight: 'bold'

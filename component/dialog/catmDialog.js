@@ -50,7 +50,6 @@ const CATMdialog = (props) => {
 
 
         localStorage.removeItem(JSON.stringify(data) + 'catm')
-        setSnackbar({ children: "Submitted Successfully", serverity: 'success' })
         onClose({ children: "Submitted Successfully", serverity: 'success' });
     }
 
@@ -65,7 +64,7 @@ const CATMdialog = (props) => {
 
     const handleProcessRowUpdateError = useCallback((error) => {
         setSnackbar({ children: error.message, severity: 'error' });
-      }, []);
+    }, []);
 
     const updateMarks = (newRow) => {
         const temp = marks.map((item) => {
@@ -76,13 +75,14 @@ const CATMdialog = (props) => {
         })
         setMarks(temp);
     }
-    
+
     const ProcessRowUpdate = (newRow, oldRow) => {
-        if(newRow.ct > 13.5 || newRow.attendance > 7.5){
-            setSnackbar({children:"Out of Range number", serverity:'error'})
+        if (newRow.ct > 13.5 || newRow.attendance > 7.5) {
+            setSnackbar({ children: "Out of Range number", serverity: 'error' })
             return oldRow;
         }
         updateMarks(newRow);
+        setSnackbar({ children: 'saved', serverity: "success" })
         return newRow;
     }
 
@@ -94,7 +94,7 @@ const CATMdialog = (props) => {
             flex: 1,
             filterable: false,
             renderCell: (index) => index.api.getRowIndex(index.row.roll) + 1,
-            flex:1
+            flex: 1
         },
         {
             field: "roll",
@@ -163,7 +163,7 @@ const CATMdialog = (props) => {
             .then(res => res.json())
             .then(data => {
                 const rolls = data.map((item) => {
-                    return { roll: item.roll, name:item.name ,ct: null, attendance: null }
+                    return { roll: item.roll, name: item.name, ct: null, attendance: null }
                 })
 
                 setMarks(rolls)

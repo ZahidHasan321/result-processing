@@ -98,9 +98,9 @@ const History = () => {
   ]
 
   return (
-    <Paper variant="Outlined" sx={{ m: 6, boxShadow: 3 }}>
-      <Typography fontSize={30} sx={{ ml: 11, pt: 3 }}>History</Typography>
-      <Typography variant="caption" sx={{ ml:11 }}>Double click on row for more.</Typography>
+    <Paper variant="Outlined" sx={{ boxShadow: 3 }}>
+      <Typography fontSize={30} sx={{ ml: 12, pt: 3 }}>History</Typography>
+      <Typography variant="caption" sx={{ ml:12 }}>Double click on row for more.</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Grow in={checked}>
           <Box sx={{ ml: 5, mr: 5, mb: 3, width: '90%' }}>

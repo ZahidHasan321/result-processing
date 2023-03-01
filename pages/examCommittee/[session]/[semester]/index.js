@@ -76,7 +76,7 @@ const Dashboard = () => {
   }, [query])
 
   return (
-    <Paper elevation={3} sx={{ m: 4, bgcolor: '#e7ebf0' }}>
+    <Paper elevation={3} sx={{ bgcolor: '#e7ebf0' }}>
 
       {checked && <Typography fontSize={30} sx={{ ml: 3, pt: 3 }}> {formatOrdinals(query.semester)} Semester, {query.session}</Typography>}
       <Slide in={checked}>
@@ -97,12 +97,7 @@ const Dashboard = () => {
                     <Typography variant="body2" fontSize={14}>SET-A: {item.examiner_a_name ? item.examiner_a_name  : <i>None</i>}</Typography>
                     <Typography variant="body2" fontSize={14}>SET-B: {item.examiner_b_name  ? item.examiner_b_name  : <i>None</i>}</Typography>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', mr: 2, mt:1}}>
-                      <Circle fontSize="3px" sx={{ mr: 0.2, color: item.catm ? 'lightgreen' : '#bdbdbd' }} />
-                      <Typography variant="body2" fontSize={13}>CATM</Typography>
-                    </Box>
-
-                    <Stack direction={'row'}>
+                    <Stack direction={'row'} sx={{mt:1}}>
                       <Typography variant="body2" sx={{ mr: 1 }} fontSize={14}>SUBMITTED: </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
                         <Circle fontSize="3px" sx={{ mr: 0.2, color: item.submitted_a? 'lightgreen' : '#bdbdbd' }} />
@@ -137,6 +132,11 @@ const Dashboard = () => {
                         <Typography fontSize={14}>SET-B</Typography>
                       </Box>
                     </Stack>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', mr: 2, mt:1}}>
+                      <Circle fontSize="3px" sx={{ mr: 0.2, color: item.catm ? 'lightgreen' : '#bdbdbd' }} />
+                      <Typography variant="body2" fontSize={14}>CATM</Typography>
+                    </Box>
                   </CardContent>
                 </CardActionArea>
                 <CardActions>

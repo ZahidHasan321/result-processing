@@ -1,8 +1,11 @@
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import HomeIcon from '@mui/icons-material/Home';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import MuiAppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -14,9 +17,14 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import GroupsIcon from '@mui/icons-material/Groups';
 import { styled, useTheme } from '@mui/material/styles';
+import Image from 'next/image';
 import Link from "next/link";
 import * as React from 'react';
+import StudentIcon from '../../public/graduated.png';
+import TeacherIcon from '../../public/teacher.png';
+import CourseIcon from '../../public/courses.png';
 import MenuAppBar from '../appbar/appbar';
 
 const drawerWidth = 240;
@@ -74,9 +82,9 @@ const linkStyle = {
 export default function PersistentDrawerLeft({ children, pages, query }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [openCommittee, setOpenCommittee] = React.useState(true);
-  const [openExaminer, setOpenExaminer] = React.useState(true);
-  const [openTeacher, setOpenTeacher] = React.useState(true);
+  const [openCommittee, setOpenCommittee] = React.useState(false);
+  const [openExaminer, setOpenExaminer] = React.useState(false);
+  const [openTeacher, setOpenTeacher] = React.useState(false);
   const [openAdmin, setOpenAdmin] = React.useState(false);
 
   const handleDrawerClose = () => {
@@ -108,6 +116,14 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
         <Divider />
 
         <List>
+          <Link style={linkStyle} href='/' >
+            <ListItemButton>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary='Home' />
+            </ListItemButton>
+          </Link>
           <ListItemButton onClick={() => setOpenCommittee(!openCommittee)}>
             <ListItemIcon>
               <InboxIcon />
@@ -120,6 +136,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               <Link style={linkStyle} href='/examCommittee' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                    <RotateLeftIcon />
                   </ListItemIcon>
                   <ListItemText primary='Current' />
                 </ListItemButton>
@@ -128,6 +145,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               <Link style={linkStyle} href='/examCommittee/history' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                    <CheckCircleOutlineIcon />
                   </ListItemIcon>
                   <ListItemText primary='History' />
                 </ListItemButton>
@@ -146,9 +164,10 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
           </ListItemButton>
           <Collapse in={openExaminer} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <Link style={linkStyle} href='/examiner' >
+              <Link style={linkStyle} href='/examiner' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                    <RotateLeftIcon />
                   </ListItemIcon>
                   <ListItemText primary='Current' />
                 </ListItemButton>
@@ -157,6 +176,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               <Link style={linkStyle} href='/examiner/history' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                    <CheckCircleOutlineIcon />
                   </ListItemIcon>
                   <ListItemText primary='History' />
                 </ListItemButton>
@@ -175,9 +195,10 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
           </ListItemButton>
           <Collapse in={openTeacher} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <Link style={linkStyle} href='/courseTeacher' >
+              <Link style={linkStyle} href='/courseTeacher' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                    <RotateLeftIcon />
                   </ListItemIcon>
                   <ListItemText primary='Current' />
                 </ListItemButton>
@@ -186,6 +207,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               <Link style={linkStyle} href='/courseTeacher/history' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                    <CheckCircleOutlineIcon />
                   </ListItemIcon>
                   <ListItemText primary='History' />
                 </ListItemButton>
@@ -202,9 +224,10 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
           </ListItemButton>
           <Collapse in={openAdmin} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <Link style={linkStyle} href='/admin' >
+              <Link style={linkStyle} href='/admin' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                    <GroupsIcon />
                   </ListItemIcon>
                   <ListItemText primary='Exam Committee' />
                 </ListItemButton>
@@ -213,6 +236,12 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               <Link style={linkStyle} href='/admin/teachers' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                  <Image
+                      src={TeacherIcon}
+                      height={25}
+                      width={25}
+                      alt='teachers'
+                      />
                   </ListItemIcon>
                   <ListItemText primary='Teachers' />
                 </ListItemButton>
@@ -221,6 +250,13 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               <Link style={linkStyle} href='/admin/students' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                      <Image
+                      src={StudentIcon}
+                      height={25}
+                      width={25}
+                      alt='Student'
+                      />
+                    
                   </ListItemIcon>
                   <ListItemText primary='Students' />
                 </ListItemButton>
@@ -229,6 +265,12 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               <Link style={linkStyle} href='/admin/courses' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
+                  <Image
+                      src={CourseIcon}
+                      height={25}
+                      width={25}
+                      alt='courses'
+                      />
                   </ListItemIcon>
                   <ListItemText primary='Courses' />
                 </ListItemButton>

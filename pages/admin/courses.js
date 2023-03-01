@@ -121,7 +121,7 @@ const Courses = () => {
 
 
   return (
-    <Paper variant="outlined" sx={{ m: 6, boxShadow: 3, minHeight: 400 }}>
+    <Paper variant="outlined" sx={{ boxShadow: 3, minHeight: 400 }}>
       <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Courses</Typography>
 
       <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mr: 4, ml: 4, mb: 3 }}>

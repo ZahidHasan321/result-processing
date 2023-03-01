@@ -133,6 +133,7 @@ const MarksheetDialog = (props) => {
                 else return item;
             })
             setMarks(temp);
+            setSnackbar({children:'saved', serverity:"success"})
         }
         return newRow;
     }

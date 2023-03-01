@@ -204,7 +204,7 @@ const Home = () => {
 
   return (
     <Box>
-      <Paper variant="outlined" sx={{ m: 6, boxShadow: 3 }}>
+      <Paper variant="outlined" sx={{  boxShadow: 3 }}>
         <Box sx={{ ml: 2, mr: 2 }}>
           <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
 

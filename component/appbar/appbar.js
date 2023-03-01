@@ -43,11 +43,11 @@ function MenuAppBar(props) {
 
 
   return (
-    <AppBar position="fixed" open={open} color="transparent">
+    <AppBar position="fixed" open={open} sx={{bgcolor:'white'}}>
       <Toolbar disableGutters variant='dense'>
         <Box sx={{ flexGrow: 0, pl: 2 }}>
           <IconButton
-            color="inherit"
+            color="black"
             aria-label="open drawer"
             onClick={() => {onAppbarClick()}}
             edge="start"
