@@ -133,29 +133,27 @@ const Topsheet = (props) => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <Button sx={{ ml: 'auto', mr: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant='contained' onClick={handleClick}>Submit</Button>
+            
             <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2, mb: 2 }}>
-
                 <Typography fontSize={15} sx={{ mr: 1, mt:3}}>DEPARTMENT:</Typography>
                 <TextField
-                    sx={{mt:3}}
+                    sx={{mt:2}}
                     variant="standard"
                 />
-
                 <BasicSelect sx={{ width: 180, alignSelf: 'flex-start', ml: 3 }} list={periodList} value={period} onChange={(value) => setPeriod(value)} label="Time Period" />
             </Box>
 
 
-            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2, mb: 2 }}>
-
+            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2 }}>
                 <Typography fontSize={15} sx={{ mr: 1 }}>TOTAL ANSWER SHEET:</Typography>
                 <TextField
-                    sx={{ width: 80 }}
+                    sx={{ width: 80}}
                     type='number'
                     variant="standard"
                 />
             </Box>
 
-            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2, mb: 2 }}>
+            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2}}>
                 <Typography fontSize={15} sx={{ mr: 1 }}>TOTAL EXTRA SHEET:</Typography>
                 <TextField
                     sx={{ width: 80 }}

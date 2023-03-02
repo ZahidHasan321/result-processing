@@ -135,7 +135,7 @@ const ExaminerDialog = (props) => {
                             <AutoCompleteTeacher value={examinerB ? examinerB : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
                             <Typography fontWeight={'bold'}>Add Course Teacher</Typography>
                             <AutoCompleteTeacher value={courseTeacher  ? courseTeacher : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setCourseTeacher(value)} label="Course Teacher" />
-                            <Button type='submit' variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3 }}>Submit</Button>
+                            <Button type='submit' variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3 , bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}>Submit</Button>
                         </Box>
                     }
                 </Container>

@@ -8,7 +8,6 @@ import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import UploadStudentDialog from "../dialog/uploadStudentDialog";
 
-
 const columns = [
   {
     field: "roll",
@@ -106,8 +105,8 @@ const StudentList = () => {
       <Box sx={{ display: "flex", mb: 3 }}>
         <AutoCompleteSession sx={{ width: '180px' }} list={sessionList} onChange={(value) => setSession(value)} label='Exam Session' />
         <SemesterSelector sx={{ width: '180px', ml: 3  }} value={semester} list={semesterList} onChange={value => setSemester(value)} label='semester' />
-        <Box sx={{ ml: 'auto', pt:3 }}>
-          <Button size="small" variant="contained"  onClick={handleUpdateSemester}> Update semester</Button>
+        <Box sx={{ ml: 'auto', pl:3 }}>
+          <Button size="small" variant="contained"  sx={{ bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' }}} onClick={handleUpdateSemester}> Update semester</Button>
         </Box>
       </Box>
       <AntDesignGrid

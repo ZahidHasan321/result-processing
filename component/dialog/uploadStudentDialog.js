@@ -80,7 +80,7 @@ const UploadStudentDialog = (props) => {
                         <Button
                             type="submit"
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{ mt: 3, mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}
                         >
                             UPLOAD
                         </Button>

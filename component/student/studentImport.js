@@ -103,7 +103,7 @@ const StudentImporter = () => {
             <input ref={inputRef} type="file" accept=".csv" hidden onChange={handleFileUpload} />
           </Button>
           <Button  variant='contained' sx={{bgcolor:'red', ":hover":{ bgcolor:'red'}}} onClick={() => { setFilename(''); setCsvData([]); inputRef.current.value = null }}><Close /></Button>
-          <Button variant='contained' sx={{ml:'auto'}} onClick={handleUpload}>Upload To DB</Button>
+          <Button variant='contained' sx={{ml:'auto', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' }}} onClick={handleUpload}>Upload To DB</Button>
           </Box>
           <Box sx={{mb:2, mt:1}}>Filename: {filename}</Box>
           

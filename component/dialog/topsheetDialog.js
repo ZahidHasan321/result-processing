@@ -9,7 +9,6 @@ import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
 import Grow from "@mui/material/Grow"
 import Typography from "@mui/material/Typography";
-
 import { useState } from "react";
 import TabPanel from "../tab/tabPanel";
 import Topsheet from "../topsheet/topsheet";
@@ -51,7 +50,7 @@ const TopsheetDialog = (props) => {
                     <Tab value={1} label="Set B" />
                 </Tabs>
 
-                    <Box border={1} boxShadow={2} marginBottom={2}>
+                    <Box borderTop={1} boxShadow={2} marginBottom={2}>
                         <TabPanel value={tab} index={0}>
                             <Topsheet set="A" course={course} semester={semester} session={session} />
                         </TabPanel>

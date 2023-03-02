@@ -25,7 +25,7 @@ const ConfirmDialog = (props) => {
             <DialogTitle>Are you sure you want to delete?</DialogTitle>
             <Box sx={{display:'flex', justifyContent:'space-around'}}>
                 <Button onClick={() => {onClose()}}>Cancel</Button>
-                <Button onClick={handleContinue}>Continue</Button>
+                <Button sx={{bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' }}} onClick={handleContinue}>Continue</Button>
             </Box>
             </Box>
             

@@ -8,9 +8,6 @@ import Snackbar from "@mui/material/Snackbar"
 import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
 import Grow from "@mui/material/Grow"
-
-
-
 import { useCallback, useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
 
@@ -30,8 +27,8 @@ const CATMdialog = (props) => {
     }
 
     const handleOnSubmit = async () => {
-        marks.map((item) => {
-            fetch('/api/courseTeacher/setMarks', {
+        marks.map(async(item) => {
+            await fetch('/api/courseTeacher/setMarks', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,7 +37,7 @@ const CATMdialog = (props) => {
             })
         })
 
-        fetch('/api/courseTeacher/updateInsert', {
+        await fetch('/api/courseTeacher/updateInsert', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

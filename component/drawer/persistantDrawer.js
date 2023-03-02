@@ -26,6 +26,7 @@ import StudentIcon from '../../public/graduated.png';
 import TeacherIcon from '../../public/teacher.png';
 import CourseIcon from '../../public/courses.png';
 import MenuAppBar from '../appbar/appbar';
+import { Typography } from '@mui/material';
 
 const drawerWidth = 240;
 

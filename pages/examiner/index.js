@@ -15,10 +15,6 @@ import { useEffect, useState } from "react";
 
 
 const Home = () => {
-  const { status, data } = useSession();
-  if (status === 'unauthenticated') {
-    Router.replace('auth/signin');
-  }
   const [list, setList] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [rowData, setRowData] = useState(null);
