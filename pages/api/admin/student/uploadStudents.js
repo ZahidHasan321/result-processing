@@ -9,7 +9,7 @@ export default async function handler(req, res) {
         await client.query("BEGIN");
 
         const text = "INSERT INTO student VALUES($1, $2, $3) ON CONFLICT(roll) DO UPDATE SET name = $2, hall = $3";
-        const text2 = "INSERT INTO stud_per_session VALUES($1, $2, $3) ON CONFLICT DO NOTHING"
+        const text2 = "INSERT INTO stud_per_session VALUES($1, $2, $3) ON CONFLICT(roll,exam_session,semester) DO UPDATE SET roll = excluded.roll"
 
         list.map(async (item) => {
             await client.query(text, Object.values(item))

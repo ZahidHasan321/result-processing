@@ -56,24 +56,6 @@ const MarksheetDialog = (props) => {
             onClose({children:'Successfully submitted', serverity:'success'});
         }
     }
-    const getMarsheetData = async () => {
-        await fetch('/api/examiner/getPaperCodes', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data) {
-                    const list = data.map((mark) => {
-                        return mark = { ...mark, Q1: null, Q2: null, Q3: null, Q4: null, Q5: null, Q6: null, Q7: null, Q8: null, Q9: null, Q10: null }
-                    })
-                }
-                setMarks(data);
-            });
-    }
 
     useEffect(() => {
         var list = [];
@@ -102,24 +84,29 @@ const MarksheetDialog = (props) => {
         setChecked(true)
     }, 500)
 
+
+    const getMarks = async() => {
+        fetch('/api/examiner/getMarks', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
+        })
+            .then(res => res.json())
+            .then(data => setSubmittedData(data))
+    }
+
     useEffect(() => {
         if (editableData === false) {
-            fetch('/api/examiner/getMarks', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
-            })
-                .then(res => res.json())
-                .then(data => setSubmittedData(data))
+           getMarks();
         }
         else {
             const items = JSON.parse(localStorage.getItem(JSON.stringify(data) + 'marksheet'))
             if (items && items.length > 0)
                 setMarks(items)
             else {
-                getMarsheetData()
+                getMarks();
             }
         }
     }, []);
