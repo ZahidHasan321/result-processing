@@ -18,7 +18,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import Grid from '@mui/material/Unstable_Grid2';
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -73,7 +72,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getCourseDataList();
-  }, [query])
+  }, [])
 
   return (
     <Paper elevation={3} sx={{ bgcolor: '#e7ebf0' }}>
@@ -161,19 +160,30 @@ const Dashboard = () => {
       {exmainerOpen && <ExaminerDialog open={exmainerOpen} onClose={handleOnClose} semester={query.semester} session={query.session} course={courseCode} />}
       {topsheetOpen && <TopsheetDialog open={topsheetOpen} onClose={() => { getCourseDataList(); setTopsheetOpen(false) }} semester={query.semester} session={query.session} course={courseCode} />}
       {sumSheetOpen && <SumSheetDialog open={sumSheetOpen} onClose={() => setSumSheetOpen(false)} semester={query.semester} session={query.session} course={courseCode} />}
-
-      <Link href={`/examCommittee/${query.session}/${query.semester}/gradesheet`} ><Button onCLick={handleGradePdfClick}>Gradesheet</Button></Link>
     </Paper>
   )
 }
-Dashboard.getLayout = function getLayout(page) {
+
+const HeaderLayout = ({ children }) => {
   const router = useRouter();
   const query = router.query;
 
   return (
-    <Layout pages={semesterPages} query={query}>
+    <>
+      <Layout pages={semesterPages} query={query}>
+        {children}
+      </Layout>
+    </>
+  );
+};
+
+Dashboard.getLayout = function getLayout(page) {
+  
+
+  return (
+    <HeaderLayout>
       <main>{page}</main>
-    </Layout>
+    </HeaderLayout>
   )
 }
 
