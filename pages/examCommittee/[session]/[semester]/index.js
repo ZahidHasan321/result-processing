@@ -18,7 +18,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import Grid from '@mui/material/Unstable_Grid2';
-import ReactPDF from "@react-pdf/renderer";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -53,11 +52,6 @@ const Dashboard = () => {
     getCourseDataList();
     setExmainerOpen(false);
   }
-
-  const handleGradePdfClick = () => {
-    ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
-  }
-
   const getCourseDataList = async () => {
     if (query.semester != undefined && query.session != undefined) {
       await fetch('/api/examCommittee/semester/courseDataList', {
