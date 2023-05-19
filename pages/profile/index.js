@@ -15,15 +15,14 @@ const Profile = () => {
   }
 
   if(status === 'loading') return <CircularProgress />
+
+  if(status === 'authenticated') getProfileData()
+
   const getProfileData = async () => {
     const { user } = await getSession();
 
     setUserData(user);
   }
-
-  useEffect(() => {
-    getProfileData();
-  }, [])
 
   
   return (
