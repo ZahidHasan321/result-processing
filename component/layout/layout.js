@@ -1,12 +1,13 @@
-import MenuAppBar from "../appbar/appbar";
+import ResponsiveDrawer from "../drawer/persistantDrawer";
 
-const Layout = ({children, ...restProps}) => {
+const DrawerLayout = ({children, ...restProps}) => {
     return(
         <>
-        <MenuAppBar {...restProps}/>
-        <main>{children}</main>
+        <ResponsiveDrawer {...restProps}>
+            {children}
+        </ResponsiveDrawer>
         </>
     )
 }
 
-export default Layout;
+export default DrawerLayout;

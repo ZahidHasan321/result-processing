@@ -1,9 +1,9 @@
 export const INITIAL_STATE = {
-    member1:'',
-    member2:'',
-    member3:'',
-    member4:'',
-    member5:'',
+    member1:null,
+    member2:null,
+    member3:null,
+    member4:null,
+    member5:null,
     role1:'',
     role2:'',
     role3:'',
@@ -62,6 +62,10 @@ export const memberReducer = (state, action) => {
             return{
                 ...state,
                 role5:action.payload
+            }
+        case "RESET":
+            return{
+                INITIAL_STATE
             }
         default:
             return state;

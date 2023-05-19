@@ -1,16 +1,13 @@
-import { Box, Toolbar } from "@mui/material";
-import ResponsiveDrawer from "../drawer/responsivedrawer";
+import Box from "@mui/material/Box"
+import Toolbar from "@mui/material/Toolbar"
+import ResponsiveDrawer from "../drawer/persistantDrawer";
 
 const DrawerLayout = ({children, ...restProps}) => {
     return(
         <>
-        <Box sx={{display:'flex'}}>
-            <ResponsiveDrawer {...restProps}/>
-            <Box sx={{flexGrow: 1, p: 2}}>
-                <Toolbar/>
-                <main>{children}</main>
-            </Box>
-        </Box>
+        <ResponsiveDrawer {...restProps}>
+            {children}
+        </ResponsiveDrawer>
         </>
     )
 }

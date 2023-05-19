@@ -1,9 +1,12 @@
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-
+import Box from "@mui/material/Box"
+import FormControl from "@mui/material/FormControl"
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const BasicSelect = (props) => {
 
-    const {list, value ,onChange, label, sx} = props;
+    const {list, value ,onChange, label, sx, variant, ...restProps} = props;
 
     function handleChange(e)
     {
@@ -13,19 +16,21 @@ const BasicSelect = (props) => {
     return(
         <Box sx={sx}>
         <FormControl fullWidth>
-        <InputLabel id={`${label}_select-label`}>{label}</InputLabel>
+        {label && <InputLabel id={`${label}_select-label`}>{label}</InputLabel>}
         {list && <Select
             labelId={`${label}_select-label`}
             id={`${label}_select`}
             label={label}
             value={value || ''}
             onChange={handleChange}
+            {...restProps}
+            variant={(variant!='' && variant != null && variant !=undefined) ? variant : 'outlined'}
+            
           >
-              <MenuItem key={'none'} value=''><em>None</em></MenuItem>
                   {
                     ((list).map((item, idx) => {
                           return(
-                          <MenuItem key={idx} value={item.id}> {item.name}</MenuItem>
+                          <MenuItem key={idx} value={item.id} > {item.name}</MenuItem>
                           )
                           }))}
                   

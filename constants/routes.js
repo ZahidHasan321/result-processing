@@ -3,72 +3,90 @@ export const examinerPages = [
     routename: "Home",
     routepath: "/",
   },
-    {
-        routename: "Dashboard",
-        routepath: "/examiner/"
-      },
-    {
-      routename: "Current",
-      routepath: "/examiner/current/"
-    },
-    {
-      routename: "History",
-      routepath: "/examiner/history/"
-    }
-  ]
-
-
-  export const committeePages = [
-    {
-      routename: "Home",
-      routepath: "/",
-    },
-    {
-        routename: "Current",
-        routepath: "/examCommittee/",
-      },
-    {
-      routename: "History",
-      routepath: "/examCommittee/history"
-    },
-  ]
-
-  export const semesterPages = [
-    {
-      routename: "Home",
-      routepath: "/",
-    },
-    {
-        routename: "Dashboard",
-        routepath: "/examCommittee/[session]/[semester]/dashboard",
-      },
-    {
-      routename: "Current",
-      routepath: "/examCommittee/[session]/[semester]/current"
-    },
-    {
-      routename: "History",
-      routepath: "/examCommittee/[session]/[semester]/history"
-    }
-  ]
-
-  export const AdminPages = [
-    {
-      routename: "Manage Committee",
-      routepath: "/admin/",
-    },
-    {
-        routename: "Manage Teachers",
-        routepath: "/admin/teachers/",
-    },
-    {
-      routename: "Test",
-      routepath: "/admin/test/",
+  {
+    routename: "Current",
+    routepath: "/examiner"
   },
-  
-      
-  ]
+  {
+    routename: "History",
+    routepath: "/examiner/history"
+  }
+]
+
+export const courseTeacher = [
+  {
+    routename: "Home",
+    routepath: "/",
+  },
+  {
+    routename: "Current",
+    routepath: "/courseTeacher"
+  },
+  {
+    routename: "History",
+    routepath: "/courseTeacher/history"
+  }
+]
+
+
+export const committeePages = [
+  {
+    routename: "Home",
+    routepath: "/",
+  },
+  {
+    routename: "Current",
+    routepath: "/examCommittee",
+  },
+  {
+    routename: "History",
+    routepath: "/examCommittee/history"
+  }
+]
+
+export const semesterPages = [
+  {
+    routename: "Home",
+    routepath: "/",
+  },
+  {
+    routename: "Dashboard",
+    routepath: "/examCommittee/[session]/[semester]",
+  },
+  {
+    routename: "Submitted",
+    routepath: "/examCommittee/[session]/[semester]/submitted"
+  },
+  {
+    routename: "Decoded",
+    routepath: "/examCommittee/[session]/[semester]/decoded"
+  }
+]
+
+export const AdminPages = [
+  {
+    routename: "Home",
+    routepath: "/",
+  },
+  {
+    routename: "Exam Committee",
+    routepath: "/admin",
+  },
+  {
+    routename: "Teachers",
+    routepath: "/admin/teachers",
+  },
+  {
+    routename: "Courses",
+    routepath: "/admin/courses",
+  },
+  {
+    routename: "Students",
+    routepath: "/admin/students",
+  },
+
+
+]
 
 
 
-  
