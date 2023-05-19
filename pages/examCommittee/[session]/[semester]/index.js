@@ -5,19 +5,21 @@ import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import Circle from "@mui/icons-material/Circle";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Paper from "@mui/material/Paper";
+import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
-import Card from "@mui/material/Card"
-import CardActionArea from "@mui/material/CardActionArea"
-import CardActions from "@mui/material/CardActions"
-import CardContent from "@mui/material/CardContent"
-import CardHeader from "@mui/material/CardHeader"
-import Slide from "@mui/material/Slide"
+import Typography from "@mui/material/Typography";
 
 import Grid from '@mui/material/Unstable_Grid2';
+import ReactPDF from "@react-pdf/renderer";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -52,6 +54,10 @@ const Dashboard = () => {
     setExmainerOpen(false);
   }
 
+  const handleGradePdfClick = () => {
+    ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
+  }
+
   const getCourseDataList = async () => {
     if (query.semester != undefined && query.session != undefined) {
       await fetch('/api/examCommittee/semester/courseDataList', {
@@ -64,10 +70,10 @@ const Dashboard = () => {
         .then(res => res.json())
         .then(data => {
           setCourseData(data)
-          
+
         });
 
-        setChecked(true);
+      setChecked(true);
     }
   }
 
@@ -94,13 +100,13 @@ const Dashboard = () => {
                     subheader={item.course_name} />
 
                   <CardContent>
-                    <Typography variant="body2" fontSize={14}>SET-A: {item.examiner_a_name ? item.examiner_a_name  : <i>None</i>}</Typography>
-                    <Typography variant="body2" fontSize={14}>SET-B: {item.examiner_b_name  ? item.examiner_b_name  : <i>None</i>}</Typography>
+                    <Typography variant="body2" fontSize={14}>SET-A: {item.examiner_a_name ? item.examiner_a_name : <i>None</i>}</Typography>
+                    <Typography variant="body2" fontSize={14}>SET-B: {item.examiner_b_name ? item.examiner_b_name : <i>None</i>}</Typography>
 
-                    <Stack direction={'row'} sx={{mt:1}}>
+                    <Stack direction={'row'} sx={{ mt: 1 }}>
                       <Typography variant="body2" sx={{ mr: 1 }} fontSize={14}>SUBMITTED: </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-                        <Circle fontSize="3px" sx={{ mr: 0.2, color: item.submitted_a? 'lightgreen' : '#bdbdbd' }} />
+                        <Circle fontSize="3px" sx={{ mr: 0.2, color: item.submitted_a ? 'lightgreen' : '#bdbdbd' }} />
                         <Typography fontSize={14}>SET-A</Typography>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center', }}>
@@ -110,16 +116,16 @@ const Dashboard = () => {
                     </Stack>
 
                     <Stack direction={'row'}>
-                    <Typography variant="body2"  sx={{mr:2.5}} fontSize={14}>DECODED: </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
-                      <Circle fontSize="3px" sx={{ mr: 0.2, color: item.decoded_a ? 'lightgreen' : '#bdbdbd' }} />
-                      <Typography fontSize={14}>SET-A</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', }}>
-                      <Circle fontSize="3px" sx={{ mr: 0.2, color: item.decoded_b ? 'lightgreen' : '#bdbdbd' }} />
-                      <Typography fontSize={14}>SET-B</Typography>
-                    </Box>
-                  </Stack>
+                      <Typography variant="body2" sx={{ mr: 2.5 }} fontSize={14}>DECODED: </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+                        <Circle fontSize="3px" sx={{ mr: 0.2, color: item.decoded_a ? 'lightgreen' : '#bdbdbd' }} />
+                        <Typography fontSize={14}>SET-A</Typography>
+                      </Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', }}>
+                        <Circle fontSize="3px" sx={{ mr: 0.2, color: item.decoded_b ? 'lightgreen' : '#bdbdbd' }} />
+                        <Typography fontSize={14}>SET-B</Typography>
+                      </Box>
+                    </Stack>
 
                     <Stack direction={'row'}>
                       <Typography variant="body2" sx={{ mr: 2 }} fontSize={14}>TOPSHEET: </Typography>
@@ -133,7 +139,7 @@ const Dashboard = () => {
                       </Box>
                     </Stack>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', mr: 2, mt:1}}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mr: 2, mt: 1 }}>
                       <Circle fontSize="3px" sx={{ mr: 0.2, color: item.catm ? 'lightgreen' : '#bdbdbd' }} />
                       <Typography variant="body2" fontSize={14}>CATM</Typography>
                     </Box>
@@ -161,6 +167,8 @@ const Dashboard = () => {
       {exmainerOpen && <ExaminerDialog open={exmainerOpen} onClose={handleOnClose} semester={query.semester} session={query.session} course={courseCode} />}
       {topsheetOpen && <TopsheetDialog open={topsheetOpen} onClose={() => { getCourseDataList(); setTopsheetOpen(false) }} semester={query.semester} session={query.session} course={courseCode} />}
       {sumSheetOpen && <SumSheetDialog open={sumSheetOpen} onClose={() => setSumSheetOpen(false)} semester={query.semester} session={query.session} course={courseCode} />}
+
+      <Link href={`/examCommittee/${query.session}/${query.semester}/gradesheet`} ><Button onCLick={handleGradePdfClick}>Gradesheet</Button></Link>
     </Paper>
   )
 }

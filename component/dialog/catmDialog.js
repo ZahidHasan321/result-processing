@@ -148,9 +148,8 @@ const CATMdialog = (props) => {
             });
     }
 
-
     const getStudentID = async () => {
-        await fetch('/api/admin/student/getStudentData', {
+        await fetch('/api/courseTeacher/getstudents', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

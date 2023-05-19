@@ -124,6 +124,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               </ListItemIcon>
               <ListItemText primary='Home' />
             </ListItemButton>
+            <Divider />
           </Link>
           <ListItemButton onClick={() => setOpenCommittee(!openCommittee)}>
             <ListItemIcon>
@@ -151,7 +152,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
                   <ListItemText primary='History' />
                 </ListItemButton>
               </Link>
-
+              <Divider />
             </List>
           </Collapse>
 
@@ -182,7 +183,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
                   <ListItemText primary='History' />
                 </ListItemButton>
               </Link>
-
+              <Divider />
             </List>
           </Collapse>
 
@@ -204,7 +205,6 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
                   <ListItemText primary='Current' />
                 </ListItemButton>
               </Link>
-
               <Link style={linkStyle} href='/courseTeacher/history' >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
@@ -213,6 +213,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
                   <ListItemText primary='History' />
                 </ListItemButton>
               </Link>
+              <Divider />
             </List>
           </Collapse>
 
@@ -276,15 +277,10 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
                   <ListItemText primary='Courses' />
                 </ListItemButton>
               </Link>
+          
             </List>
           </Collapse>
-
-
-
         </List>
-
-
-
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

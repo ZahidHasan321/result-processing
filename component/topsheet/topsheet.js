@@ -162,7 +162,7 @@ const Topsheet = (props) => {
                 />
             </Box>
 
-            <Paper sx={{ border: 1, m: 2, boxShadow: 2 }}>
+            <Paper sx={{ m: 2, boxShadow: 2 }}>
                 <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Present Students</Typography>
                 {presentData && <ChipArray show={true} list={presentData} onDelete={(data) => handlePresentDelete(data, 'present')} updateData={updatePresentData} sx={{
                     minWidth: '700px',
@@ -171,7 +171,7 @@ const Topsheet = (props) => {
                 }} />}
             </Paper>
 
-            <Paper sx={{ border: 1, m: 2, boxShadow: 2 }}>
+            <Paper sx={{ m: 2, boxShadow: 2 }}>
                 <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Absent Students</Typography>
                 {absentData && <ChipArray list={absentData} onDelete={(data) => handlePresentDelete(data, 'absent')} updateData={updateAbsentData} sx={{
                     minWidth: '700px',
@@ -180,7 +180,7 @@ const Topsheet = (props) => {
                 }} />}
             </Paper>
 
-            <Paper sx={{ border: 1, m: 2, boxShadow: 2 }}>
+            <Paper sx={{ m: 2, boxShadow: 2 }}>
                 <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Expelled Students</Typography>
                 {expelledData && <ChipArray list={expelledData} onDelete={(data) => handlePresentDelete(data, 'expelled')} updateData={updateExpelledData} sx={{
                     minWidth: '700px',
