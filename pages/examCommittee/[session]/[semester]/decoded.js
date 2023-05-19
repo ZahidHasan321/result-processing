@@ -118,14 +118,26 @@ const Decoded = () => {
 
 
 
-Decoded.getLayout = function getLayout(page) {
+const HeaderLayout = ({ children }) => {
   const router = useRouter();
   const query = router.query;
 
   return (
-    <Layout pages={semesterPages} query={query}>
+    <>
+      <Layout pages={semesterPages} query={query}>
+        {children}
+      </Layout>
+    </>
+  );
+};
+
+Decoded.getLayout = function getLayout(page) {
+  
+
+  return (
+    <HeaderLayout>
       <main>{page}</main>
-    </Layout>
+    </HeaderLayout>
   )
 }
 
