@@ -45,6 +45,11 @@ const Courses = () => {
       headerName: "Course Type",
       minWidth: 200,
     },
+    {
+      field: "max_mark",
+      headerName: "Course Mark",
+      minWidth: 200,
+    },
 
     {
       field: "delete",

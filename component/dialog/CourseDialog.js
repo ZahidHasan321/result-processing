@@ -25,6 +25,7 @@ const CourseDialog = (props) => {
     const [name, setName] = useState('');
     const [credit, setCredit] = useState('');
     const [type, setType] = useState('');
+    const [mark, setMark] = useState('')
     const [semester, setSemester] = useState('');
     const [showAlert, setShowAlert] = useState(null);
     const [showError, setShowError] = useState(null);
@@ -50,7 +51,7 @@ const CourseDialog = (props) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ code : code.trim(), name: name.trim(), credit, type, semester })
+            body: JSON.stringify({ code : code.trim(), name: name.trim(), credit, type, semester, mark })
         }).then(res => {
             if (res.ok) {
                 setShowAlert(true);
@@ -59,6 +60,7 @@ const CourseDialog = (props) => {
                 setCredit('')
                 setSemester('')
                 setType('')
+                setMark('')
                 setTimeout(() => {
                     setShowAlert(false);
                 }, 5000)
@@ -125,6 +127,18 @@ const CourseDialog = (props) => {
                             name='semester'
                             value={semester}
                             onChange={(e) => { e.preventDefault(); setSemester(e.target.value) }}
+                            autoFocus
+                            sx={{ mb: 2 }}
+                        />
+
+                        <TextField
+                            margin="normal"
+                            required
+                            id='mark'
+                            label='mark'
+                            name='Mark'
+                            value={mark}
+                            onChange={(e) => { e.preventDefault(); setMark(e.target.value) }}
                             autoFocus
                             sx={{ mb: 2 }}
                         />
