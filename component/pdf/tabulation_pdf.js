@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Page, Text, View, Document, Font, Image } from '@react-pdf/renderer';
 import styles from './styles';
-import logo from "../../public/Cu_logo.jpg"
 import { formatOrdinals } from '@/helper/ordinal';
 
 Font.register({ family: 'Times-Roman' });
@@ -15,8 +14,67 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
     for (let i = 0; i < pageNumber; i++) {
         looper.push(i)
     }
-
     let it = 0
+    let tcp = 0
+    let tce = 0
+    const letterGrade = (n) => {
+        let grade
+        if (n >= 80)
+            grade = 'A+'
+        else if (n >= 75 && n < 80)
+            grade = 'A'
+        else if (n >= 70 && n < 75)
+            grade = 'A-'
+        else if (n >= 65 && n < 70)
+            grade = 'B+'
+        else if (n >= 60 && n < 65)
+            grade = 'B'
+        else if (n >= 55 && n < 60)
+            grade = 'B-'
+        else if (n >= 50 && n < 55)
+            grade = 'C+'
+        else if (n >= 45 && n < 50)
+            grade = 'C'
+        else if (n >= 40 && n < 45)
+            grade = 'D'
+        else if (n >= 0 && n < 40)
+            grade = 'F'
+        return grade
+    }
+
+    const gradePoint = (g) => {
+        let point = 0.00
+        switch (g) {
+            case 'A+':
+                point = 4.00
+                break;
+            case 'A':
+                point = 3.75
+                break;
+            case 'A-':
+                point = 3.50
+                break;
+            case 'B+':
+                point = 3.25
+                break;
+            case 'B':
+                point = 3.00
+                break;
+            case 'B-':
+                point = 2.75
+                break;
+            case 'C+':
+                point = 2.50
+                break;
+            case 'C':
+                point = 2.25
+                break;
+            case 'D':
+                point = 2.00
+                break;
+        }
+        return point
+    }
 
 
     return (
@@ -111,7 +169,10 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                     </View>
 
                                     <View style={{ display: 'flex', flexDirection: 'column', fontSize: '10px', width: '230px', marginRight: '10px' }}>
-                                        <Image src={logo} style={{ height: '50px' }} />
+                                        <Image src='/Cu_logo.jpg' style={{
+                                            height: '50px',
+                                            width: '46px',
+                                        }} />
                                         <Text style={{ textAlign: 'center' }}>University of Chittagong</Text>
                                         <Text style={{ textAlign: 'center' }}>Faculty of Engineering</Text>
                                         <Text style={{ textAlign: 'center' }}>Department of Computer Science & Enginerring</Text>
@@ -165,6 +226,7 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
 
                                         {
                                             courseList && courseList.map((course, idx) => {
+
                                                 if (course.course_type == 'Theory') {
                                                     return (
                                                         <View key={idx} style={{ display: 'flex', flexDirection: 'column', marginLeft: `${idx == 0 ? '-58px' : '-33px'}` }}>
@@ -211,20 +273,16 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                         </View>
                                     </View>
 
-
-
-
-
                                     {
                                         Array(3).fill(1).map((dummy, idx1) => {
-                                            let x = 1
+
                                             return (
                                                 <View key={idx1} style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', ...styles.verticalText }}>Serial No.</Text>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>Hall</Text>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>Student ID</Text>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>Name</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', ...styles.verticalText, fontFamily: 'Times-Bold' }}>{it + 1}</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].hall : 'Hall'}</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].roll : 'Student ID'}</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].name : 'Name'}</Text>
                                                         <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>Session</Text>
                                                         <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px' }}>
                                                             <Text style={{ borderBottom: 1, borderLeft: 1, marginLeft: '-58px', ...styles.vTextNP2 }}>Regular</Text>
@@ -234,63 +292,83 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
 
 
                                                         {
-                                                            courseList && courseList.map((course, idx3) => {
+
+                                                            courseList && tabularData && courseList.map((course, idx3) => {
+
+                                                                const obj = tabularData.length ? tabularData[it][1].find(x => x.course_code == course.course_code) : []
+
+                                                                const grade = letterGrade((obj.total / course.max_mark) * 100)
+                                                                const point = (gradePoint(grade) * course.course_credit)
+                                                                tcp = tcp + point
+                                                                tce = tce + (point > 0 ? course.course_credit : 0)
                                                                 if (course.course_type == 'Theory') {
                                                                     return (
-                                                                        <View style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
+                                                                        <View key={idx3} style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `${idx3 == 0 ? '-48px' : '-24.7px'}` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>A+</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>19.5</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.catm}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>A+</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>19.5</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.fem}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>A+</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>19.5</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.total}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>A+</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>19.5</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{grade}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>A+</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>19.5</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{point.toFixed(2)}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
                                                                             </View>
                                                                         </View>
                                                                     )
                                                                 }
-                                                                else {
+                                                                else if (course.course_type == 'Lab') {
                                                                     return (
-                                                                        <View style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
+                                                                        <View key={idx3} style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `${idx3 == 0 ? '-48px' : '-24.7px'}` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>A+</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>19.5</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.total}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>A+</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>19.5</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{grade}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>A+</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>19.5</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{point.toFixed(2)}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
                                                                             </View>
                                                                         </View>
                                                                     )
                                                                 }
 
                                                             })
+
                                                         }
 
+
+
                                                         <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-24.7px', ...styles.verticalText }}>TCE</Text>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>TCP</Text>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>GPA</Text>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>Result</Text>
+                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-24.7px', ...styles.verticalText }}>{tce}</Text>
+                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>{tcp.toFixed(2)}</Text>
+                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>{(tce / tcp).toFixed(2)}</Text>
+                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>{(tce / tcp) > 2.20 ? 'P' : 'F'}</Text>
                                                             <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>Remark</Text>
                                                         </View>
                                                     </View>
+
+                                                    {
+                                                        (() => {
+                                                            it++
+                                                            tcp = 0
+                                                            tce = 0
+                                                        })()
+                                                    }
+
 
                                                 </View>
                                             )

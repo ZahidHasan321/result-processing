@@ -3,7 +3,7 @@ import pool from "@/lib/db";
 export default async function handler(req, res) {
 
     const query = {
-        text: 'SELECT student.roll FROM student JOIN stud_per_session ON student.roll = stud_per_session.roll WHERE exam_session = $1 AND semester = $2 ORDER BY student.roll ASC',
+        text: 'SELECT * FROM student JOIN stud_per_session ON student.roll = stud_per_session.roll WHERE exam_session = $1 AND semester = $2 ORDER BY student.roll ASC',
         values: Object.values(req.body)
     }
 

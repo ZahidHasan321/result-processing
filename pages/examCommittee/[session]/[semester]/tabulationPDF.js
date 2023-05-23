@@ -60,7 +60,7 @@ const Viewer = () => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    setTabularData(data)
+                    setTabularData(Object.entries(data))
                 })
         }
     }
@@ -76,6 +76,7 @@ const Viewer = () => {
             })
                 .then(res => res.json())
                 .then(data => {
+                
                     setStudentID(data)
                 })
         }
@@ -88,6 +89,8 @@ const Viewer = () => {
         getTabularData()
         getStudentID()
     }, [query.semester])
+
+    console.log(tabularData)
 
     if (courseList.length > 0) {
         return (

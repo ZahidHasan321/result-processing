@@ -17,5 +17,15 @@ export default async function handler(req, res) {
              res.status(500).send([]);
             });
 
-    res.status(200).send(result);
+    const hash = new Map()
+    result.forEach((obj, idx) => {
+        if(Boolean(hash.get(obj.roll))){
+            hash.set(obj.roll, [...hash.get(obj.roll), obj])
+        }
+        else{
+            hash.set(obj.roll, [obj])
+        }
+    })
+    const arr = await Object.fromEntries(hash)
+    res.status(200).send(arr);
 }
