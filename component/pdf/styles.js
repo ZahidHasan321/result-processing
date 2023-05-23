@@ -5,7 +5,6 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       marginTop: '48px',
       marginBottom: '10px',
-      marginLeft: '30px',
       marginRight: '7px'
 
     },
@@ -14,8 +13,36 @@ const styles = StyleSheet.create({
       padding: 10,
       flexGrow: 1
     },
-    Text:{
-        fontSize: 5
+    verticalText:{
+      transform: "rotate(-90deg)",
+      transformOrigin: "left top 0",
+      float: "left",
+      marginTop:'69px',
+      paddingLeft:'3px',
+      paddingRight:'3px',
+      width:'70px',
+      textAlign:'center'
+    },
+
+    vTextNP:{
+      transform: "rotate(-90deg)",
+      transformOrigin: "left top 0",
+      float: "left",
+      marginTop:'43.2px',
+      width:'43.3px',
+      textAlign:'center'
+    },
+    hText: {
+      borderRight:1,
+      borderBottom:1,
+      width:'52.2px',
+      textAlign:'center'
+    },
+    hText2: {
+      borderRight:1,
+      borderBottom:1,
+      width:'31.6px',
+      textAlign:'center'
     }
   });
 

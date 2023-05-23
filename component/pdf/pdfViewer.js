@@ -4,7 +4,7 @@ import TabulationPDF from "./tabulation_pdf"
 
 
 
-const TabulationView = ({session, semester, courseList, memberList}) => {
+const TabulationView = ({session, semester, courseList, memberList, tabularData, studentID}) => {
     const [client, setClient] = useState(false)
 
     return(
@@ -15,7 +15,7 @@ const TabulationView = ({session, semester, courseList, memberList}) => {
             width: '100vw', 
             height: '100vh' 
             }}>
-            <TabulationPDF session={session} semester={semester} courseList = {courseList} memberList = {memberList}/>
+            <TabulationPDF session={session} semester={semester} courseList = {courseList} memberList = {memberList} tabularData = {tabularData} studentID = {studentID}/>
         </PDFViewer>
     )
 }

@@ -13,6 +13,8 @@ const Viewer = () => {
 
     const [courseList, setCourseList] = useState([])
     const [memberList, setMemberList] = useState([])
+    const [tabularData, setTabularData] = useState([])
+    const [studentID, setStudentID] = useState([])
 
 
     const getCourseList = async () => {
@@ -31,14 +33,14 @@ const Viewer = () => {
         }
     }
 
-    const getMemberList = async() => {
-        if(query.semester != undefined && query.session != undefined){
+    const getMemberList = async () => {
+        if (query.semester != undefined && query.session != undefined) {
             await fetch('/api/admin/committeeList', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({session: query.session, semester: query.semester})
+                body: JSON.stringify({ session: query.session, semester: query.semester })
             })
                 .then(res => res.json())
                 .then(data => {
@@ -47,15 +49,49 @@ const Viewer = () => {
         }
     }
 
+    const getTabularData = async () => {
+        if (query.semester != undefined && query.session != undefined) {
+            await fetch('/api/examCommittee/semester/getTabularData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ session: query.session, semester: query.semester })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setTabularData(data)
+                })
+        }
+    }
+
+    const getStudentID = async () => {
+        if (query.semester != undefined && query.session != undefined) {
+            await fetch('/api/admin/student/getStudentIDs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ session: query.session, semester: query.semester })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setStudentID(data)
+                })
+        }
+    }
+
     useEffect(() => {
         setClient(true)
         getCourseList()
         getMemberList()
+        getTabularData()
+        getStudentID()
     }, [query.semester])
 
     if (courseList.length > 0) {
         return (
-            <TabulationView session={query.session} semester={query.semester} courseList={courseList} memberList = {memberList}/>
+            <TabulationView session={query.session} semester={query.semester} courseList={courseList} memberList={memberList} tabularData={tabularData} studentID = {studentID}/>
         )
     }
     else {
