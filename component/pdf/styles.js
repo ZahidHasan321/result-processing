@@ -57,7 +57,17 @@ const styles = StyleSheet.create({
     float: "left",
     width: '35px',
     height: '11px',
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingTop:'1px'
+  },
+  vTextNP4: {
+    transform: "rotate(-90deg)",
+    transformOrigin: "left top 0",
+    float: "left",
+    width: '34px',
+    height: '11px',
+    textAlign: 'center',
+    paddingTop:'1px'
   },
   hText: {
     borderRight: 1,

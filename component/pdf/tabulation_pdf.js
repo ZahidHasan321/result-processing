@@ -14,9 +14,11 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
     for (let i = 0; i < pageNumber; i++) {
         looper.push(i)
     }
+
     let it = 0
     let tcp = 0
     let tce = 0
+    let improve = false;
     const letterGrade = (n) => {
         let grade
         if (n >= 80)
@@ -265,11 +267,11 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                         }
 
                                         <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-33px', ...styles.verticalText }}>TCE</Text>
-                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>TCP</Text>
-                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>GPA</Text>
-                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>Result</Text>
-                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>Remark</Text>
+                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-33px', ...styles.verticalText }}>TCE</Text>
+                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>TCP</Text>
+                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>GPA</Text>
+                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>Result</Text>
+                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>Remark</Text>
                                         </View>
                                     </View>
 
@@ -283,7 +285,7 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                                         <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].hall : 'Hall'}</Text>
                                                         <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].roll : 'Student ID'}</Text>
                                                         <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].name : 'Name'}</Text>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>Session</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>{it <= studentID.length ? `${studentID[it].session - 1}-${studentID[it].session}` : 'Session'}</Text>
                                                         <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px' }}>
                                                             <Text style={{ borderBottom: 1, borderLeft: 1, marginLeft: '-58px', ...styles.vTextNP2 }}>Regular</Text>
                                                             <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, marginLeft: '-58px', ...styles.vTextNP2 }}>Improve</Text>
@@ -292,37 +294,39 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
 
 
                                                         {
-
+                                    
                                                             courseList && tabularData && courseList.map((course, idx3) => {
 
                                                                 const obj = tabularData.length ? tabularData[it][1].find(x => x.course_code == course.course_code) : []
 
                                                                 const grade = letterGrade((obj.total / course.max_mark) * 100)
                                                                 const point = (gradePoint(grade) * course.course_credit)
+                                                                improve = obj.improve
                                                                 tcp = tcp + point
                                                                 tce = tce + (point > 0 ? course.course_credit : 0)
+            
                                                                 if (course.course_type == 'Theory') {
                                                                     return (
                                                                         <View key={idx3} style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `${idx3 == 0 ? '-48px' : '-24.7px'}` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.catm}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : obj.catm}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.catm : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.fem}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : obj.fem}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.fem : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.total}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : obj.total}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.total : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{grade}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : grade}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? grade : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{point.toFixed(2)}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : point.toFixed(2)}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? point.toFixed(2) : ''}</Text>
                                                                             </View>
                                                                         </View>
                                                                     )
@@ -331,16 +335,16 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                                                     return (
                                                                         <View key={idx3} style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `${idx3 == 0 ? '-48px' : '-24.7px'}` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.total}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : obj.total}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.catm : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{grade}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : grade}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? grade : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{point.toFixed(2)}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}></Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : point.toFixed(2)}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? point.toFixed(2) : ''}</Text>
                                                                             </View>
                                                                         </View>
                                                                     )
@@ -352,12 +356,31 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
 
 
 
-                                                        <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-24.7px', ...styles.verticalText }}>{tce}</Text>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>{tcp.toFixed(2)}</Text>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>{(tce / tcp).toFixed(2)}</Text>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>{(tce / tcp) > 2.20 ? 'P' : 'F'}</Text>
-                                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-58px', ...styles.verticalText }}>Remark</Text>
+                                                        <View style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px'  }}>
+                                                            <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' : tce}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}>{improve ? tce : ''} </Text>
+                                                            </View>
+
+                                                            <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24px` }}>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' :tcp.toFixed(2)}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}>{improve ? tcp.toFixed(2) : ''}</Text>
+                                                            </View>
+
+                                                            <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24px` }}>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' :((tce / tcp) !== (tce / tcp)? 0.00 : (tce / tcp).toFixed(2))}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}>{improve ? ((tce / tcp) !== (tce / tcp) ? 0.00 : (tce / tcp).toFixed(2) ): ''}</Text>
+                                                            </View>
+
+                                                            <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24px` }}>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' : ((tce / tcp) > 2.20 ? 'P' : 'F')}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}>{improve ? ((tce / tcp) > 2.20 ? 'P' : 'F') : ''}</Text>
+                                                            </View>{(tce / tcp) > 2.20 ? 'P' : 'F'}
+
+                                                            <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24px` }}>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}></Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}></Text>
+                                                            </View>
                                                         </View>
                                                     </View>
 
