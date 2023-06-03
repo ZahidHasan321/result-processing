@@ -3,7 +3,7 @@ import pool from "@/lib/db";
 export default async function handler(req, res) {
 
     const query = {
-        text: 'SELECT course_code, course_name, course_credit, course_type FROM courses WHERE semester = $1',
+        text: 'SELECT course_code, course_name, course_credit, course_type, max_mark FROM courses WHERE semester = $1 ORDER BY course_code ASC',
         values: [req.body]
     }
     await pool.query(query)

@@ -41,6 +41,14 @@ export default async function (req, res) {
                     values: [param.semester, param.session]
                 }
             ).catch(err => console.log(err));
+            
+            await client.query(
+                {
+                    text: 'INSERT INTO exam_info(exam_session, semester) VALUES($1, $2) ',
+                    values: [param.session, param.semester]
+                }
+            ).catch(err => console.log(err));
+
             await client.query('COMMIT')
             res.status(200).send({ message: 'Committee Created' })
             

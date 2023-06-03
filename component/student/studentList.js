@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
 import AutoCompleteSession from "../selector/autocompleteSession";
 import SemesterSelector from "../selector/semesterSelector";
@@ -19,13 +19,23 @@ const columns = [
     field: "name",
     headerName: "Name",
     minWidth: 200,
-    flex: 1
+    flex: 1,
+    editable:true
   },
   {
     field: "hall",
     headerName: "Hall",
     minWidth: 200,
-    flex: 1
+    flex: 1,
+    editable:true
+  },
+  {
+    field: "improve",
+    headerName: "Improvement",
+    type: 'boolean',
+    minWidth: 200,
+    flex: 1,
+    editable: true
   },
 ];
 
@@ -100,13 +110,42 @@ const StudentList = () => {
     }
   }
 
+  const processRowUpdate = (newRow, oldRow) => {
+    if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
+
+    if (newRow.name != '' && newRow.hall != '' && newRow.roll != '') {
+      fetch('/api/admin/student/updateStudent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: newRow.roll, name: newRow.name, hall:newRow.hall, improve: newRow.improve, session: session, semester: semester })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "Success") {
+            setSnackbar({ children: 'Student data updated', severity: "success" })
+          }
+          else {
+            setSnackbar({ children: 'Failed to update', severity: "error" })
+          }
+        });
+    }
+
+    return newRow;
+  }
+
+  const handleProcessRowUpdateError = useCallback((error) => {
+    setSnackbar({ children: error.message, severity: 'error' });
+  }, []);
+
   return (
     <Box sx={{ m: 3, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       <Box sx={{ display: "flex", mb: 3 }}>
         <AutoCompleteSession sx={{ width: '180px' }} list={sessionList} onChange={(value) => setSession(value)} label='Exam Session' />
-        <SemesterSelector sx={{ width: '180px', ml: 3  }} value={semester} list={semesterList} onChange={value => setSemester(value)} label='semester' />
-        <Box sx={{ ml: 'auto', pl:3 }}>
-          <Button size="small" variant="contained"  sx={{ bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' }}} onClick={handleUpdateSemester}> Update semester</Button>
+        <SemesterSelector sx={{ width: '180px', ml: 3 }} value={semester} list={semesterList} onChange={value => setSemester(value)} label='semester' />
+        <Box sx={{ ml: 'auto', pl: 3 }}>
+          <Button size="small" variant="contained" sx={{ bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleUpdateSemester}> Update semester</Button>
         </Box>
       </Box>
       <AntDesignGrid
@@ -115,6 +154,9 @@ const StudentList = () => {
         checked={checked}
         rows={studentList}
         columns={columns}
+        experimentalFeatures={{ newEditingApi: true }}
+        processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={handleProcessRowUpdateError}
         getRowId={(row) => row.roll}
       />
 

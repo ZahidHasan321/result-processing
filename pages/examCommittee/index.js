@@ -94,7 +94,7 @@ const Home = () => {
     <Paper variant="Outlined" sx={{ boxShadow: 3 }}>
       <Box >
         <Typography fontSize={30} sx={{ ml: 12, pt: 3 }}>IN PROGRESS</Typography>
-        <Typography variant="caption" sx={{ ml: 12 }}>Double click on row for more.</Typography>
+        <Typography variant="caption" sx={{ ml:12 }}>Double click on row for more.</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           
             <Box sx={{ ml: 5, mr: 5, mb: 3, width: '90%' }}>

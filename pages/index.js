@@ -33,7 +33,6 @@ const Home = () => {
           <Box sx={{ display: "flex", flexDirection: 'column', alignItems: 'center', mt: '10%' }}>
             <Typography fontSize={50} mb={10}>Choose which one you want to work on?</Typography>
             <Stack direction='row' spacing={10}>
-              
               <Link style={linkStyle} href="/examCommittee"><Button sx={boxButton} variant="contained">Exam Committee</Button></Link>
               <Link style={linkStyle} href="/examiner"><Button sx={boxButton} variant="contained"> Examiner</Button></Link>
               <Link style={linkStyle} href="/courseTeacher"><Button sx={boxButton} variant="contained"> Course Teacher</Button></Link>

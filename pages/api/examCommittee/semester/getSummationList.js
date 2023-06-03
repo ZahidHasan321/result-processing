@@ -13,7 +13,6 @@ export default async function handler(req, res) {
         .then(data => data.rows)
         .catch(err =>{
              res.status(500).send([]);
-             console.log(err);
             });
 
     res.status(200).send(result);

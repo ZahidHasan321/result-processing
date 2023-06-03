@@ -6,7 +6,7 @@ if(param == ""){
     param = null;
 }
 const query = {
-    text: 'SELECT * FROM exam_committee WHERE id = ($1)::uuid AND published = true',
+    text: 'SELECT * FROM exam_committee c JOIN exam_info i ON c.exam_session = i.exam_session AND c.semester = i.semester WHERE id = ($1)::uuid AND published = true',
     values: [req.body]
 }
   const result = await pool.query(query)

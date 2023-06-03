@@ -59,6 +59,12 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     },
     '& .MuiDataGrid-cell--editing': {
         backgroundColor: theme.palette.mode === 'dark' ? '#376331' : 'rgb(217 243 190)',
+    },
+    '& .MuiDataGrid-booleanCell[data-value="true"]': {
+        color: theme.palette.success.main
+    },
+    '& .MuiDataGrid-booleanCell[data-value="false"]': {
+        color: theme.palette.error.main
     }
 }));
 
@@ -116,7 +122,7 @@ export default function AntDesignGrid(props) {
     const { checked, rows, columns, component, ...restProps } = props;
 
     return (
-        <div style={{ width: '100%', height: '100%'}}>
+        <div style={{ width: '100%', height: '100%' }}>
             <Grow in={checked}>
                 <StyledDataGrid
 
