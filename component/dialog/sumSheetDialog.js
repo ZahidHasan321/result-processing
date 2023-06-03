@@ -17,7 +17,7 @@ const columns = [
     },
     {
         field: "name",
-        headerName: "StudentName",
+        headerName: "Student Name",
         minWidth: 200,
         flex: 1
     },

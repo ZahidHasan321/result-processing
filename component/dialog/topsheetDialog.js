@@ -33,10 +33,9 @@ const TopsheetDialog = (props) => {
         <Dialog TransitionComponent={Grow} maxWidth='xl' fullWidth open={open} onClose={handleOnClose} sx={{ backdropFilter: 'blur(5px)' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <DialogTitle fontSize={30} fontWeight='bold'>Top Sheet</DialogTitle>
-                <Stack direction={'row'} spacing={3} sx={{ mb: 2 }}>
-                    <Typography fontWeight={'bold'} fontSize={18}> Session:{session}</Typography>
-                    <Typography fontWeight={'bold'} fontSize={18}>Semester:{formatOrdinals(semester)}</Typography>
-                    <Typography fontWeight={'bold'} fontSize={18}>Course:{course}</Typography>
+                <Stack direction={'column'} spacing={1} sx={{ mb: 2 }}>
+                    <Typography fontSize={18}><b>{formatOrdinals(semester)} semester</b> Bsc Engineering <b>{session}</b></Typography>
+                    <Typography fontWeight={'bold'} fontSize={22} alignSelf={'center'}>{course}</Typography>
                 </Stack>
                 <Tabs
                     sx={{ width: 500, borderBottom: 1 }}

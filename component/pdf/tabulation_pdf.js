@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Page, Text, View, Document, Font, Image } from '@react-pdf/renderer';
 import styles from './styles';
 import { formatOrdinals } from '@/helper/ordinal';
+import dayjs from 'dayjs';
+
+let monthsArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 Font.register({ family: 'Times-Roman' });
 
 // Create Document Component
-const TabulationPDF = ({ semester, session, courseList, memberList, tabularData, studentID }) => {
+const TabulationPDF = ({ semester, session, courseList, memberList, tabularData, studentID, examInfo}) => {
     let totalCredit = 0
     let pageNumber = Math.ceil(studentID.length / 3)
     let labNumber = 0
@@ -18,6 +21,8 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
     let it = 0
     let tcp = 0
     let tce = 0
+    let startMonth = examInfo[0] ? dayjs(examInfo[0].start_date).month() : null
+    let endMonth = examInfo[0] ? dayjs(examInfo[0].end_date).month() : null
     let improve = false;
     const letterGrade = (n) => {
         let grade
@@ -175,11 +180,12 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                             height: '50px',
                                             width: '46px',
                                         }} />
+                                        
                                         <Text style={{ textAlign: 'center' }}>University of Chittagong</Text>
                                         <Text style={{ textAlign: 'center' }}>Faculty of Engineering</Text>
                                         <Text style={{ textAlign: 'center' }}>Department of Computer Science & Enginerring</Text>
                                         <Text style={{ textAlign: 'center' }}>{`${formatOrdinals(semester)} Semester BSc Engineering Examination ${session}`}</Text>
-                                        <Text style={{ textAlign: 'center' }}>Held in: September - November 2021</Text>
+                                        <Text style={{ textAlign: 'center' }}>Held in: {monthsArray[startMonth]} - {monthsArray[endMonth]} {dayjs(examInfo.start_date).year()}</Text>
                                         <Text style={{ textAlign: 'center' }}>Tabulation Sheet</Text>
                                     </View>
 
@@ -291,8 +297,6 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                                             <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, marginLeft: '-58px', ...styles.vTextNP2 }}>Improve</Text>
                                                         </View>
 
-
-
                                                         {
                                     
                                                             courseList && tabularData && courseList.map((course, idx3) => {
@@ -391,8 +395,6 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                                             tce = 0
                                                         })()
                                                     }
-
-
                                                 </View>
                                             )
                                         })
@@ -434,7 +436,6 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
 
                                     <View style={{ display: 'flex', flexDirection: 'column', fontSize: '8px' }}>
                                         <Text style={{ marginBottom: '30px' }}>Result Published on ..........................</Text>
-
                                         <Text style={{ marginLeft: 'auto' }}>Controller of Examinations</Text>
                                         <Text style={{ marginLeft: 'auto' }} >University of Chittagong</Text>
                                     </View>

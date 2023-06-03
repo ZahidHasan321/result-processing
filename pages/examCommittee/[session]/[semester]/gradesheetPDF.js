@@ -1,12 +1,12 @@
 import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
-import TabulationView from "../../../../component/pdf/pdfViewer"
 import { useRouter } from "next/router"
+import GradesheetView from "@/component/pdf/gradesheet_Viewer"
 const dynamicPDF = dynamic(() => import("../../../../component/pdf/pdfViewer"), {
     ssr: false,
 })
 
-const Viewer = () => {
+const GradesheetViewer = () => {
     const [client, setClient] = useState(false)
     const router = useRouter();
     const query = router.query;
@@ -107,7 +107,7 @@ const Viewer = () => {
 
     if (courseList.length > 0) {
         return (
-            <TabulationView session={query.session} semester={query.semester} courseList={courseList} memberList={memberList} tabularData={tabularData} studentID = {studentID} examInfo = {examInfo}/>
+            <GradesheetView session={query.session} semester={query.semester} courseList={courseList} memberList={memberList} tabularData={tabularData} studentID = {studentID} examInfo = {examInfo}/>
         )
     }
     else {
@@ -118,4 +118,4 @@ const Viewer = () => {
         )
     }
 }
-export default Viewer
+export default GradesheetViewer
