@@ -84,7 +84,6 @@ const MarksheetDialog = (props) => {
         setChecked(true)
     }, 500)
 
-    console.log(data);
     const getMarks = async() => {
         fetch('/api/examiner/getMarks', {
             method: 'POST',

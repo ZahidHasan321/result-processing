@@ -131,7 +131,7 @@ const ExaminerDialog = (props) => {
 
                     {loading &&
                         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                            <AutoCompleteTeacher value={examinerA ? examinerA : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-B Examiner" />
+                            <AutoCompleteTeacher value={examinerA ? examinerA : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-A Examiner" />
                             <AutoCompleteTeacher value={examinerB ? examinerB : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
                             <Typography fontWeight={'bold'}>Add Course Teacher</Typography>
                             <AutoCompleteTeacher value={courseTeacher  ? courseTeacher : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setCourseTeacher(value)} label="Course Teacher" />
