@@ -6,9 +6,8 @@ export default async function handler(req, res) {
     values: [req.body]
   }
 
-  const result = await pool.query(query)
-    .then(res => res.rows)
-    .then(err => err);
+ await pool.query(query)
+    .then(() => res.status(200).send({message:'Teacher Deleted', status:'success'}))
+    .then(()=>  res.status(200).send({message:'Could not delete', status:'error'}));
 
-  res.send(result);
 }

@@ -13,15 +13,20 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { getSession, signIn } from 'next-auth/react';
 import Router from 'next/router';
+import { useState } from 'react';
 
 const theme = createTheme();
 
 export default function SignIn() {
+  const [error, setError] = useState(false);
 
   async function redirectUser() {
     const session = await getSession()
-    if (session.user) {
+    if (session.user.role === 'Teacher') {
       Router.push('/');
+    }
+    else {
+      Router.push('/admin')
     }
   }
 
@@ -36,10 +41,13 @@ export default function SignIn() {
       redirect: false
     });
 
-    console.log(res);
+    console.log(res)
 
     if (res.ok) {
       redirectUser();
+    }
+    else {
+      setError(true);
     }
 
   };
@@ -47,11 +55,11 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="sm">
-        <Card sx={{mt:15}}>
+        <Card sx={{ mt: 15 }}>
           <Box
             sx={{
               marginTop: 8,
-              mb:5,
+              mb: 5,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -64,7 +72,7 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, ml:5, mr:10}}>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, ml: 5, mr: 10 }}>
               <TextField
                 margin="normal"
                 required
@@ -85,15 +93,12 @@ export default function SignIn() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+              {error ? <label style={{ color: 'red', fontSize: 10 }}>Username or Password is wrong</label> : null}
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 2, mb: 2 }}
               >
                 Sign In
               </Button>

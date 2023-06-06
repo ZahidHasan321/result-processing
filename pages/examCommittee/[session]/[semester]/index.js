@@ -147,7 +147,7 @@ const Dashboard = () => {
                 
               }}
               />
-            <Link href={`/examCommittee/${query.session}/${query.semester}/tabulationPDF`}><Button variant="contained">Tabulation PDF</Button></Link>
+            <Link href={`/examCommittee/${query.session}/${query.semester}/tabulationPDF`} style={{marginRight:'10px'}}><Button variant="contained">Tabulation PDF</Button></Link>
             <Link href={`/examCommittee/${query.session}/${query.semester}/gradesheetPDF`}><Button variant="contained">Gradesheet PDF</Button></Link>
           </Box>
         </Box>

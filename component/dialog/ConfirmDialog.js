@@ -21,7 +21,7 @@ const ConfirmDialog = (props) => {
     }
     return(
         <Dialog TransitionComponent={Grow} open={open} onClose={handleClose}>
-            <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
+            <Box sx={{display:'flex', flexDirection:'column', justifyContent:'center', height:'150px'}}>
             <DialogTitle>Are you sure you want to delete?</DialogTitle>
             <Box sx={{display:'flex', justifyContent:'space-around'}}>
                 <Button onClick={() => {onClose()}}>Cancel</Button>

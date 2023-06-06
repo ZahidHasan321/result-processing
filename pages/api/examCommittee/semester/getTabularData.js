@@ -9,6 +9,8 @@ export default async function handler(req, res) {
         ON s.course_code = c.course_code
         JOIN stud_per_session st
         ON s.roll = st.roll
+        JOIN student stud
+        ON stud.roll = s.roll
         AND s.exam_session = st.exam_session
         AND c.semester = st.semester
         WHERE s.exam_session = $1 AND

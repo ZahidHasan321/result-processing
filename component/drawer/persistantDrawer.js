@@ -140,7 +140,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
                   <ListItemIcon>
                     <RotateLeftIcon />
                   </ListItemIcon>
-                  <ListItemText primary='Current' />
+                  <ListItemText primary='Pending' />
                 </ListItemButton>
               </Link>
 
@@ -171,7 +171,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
                   <ListItemIcon>
                     <RotateLeftIcon />
                   </ListItemIcon>
-                  <ListItemText primary='Current' />
+                  <ListItemText primary='Pending' />
                 </ListItemButton>
               </Link>
 
@@ -202,7 +202,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
                   <ListItemIcon>
                     <RotateLeftIcon />
                   </ListItemIcon>
-                  <ListItemText primary='Current' />
+                  <ListItemText primary='Pending' />
                 </ListItemButton>
               </Link>
               <Link style={linkStyle} href='/courseTeacher/history' >
@@ -217,7 +217,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
             </List>
           </Collapse>
 
-          <ListItemButton onClick={() => setOpenAdmin(!openAdmin)}>
+          {/* <ListItemButton onClick={() => setOpenAdmin(!openAdmin)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -279,7 +279,7 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
               </Link>
           
             </List>
-          </Collapse>
+          </Collapse> */}
         </List>
       </Drawer>
       <Main open={open}>

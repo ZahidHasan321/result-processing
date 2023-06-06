@@ -4,7 +4,7 @@ export const examinerPages = [
     routepath: "/",
   },
   {
-    routename: "Current",
+    routename: "Pending",
     routepath: "/examiner"
   },
   {
@@ -19,7 +19,7 @@ export const courseTeacher = [
     routepath: "/",
   },
   {
-    routename: "Current",
+    routename: "Pending",
     routepath: "/courseTeacher"
   },
   {
@@ -35,7 +35,7 @@ export const committeePages = [
     routepath: "/",
   },
   {
-    routename: "Current",
+    routename: "Pending",
     routepath: "/examCommittee",
   },
   {

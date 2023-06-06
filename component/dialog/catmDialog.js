@@ -200,7 +200,7 @@ const CATMdialog = (props) => {
             <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column' }}>
                 {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2 }} onClick={handleOnSubmit}>Submit</Button>}
                 <AntDesignGrid
-                    sx={{ boxShadow: 3 }}
+                    sx={{ boxShadow: 3, fontSize:'16px' }}
                     getRowId={row => row.roll}
                     autoHeight
                     columns={columns}

@@ -84,7 +84,6 @@ const MarksheetDialog = (props) => {
         setChecked(true)
     }, 500)
 
-    console.log(data);
     const getMarks = async() => {
         fetch('/api/examiner/getMarks', {
             method: 'POST',
@@ -255,7 +254,7 @@ const MarksheetDialog = (props) => {
                     {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>}
                     {marks &&
                         <AntDesignGrid
-                            sx={{ boxShadow: 3 }}
+                            sx={{ boxShadow: 3, fontSize:'16px' }}
                             getRowId={row => row.code}
                             autoHeight
                             columns={columns}

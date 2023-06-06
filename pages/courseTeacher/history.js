@@ -86,7 +86,7 @@ const History = () => {
             <Paper sx={{ boxShadow: 3, minWidth: 700 }}>
                 <Box sx={{ pt: 2, pb: 2 }}>
                     <AntDesignGrid
-                        sx={{ m:4, boxShadow: 3 }}
+                        sx={{ m:4, boxShadow: 3, fontSize:'16px' }}
                         autoHeight
                         onRowDoubleClick={handleRowClick}
                         columns={columns}

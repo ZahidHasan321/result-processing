@@ -7,6 +7,6 @@ export default async function handler(req, res) {
         values: [param]
     }
     await pool.query(query)
-    .then(data => res.status(200).send(data.rows))
-    .catch(err => res.status(500).send(err))
+    .then(data => res.status(200).send({message:'Deleted course', status:'Success'}))
+    .catch(err => res.status(500).send({message:'Could not delete course', status:'Error'}))
 }
