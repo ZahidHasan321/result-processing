@@ -11,7 +11,7 @@ import Router from "next/router";
 
 const Home = () => {
   const { status, data } = useSession();
-  if (status === 'unauthenticated') {
+  if (status === 'unauthenticated' ) {
     Router.replace('auth/signin');
   }
 

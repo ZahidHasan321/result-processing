@@ -109,7 +109,7 @@ const History = () => {
                 '& .MuiDataGrid-cell:focus': {
                   outline: 'none',
                 },
-                boxShadow:3
+                boxShadow:3, fontSize:'16px'
               }}
               rows={list}
               columns={columns}

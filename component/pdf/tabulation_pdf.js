@@ -9,15 +9,16 @@ let monthsArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July
 Font.register({ family: 'Times-Roman' });
 
 // Create Document Component
-const TabulationPDF = ({ semester, session, courseList, memberList, tabularData, studentID, examInfo}) => {
+const TabulationPDF = ({ semester, session, courseList, memberList, tabularData, studentID, examInfo }) => {
     let totalCredit = 0
-    let pageNumber = Math.ceil(studentID.length / 3)
+    let pageNumber = Math.ceil(tabularData.length / 3)
     let labNumber = 0
     let looper = []
     for (let i = 0; i < pageNumber; i++) {
         looper.push(i)
     }
 
+    let tabulatorCounter = 0;
     let it = 0
     let tcp = 0
     let tce = 0
@@ -82,7 +83,7 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
         }
         return point
     }
-
+    console.log(tabularData)
 
     return (
         <Document >
@@ -102,7 +103,7 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                         <Text>CP = Credit Points = Credit x GP </Text>
                                         <Text>TCE = Total Credit Earned</Text>
                                         <Text>TCP = Total Credit Points</Text>
-                                        <Text>TCO = Total Credits Offered</Text>
+                                        <Text>TCO = Total Credits Offered</Text>, borderTop:1
                                         <Text>GPA=Grade Point Average=TCP/TCO </Text>
                                     </View>
 
@@ -176,11 +177,13 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                     </View>
 
                                     <View style={{ display: 'flex', flexDirection: 'column', fontSize: '10px', width: '230px', marginRight: '10px' }}>
-                                        <Image src='/Cu_logo.jpg' style={{
+                                        <Image src='/cu_logo.png' style={{
+                                            alignContent: 'center',
+                                            alignSelf: 'center',
                                             height: '50px',
-                                            width: '46px',
+                                            width: '35px',
                                         }} />
-                                        
+
                                         <Text style={{ textAlign: 'center' }}>University of Chittagong</Text>
                                         <Text style={{ textAlign: 'center' }}>Faculty of Engineering</Text>
                                         <Text style={{ textAlign: 'center' }}>Department of Computer Science & Enginerring</Text>
@@ -223,21 +226,21 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                     //Table starts here
                                 }
 
-                                <View style={{ border: 1, display: 'flex', flexDirection: 'column', fontSize: '9px', width: '770px', marginLeft: '30px', marginBottom: '10px', marginTop: '10px' }}>
+                                <View style={{ borderLeft: 1, display: 'flex', flexDirection: 'column', fontSize: '9px', width: '770px', marginLeft: '30px', marginBottom: '10px', marginTop: '10px' }}>
                                     <View style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
-                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', ...styles.verticalText }}>Serial No.</Text>
-                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>Hall</Text>
-                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>Student ID</Text>
-                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>Name</Text>
-                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>Session</Text>
-                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-60px', ...styles.verticalText }}></Text>
+                                        <Text style={{ borderBottom: 1, borderLeft: 1, borderRight: 1, height: '12px', ...styles.verticalText }}>Serial No.</Text>
+                                        <Text style={{ borderBottom: 1, borderLeft: 1, borderRight: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>Hall</Text>
+                                        <Text style={{ borderBottom: 1, borderLeft: 1, borderRight: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>Student ID</Text>
+                                        <Text style={{ borderBottom: 1, borderLeft: 1, borderRight: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>Name</Text>
+                                        <Text style={{ borderBottom: 1, borderLeft: 1, borderRight: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>Session</Text>
+                                        <Text style={{ borderBottom: 1, borderLeft: 1, borderRight: 1, height: '12px', marginLeft: '-60px', ...styles.verticalText }}></Text>
 
                                         {
                                             courseList && courseList.map((course, idx) => {
 
                                                 if (course.course_type == 'Theory') {
                                                     return (
-                                                        <View key={idx} style={{ display: 'flex', flexDirection: 'column', marginLeft: `${idx == 0 ? '-58px' : '-33px'}` }}>
+                                                        <View key={idx} style={{ display: 'flex', borderTop: 1, flexDirection: 'column', marginTop: '-1px', marginLeft: `${idx == 0 ? '-58px' : '-33px'}` }}>
                                                             <View style={{ display: 'flex', flexDirection: 'column' }}>
                                                                 <Text style={{ paddingLeft: '3px', paddingRight: '3px', ...styles.hText }}>{course.course_code}</Text>
                                                                 <Text style={{ padding: '2px', ...styles.hText }}>{`${course.max_mark ? course.max_mark : 0} Marks`}</Text>
@@ -254,8 +257,8 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                                 }
                                                 else {
                                                     return (
-                                                        <View key={idx} style={{ display: 'flex', flexDirection: 'column', marginLeft: `${labNumber == 0 ? '-53px' : '-30px'}` }}>
-                                                            <View style={{ display: 'flex', flexDirection: 'column', marginLeft: `${labNumber == 0 ? '20px' : '-3px'}`, fontSize: '7px' }}>
+                                                        <View key={idx} style={{ display: 'flex', flexDirection: 'column', marginTop: '-1px', marginLeft: `${labNumber == 0 ? '-53px' : '-30px'}` }}>
+                                                            <View style={{ display: 'flex', borderTop: 1, flexDirection: 'column', marginLeft: `${labNumber == 0 ? '20px' : '-3px'}`, fontSize: '7px' }}>
                                                                 <Text style={{ ...styles.hText2, paddingTop: '1px', paddingBottom: '1.2px' }}>{course.course_code}</Text>
                                                                 <Text style={{ ...styles.hText2, paddingTop: '3px', paddingBottom: '3.2px' }}>{`${course.max_mark ? course.max_mark : 0} Marks`}</Text>
                                                             </View>
@@ -276,61 +279,66 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                             <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-33px', ...styles.verticalText }}>TCE</Text>
                                             <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>TCP</Text>
                                             <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>GPA</Text>
-                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>Result</Text>
-                                            <Text style={{ borderBottom: 1, borderLeft: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>Remark</Text>
+                                            <Text style={{ borderBottom: 1, borderLeft: 1, borderRight: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>Result</Text>
+                                            <Text style={{ borderBottom: 1, borderLeft: 1, borderRight: 1, height: '11px', marginLeft: '-60px', ...styles.verticalText }}>Remark</Text>
                                         </View>
                                     </View>
 
                                     {
                                         Array(3).fill(1).map((dummy, idx1) => {
 
+                                            let id = Array.isArray(tabularData) && String(Array.isArray(tabularData[it]) && tabularData[it][0]).substring(0, 2);
+                                            let stud_session = '20' + id;
+
+                                            stud_session = Number(stud_session);
+
                                             return (
                                                 <View key={idx1} style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                                                         <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', ...styles.verticalText, fontFamily: 'Times-Bold' }}>{it + 1}</Text>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].hall : 'Hall'}</Text>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].roll : 'Student ID'}</Text>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>{it <= studentID.length ? studentID[it].name : 'Name'}</Text>
-                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>{it <= studentID.length ? `${studentID[it].session - 1}-${studentID[it].session}` : 'Session'}</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>{it <= tabularData.length && Array.isArray(tabularData[it]) ? tabularData[it][1][0].hall : 'Hall'}</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>{it <= tabularData.length && Array.isArray(tabularData[it]) ? tabularData[it][1][0].roll : 'Student ID'}</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '20px', marginLeft: '-58px', ...styles.verticalText }}>{it <= tabularData.length && Array.isArray(tabularData[it]) ? tabularData[it][1][0].name : 'Name'}</Text>
+                                                        <Text style={{ borderBottom: 1, borderLeft: 1, height: '12px', marginLeft: '-50px', ...styles.verticalText }}>{it <= tabularData.length && Array.isArray(tabularData[it]) ? `${stud_session - 1}-${stud_session}` : 'Session'}</Text>
                                                         <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px' }}>
                                                             <Text style={{ borderBottom: 1, borderLeft: 1, marginLeft: '-58px', ...styles.vTextNP2 }}>Regular</Text>
-                                                            <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, marginLeft: '-58px', ...styles.vTextNP2 }}>Improve</Text>
+                                                            <Text style={{ borderBottom: 1, borderLeft: 1, marginLeft: '-58px', ...styles.vTextNP2 }}>Improve</Text>
                                                         </View>
 
                                                         {
-                                    
+
                                                             courseList && tabularData && courseList.map((course, idx3) => {
 
-                                                                const obj = tabularData.length ? tabularData[it][1].find(x => x.course_code == course.course_code) : []
+                                                                const obj = tabularData.length && Array.isArray(tabularData[it]) ? tabularData[it][1].find(x => x.course_code == course.course_code) : []
 
-                                                                const grade = letterGrade((obj.total / course.max_mark) * 100)
+                                                                const grade = letterGrade(course.max_mark > 0 ? (obj.total / course.max_mark) * 100 : 0);
                                                                 const point = (gradePoint(grade) * course.course_credit)
                                                                 improve = obj.improve
                                                                 tcp = tcp + point
                                                                 tce = tce + (point > 0 ? course.course_credit : 0)
-            
+
                                                                 if (course.course_type == 'Theory') {
                                                                     return (
                                                                         <View key={idx3} style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `${idx3 == 0 ? '-48px' : '-24.7px'}` }}>
                                                                                 <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : obj.catm}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.catm : ''}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.catm : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
                                                                                 <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : obj.fem}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.fem : ''}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.fem : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
                                                                                 <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : obj.total}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.total : ''}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.total : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
                                                                                 <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : grade}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? grade : ''}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? grade : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : point.toFixed(2)}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? point.toFixed(2) : ''}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : Array.isArray(tabularData[it]) && point.toFixed(2)}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve && Array.isArray(tabularData[it]) ? point.toFixed(2) : ''}</Text>
                                                                             </View>
                                                                         </View>
                                                                     )
@@ -340,15 +348,15 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                                                         <View key={idx3} style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `${idx3 == 0 ? '-48px' : '-24.7px'}` }}>
                                                                                 <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : obj.total}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.catm : ''}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? obj.catm : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
                                                                                 <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : grade}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? grade : ''}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? grade : ''}</Text>
                                                                             </View>
                                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : point.toFixed(2)}</Text>
-                                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve ? point.toFixed(2) : ''}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '24px' }}>{obj.improve ? '' : Array.isArray(tabularData[it]) && point.toFixed(2)}</Text>
+                                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP3, marginTop: '23px' }}>{obj.improve && Array.isArray(tabularData[it]) ? point.toFixed(2) : ''}</Text>
                                                                             </View>
                                                                         </View>
                                                                     )
@@ -360,30 +368,30 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
 
 
 
-                                                        <View style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px'  }}>
+                                                        <View style={{ display: 'flex', flexDirection: 'row', marginBottom: '-21px' }}>
                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24.7px` }}>
-                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' : tce}</Text>
-                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}>{improve ? tce : ''} </Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' : Array.isArray(tabularData[it]) && tce}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '23px' }}>{improve && Array.isArray(tabularData[it]) ? tce : ''} </Text>
                                                             </View>
 
                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24px` }}>
-                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' :tcp.toFixed(2)}</Text>
-                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}>{improve ? tcp.toFixed(2) : ''}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' : Array.isArray(tabularData[it]) && tcp.toFixed(2)}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '23px' }}>{improve && Array.isArray(tabularData[it]) ? tcp.toFixed(2) : ''}</Text>
                                                             </View>
 
                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24px` }}>
-                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' :((tce / tcp) !== (tce / tcp)? 0.00 : (tce / tcp).toFixed(2))}</Text>
-                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}>{improve ? ((tce / tcp) !== (tce / tcp) ? 0.00 : (tce / tcp).toFixed(2) ): ''}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' : ((tce / tcp) !== (tce / tcp) ? Array.isArray(tabularData[it]) && 0.00 : Array.isArray(tabularData[it]) && (tce / tcp).toFixed(2))}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '23px' }}>{improve && Array.isArray(tabularData[it]) ? ((tce / tcp) !== (tce / tcp) ? Array.isArray(tabularData[it]) && 0.00 : Array.isArray(tabularData[it]) && (tce / tcp).toFixed(2)) : ''}</Text>
                                                             </View>
 
                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24px` }}>
-                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' : ((tce / tcp) > 2.20 ? 'P' : 'F')}</Text>
-                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}>{improve ? ((tce / tcp) > 2.20 ? 'P' : 'F') : ''}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}>{improve ? '' : ((tce / tcp) > 2.20 ? Array.isArray(tabularData[it]) && 'P' : Array.isArray(tabularData[it]) && 'F')}</Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '23px' }}>{improve && Array.isArray(tabularData[it]) ? ((tce / tcp) > 2.20 ? Array.isArray(tabularData[it]) && 'P' : Array.isArray(tabularData[it]) && 'F') : ''}</Text>
                                                             </View>{(tce / tcp) > 2.20 ? 'P' : 'F'}
 
                                                             <View style={{ display: 'flex', flexDirection: 'column', fontSize: '7px', marginTop: '11px', marginLeft: `-24px` }}>
                                                                 <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '24px' }}></Text>
-                                                                <Text style={{ borderBottom: 1, borderLeft: `${idx1 == 2 ? 0 : 1}`, ...styles.vTextNP4, marginTop: '23px' }}></Text>
+                                                                <Text style={{ borderBottom: 1, borderLeft: 1, ...styles.vTextNP4, marginTop: '23px' }}></Text>
                                                             </View>
                                                         </View>
                                                     </View>
@@ -407,13 +415,15 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
 
                                 <View style={{ display: 'flex', flexDirection: 'row', marginLeft: '30px' }}>
                                     <View style={{ display: 'flex', flexDirection: 'column', fontSize: '8px', marginRight: '140px' }}>
-                                        <Text style={{ fontFamily: "Times-Bold", marginBottom: '20px' }} >Tabulator</Text>
+                                        <Text style={{ fontFamily: "Times-Bold", marginBottom: '10px' }} >Tabulator</Text>
 
                                         {
-                                            memberList && memberList.map((member, idx) => {
+
+                                            memberList &&
+                                            memberList.map((member, idx) => {
                                                 if (member.role === 'Tabulator' || member.role === 'Chairman') {
                                                     return (
-                                                        <Text key={idx} style={{ marginBottom: '10px' }}>{`${idx + 1}. ${member.name} ............................`}</Text>
+                                                        <Text key={idx} style={{ marginBottom: '10px' }}>{`${++tabulatorCounter}. ${member.name} ............................`}</Text>
                                                     )
                                                 }
                                             })
@@ -421,7 +431,7 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                     </View>
 
                                     <View style={{ display: 'flex', flexDirection: 'column', fontSize: '8px', marginRight: '120px' }}>
-                                        <Text style={{ fontFamily: "Times-Bold", marginBottom: '20px' }} >Exam Committee</Text>
+                                        <Text style={{ fontFamily: "Times-Bold", marginBottom: '10px' }} >Exam Committee</Text>
 
                                         {
                                             memberList && memberList.map((member, idx) => {
@@ -434,8 +444,14 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                                         }
                                     </View>
 
+                                    {
+                                        (() => {
+                                            tabulatorCounter = 0
+                                        })()
+                                    }
+
                                     <View style={{ display: 'flex', flexDirection: 'column', fontSize: '8px' }}>
-                                        <Text style={{ marginBottom: '30px' }}>Result Published on ..........................</Text>
+                                        <Text style={{ marginBottom: '35px' }}>Result Published on ..........................</Text>
                                         <Text style={{ marginLeft: 'auto' }}>Controller of Examinations</Text>
                                         <Text style={{ marginLeft: 'auto' }} >University of Chittagong</Text>
                                     </View>

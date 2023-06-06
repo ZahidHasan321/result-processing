@@ -7,37 +7,12 @@ import SemesterSelector from "../selector/semesterSelector";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import UploadStudentDialog from "../dialog/uploadStudentDialog";
+import { GridActionsCellItem, GridRowModes } from "@mui/x-data-grid";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
 
-const columns = [
-  {
-    field: "roll",
-    headerName: "ID",
-    minWidth: 200,
-    flex: 1
-  },
-  {
-    field: "name",
-    headerName: "Name",
-    minWidth: 200,
-    flex: 1,
-    editable:true
-  },
-  {
-    field: "hall",
-    headerName: "Hall",
-    minWidth: 200,
-    flex: 1,
-    editable:true
-  },
-  {
-    field: "improve",
-    headerName: "Improvement",
-    type: 'boolean',
-    minWidth: 200,
-    flex: 1,
-    editable: true
-  },
-];
 
 const StudentList = () => {
   const [studentList, setStudentList] = useState([]);
@@ -48,6 +23,129 @@ const StudentList = () => {
   const [semester, setSemester] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
+  const [rowModesModel, setRowModesModel] = useState({});
+
+  const handleRowEditStart = (params, event) => {
+    event.defaultMuiPrevented = true;
+  };
+
+  const handleRowEditStop = (params, event) => {
+    event.defaultMuiPrevented = true;
+  };
+
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleDeleteClick = (id) => () => {
+    fetch('/api/admin/student/deleteStudent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id})
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "Success") {
+          setSnackbar({ children: data.message , severity: "success" })
+        }
+        else {
+          setSnackbar({ children: data.message, severity: "error" })
+        }
+      });
+    setStudentList(studentList.filter((row) => row.roll !== id));
+  };
+
+  const handleCancelClick = (id) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    const editedRow = studentList.find((row) => row.roll === id);
+    if (editedRow.isNew) {
+      setRows(studentList.filter((row) => row.roll !== id));
+    }
+  };
+
+  const columns = [
+    {
+      field: "roll",
+      headerName: "ID",
+      minWidth: 200,
+      flex: 1
+    },
+    {
+      field: "name",
+      minWidth: 200,
+      flex: 1,
+      editable: true,
+    },
+    {
+      field: "hall",
+      headerName: "Hall",
+      minWidth: 200,
+      flex: 1,
+      editable: true
+    },
+    {
+      field: "improve",
+      headerName: "Improvement",
+      type: 'boolean',
+      minWidth: 200,
+      flex: 1,
+      editable: true
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick(id)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
+  ];
+
 
   const getSessionList = () => {
     fetch('/api/admin/student/getStudentSession')
@@ -110,16 +208,19 @@ const StudentList = () => {
     }
   }
 
+
+
   const processRowUpdate = (newRow, oldRow) => {
     if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
 
     if (newRow.name != '' && newRow.hall != '' && newRow.roll != '') {
+      setStudentList(studentList.map(x => x.roll === newRow.roll ? newRow : x));
       fetch('/api/admin/student/updateStudent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: newRow.roll, name: newRow.name, hall:newRow.hall, improve: newRow.improve, session: session, semester: semester })
+        body: JSON.stringify({ id: newRow.roll, name: newRow.name, hall: newRow.hall, improve: newRow.improve, session: session, semester: semester })
       })
         .then(res => res.json())
         .then(data => {
@@ -135,6 +236,10 @@ const StudentList = () => {
     return newRow;
   }
 
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
   const handleProcessRowUpdateError = useCallback((error) => {
     setSnackbar({ children: error.message, severity: 'error' });
   }, []);
@@ -149,7 +254,7 @@ const StudentList = () => {
         </Box>
       </Box>
       <AntDesignGrid
-        sx={{ boxShadow: 3 }}
+        sx={{ boxShadow: 3, fontSize:'16px' }}
         autoHeight
         checked={checked}
         rows={studentList}
@@ -157,6 +262,11 @@ const StudentList = () => {
         experimentalFeatures={{ newEditingApi: true }}
         processRowUpdate={processRowUpdate}
         onProcessRowUpdateError={handleProcessRowUpdateError}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStart={handleRowEditStart}
+        onRowEditStop={handleRowEditStop}
         getRowId={(row) => row.roll}
       />
 

@@ -112,7 +112,7 @@ const SumSheetDialog = (props) => {
             </Box>
             <Box sx={{ m: 3, flexGrow: 1 }}>
                 <AntDesignGrid
-                    sx={{ boxShadow: 3 }}
+                    sx={{ boxShadow: 3, fontSize:'16px' }}
                     autoHeight
                     checked={checked}
                     rows={summationData}

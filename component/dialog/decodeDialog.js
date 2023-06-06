@@ -12,11 +12,23 @@ import Grow from "@mui/material/Grow"
 
 import { useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
+import { useSession } from 'next-auth/react';
 
 
 
 const DecodeDialog = (props) => {
-    const { open, onClose, data, editableData, sx, showName} = props;
+
+    const { status, userData } = useSession()
+
+    if (status === "loading") {
+        return <p>Loading...</p>
+    }
+
+    if (status === 'unauthenticated') {
+        Router.replace('auth/signin');
+    }
+
+    const { open, onClose, data, editableData, sx, showName } = props;
     const [marks, setMarks] = useState(null);
     const [checked, setChecked] = useState(false);
     const [snackbar, setSnackbar] = useState(null);
@@ -29,7 +41,7 @@ const DecodeDialog = (props) => {
         onClose();
     }
     const handleOnSubmit = () => {
-        
+
         if (marks) {
             marks.map((item => {
                 var total = 0;
@@ -39,9 +51,9 @@ const DecodeDialog = (props) => {
                     }
                 })
 
-                if(total == 0) total = null;
+                if (total == 0) total = null;
 
-                if ( item.roll != null) {
+                if (item.roll != null) {
                     fetch('/api/examCommittee/semester/submitDecode', {
                         method: 'POST',
                         headers: {
@@ -61,24 +73,27 @@ const DecodeDialog = (props) => {
             })
         }
 
-        onClose({children:'Succesfully Decoded', serverity:'success'})
+        onClose({ children: 'Succesfully Decoded', serverity: 'success' })
+        localStorage.clear(data.exam_session + data.course_code + data.set_number + 'decode');
     }
 
 
     useEffect(() => {
+        const savedData = JSON.parse(localStorage.getItem(data.exam_session + data.course_code + data.set_number + 'decode'));
         var list = [];
-        if (submittedData) {
+        if (submittedData && !savedData) {
             submittedData.map((item) => {
                 const found = list.findIndex(element => element.code === item.code)
 
                 if (found != -1) list[found][item.question] = item.mark
                 else {
-                    const object = { code: item.code, name: item.name , roll: item.roll, [item.question]: item.mark, }
+                    const object = { code: item.code, name: item.name, roll: item.roll, [item.question]: item.mark, }
                     list.push(object)
                 }
             })
+            setMarks(list);
+            localStorage.setItem(data.exam_session + data.course_code + data.set_number + 'decode', JSON.stringify(marks));
         }
-        setMarks(list);
 
     }, [submittedData])
 
@@ -88,18 +103,25 @@ const DecodeDialog = (props) => {
     }, 500)
 
     useEffect(() => {
-        fetch('/api/examCommittee/semester/getMarks', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
-        })
-            .then(res => res.json())
-            .then(data => setSubmittedData(data))
+        const savedData = JSON.parse(localStorage.getItem(data.exam_session + data.course_code + data.set_number + 'decode'));
+        if (savedData && savedData.length > 0) {
+            setMarks(savedData);
+        }
+        else {
+            fetch('/api/examCommittee/semester/getMarks', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
+            })
+                .then(res => res.json())
+                .then(data => setSubmittedData(data))
+        }
     }, []);
 
-    const ProcessRowUpdate = async (newRow) => {
+    const ProcessRowUpdate = async (newRow, oldRow) => {
+        if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow
         if (marks) {
             const temp = marks.map((item) => {
                 if (item.code == newRow.code) {
@@ -108,7 +130,8 @@ const DecodeDialog = (props) => {
                 else return item;
             })
             setMarks(temp);
-            setSnackbar({children:'Saved', serverity:'sucesss'})
+            localStorage.setItem(data.exam_session + data.course_code + data.set_number + 'decode', JSON.stringify(temp));
+            setSnackbar({ children: 'Saved', serverity: 'sucesss' })
         }
         return newRow;
     }
@@ -141,7 +164,7 @@ const DecodeDialog = (props) => {
             minWidth: 150,
             flex: 1
         },
-        
+
         {
             field: "roll",
             headerName: "Roll No",
@@ -236,10 +259,10 @@ const DecodeDialog = (props) => {
                     <Button size='small' sx={{ width: 30, m: 1, ml: 'auto' }} onClick={handleOnClose}><CloseIcon htmlColor='red' /></Button>
                 </Box>
                 <Box sx={{ ml: 3, mr: 3, mb: 3, display: 'flex', flexDirection: 'column' }}>
-                    {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2 , bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' }}} onClick={handleOnSubmit}>Submit</Button>}
+                    {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>}
                     {marks &&
                         <AntDesignGrid
-                            sx={{ boxShadow: 3 }}
+                            sx={{ boxShadow: 3, fontSize: '16px' }}
                             getRowId={row => row.code}
                             autoHeight
                             columns={columns}

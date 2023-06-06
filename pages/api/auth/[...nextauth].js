@@ -1,6 +1,8 @@
 import NextAuth from "next-auth/next";
 import  CredentialsProvider  from "next-auth/providers/credentials";
 import pool from "@/lib/db";
+import { redirect } from "next/dist/server/api-utils";
+import { signIn } from "next-auth/react";
 
 
 export default NextAuth({
@@ -19,9 +21,6 @@ export default NextAuth({
 				.then(res => res.rows[0])
 				.catch(err => err.stack)
 
-
-
-				console.log(res);
 
 				if(email == res.email && password == res.password ) {
 					return res;
@@ -43,6 +42,6 @@ export default NextAuth({
 		async session({session, token}){
 			session.user = token.user;
 			return session;
-		}
+		},
 	}
 })

@@ -49,6 +49,17 @@ export default async function (req, res) {
                 }
             ).catch(err => console.log(err));
 
+            await client.query(
+                {
+                    text:`INSERT INTO summation_sheet (roll, course_code)
+                    SELECT s.roll, c.course_code
+                    FROM stud_per_session s JOIN 
+                    courses c
+                    s.exam_session = $1 AND
+                    c.semester = $2`
+                }
+            )
+
             await client.query('COMMIT')
             res.status(200).send({ message: 'Committee Created' })
             

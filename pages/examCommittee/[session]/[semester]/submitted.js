@@ -99,7 +99,7 @@ const Submitted = () => {
       <Paper sx={{ boxShadow: 3, minWidth: 700 }}>
         <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
-            sx={{ m:4, boxShadow: 3 }}
+            sx={{ m:4, boxShadow: 3, fontSize:'16px' }}
             autoHeight
             getRowId={(row) => row.course_code + row.semester + row.exam_session + row.set_number}
             checked={checked}
@@ -108,7 +108,7 @@ const Submitted = () => {
           />
         </Box>
       </Paper >
-      {openDialog && <DecodeDialog open={openDialog} onClose={(notice) => { setOpenDialog(false); notice && setSnackbar(notice); notice && getRows() }} data={rowClick} editableData={true} showName={true} />}
+      {openDialog && <DecodeDialog open={openDialog} onClose={(notice) => { setOpenDialog(false); notice && setSnackbar(notice); getRows() }} data={rowClick} editableData={true} showName={true} />}
       {!!snackbar && (
         <Snackbar
           open

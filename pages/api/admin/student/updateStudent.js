@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     const client = await pool.connect()
     const query = {
         text: 'UPDATE student SET name = $1, hall = $2 WHERE roll = $3',
-        values: [param.hall, param.name, param.id]
+        values: [param.name, param.hall, param.id]
     }
 
     const query1 = {
