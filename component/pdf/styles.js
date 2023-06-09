@@ -17,10 +17,17 @@ const styles = StyleSheet.create({
     transform: "rotate(-90deg)",
     transformOrigin: "left top 0",
     float: "left",
-    marginTop: '69px',
-    paddingLeft: '3px',
-    paddingRight: '3px',
-    width: '70px',
+    marginTop: '80px',
+    width: '80px',
+    textAlign: 'center'
+  },
+
+  verticalText3: {
+    transform: "rotate(-90deg)",
+    transformOrigin: "left top 0",
+    float: "left",
+    marginTop: '95px',
+    width: '95px',
     textAlign: 'center'
   },
   verticalText2: {
@@ -38,17 +45,26 @@ const styles = StyleSheet.create({
     transform: "rotate(-90deg)",
     transformOrigin: "left top 0",
     float: "left",
-    marginTop: '43.2px',
-    width: '43.3px',
+    marginTop: '44.5px',
+    width: '44.5px',
     textAlign: 'center'
   },
   vTextNP2: {
     transform: "rotate(-90deg)",
     transformOrigin: "left top 0",
     float: "left",
-    marginTop: '24px',
-    width: '35px',
-    height: '10px',
+    marginTop: '37px',
+    width: '49px',
+    height: '14px',
+    textAlign: 'center'
+  },
+  vTextNP22: {
+    transform: "rotate(-90deg)",
+    transformOrigin: "left top 0",
+    float: "left",
+    marginTop: '33px',
+    width: '49px',
+    height: '14px',
     textAlign: 'center'
   },
   vTextNP3: {
@@ -72,13 +88,13 @@ const styles = StyleSheet.create({
   hText: {
     borderRight: 1,
     borderBottom: 1,
-    width: '52.2px',
+    width: '68.6px',
     textAlign: 'center'
   },
   hText2: {
     borderRight: 1,
     borderBottom: 1,
-    width: '31.6px',
+    width: '52px',
     textAlign: 'center'
   }
 });

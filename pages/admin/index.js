@@ -284,7 +284,7 @@ const Home = () => {
 
 Home.getLayout = function getLayout(page) {
   return (
-    <Layout pages={AdminPages}>
+    <Layout pages={AdminPages} >
       <main>{page}</main>
     </Layout>
   )

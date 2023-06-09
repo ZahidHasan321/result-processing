@@ -80,7 +80,7 @@ const linkStyle = {
   color: "black"
 }
 
-export default function PersistentDrawerLeft({ children, pages, query }) {
+export default function PersistentDrawerLeft({ children, pages, query, showDrawer }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [openCommittee, setOpenCommittee] = React.useState(false);

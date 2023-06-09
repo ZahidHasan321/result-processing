@@ -1,11 +1,11 @@
 import ResponsiveDrawer from "../drawer/persistantDrawer";
 
-const DrawerLayout = ({children, ...restProps}) => {
-    return(
+const DrawerLayout = ({ children, showDrawer, ...restProps }) => {
+    return (
         <>
-        <ResponsiveDrawer {...restProps}>
-            {children}
-        </ResponsiveDrawer>
+            <ResponsiveDrawer {...restProps}>
+                {children}
+            </ResponsiveDrawer>
         </>
     )
 }

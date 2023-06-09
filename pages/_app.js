@@ -9,11 +9,11 @@ export default function App({ Component, pageProps }) {
 
   return getLayout(
     <SessionProvider session={pageProps.session}>
-       <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ThemeProvider theme={Theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <ThemeProvider theme={Theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
       </LocalizationProvider>
     </SessionProvider>
   )

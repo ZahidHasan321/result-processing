@@ -51,12 +51,14 @@ export default async function (req, res) {
 
             await client.query(
                 {
-                    text:`INSERT INTO summation_sheet (roll, course_code)
-                    SELECT s.roll, c.course_code
+                    text:`INSERT INTO summation_sheet (roll, course_code, exam_session)
+                    (SELECT roll, course_code, s.exam_session
                     FROM stud_per_session s JOIN 
                     courses c
+					ON 
                     s.exam_session = $1 AND
-                    c.semester = $2`
+                    s.semester = $2)`,
+                    values:[param.session, param.semester]
                 }
             )
 
@@ -66,7 +68,7 @@ export default async function (req, res) {
         }
         catch (e) {
             await client.query('ROLLBACK')
-            res.status(500).send({ message: 'Couldnot create committee' });
+            res.status(500).send({ message: 'Could not create committee' });
             throw e
         } 
         finally {
