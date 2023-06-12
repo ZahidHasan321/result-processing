@@ -107,10 +107,10 @@ const Profile = () => {
   )
 }
 
-Profile.getLayout = function getLayout(page) {
+Profile.getLayout = function getLayout({children}) {
   return (
     <Layout>
-      <main>{page}</main>
+      <main>{children}</main>
     </Layout>
   )
 }

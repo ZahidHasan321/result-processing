@@ -1,27 +1,26 @@
 import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
-import CommitteeDialog from "@/component/dialog/committeeDialog";
 import ConfirmDialog from "@/component/dialog/ConfirmDialog";
+import CommitteeDialog from "@/component/dialog/committeeDialog";
 import Layout from "@/component/layout/layout";
 import AutoCompleteSession from "@/component/selector/autocompleteSession";
 import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
-import Alert from "@mui/material/Alert"
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import Paper from "@mui/material/Paper"
-import Slide from "@mui/material/Slide"
-import Snackbar from "@mui/material/Snackbar"
 import AddIcon from '@mui/icons-material/Add';
-import Typography from "@mui/material/Typography"
-import { useCallback, useEffect, useState } from "react";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Slide from "@mui/material/Slide";
+import Snackbar from "@mui/material/Snackbar";
+import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
-import { signOut } from 'next-auth/react';
+import Router from "next/router";
+import { useCallback, useEffect, useState } from "react";
 
 
 
 const Home = () => {
-  const userSession = useSession()
-
+  const {data, status} = useSession()
   const [semester, setSemester] = useState('');
   const [semesterList, setSemesterList] = useState([]);
   const [sessionList, setSessionList] = useState([]);
@@ -153,7 +152,7 @@ const Home = () => {
 
   useEffect(() => {
     getSessionList();
-  }, [userSession.status])
+  }, [status])
 
   useEffect(() => {
     if (semester != '' && session != '') {
@@ -205,87 +204,87 @@ const Home = () => {
     setSnackbar({ children: error.message, severity: 'error' });
   }, []);
 
+  
+  return (
+    <Box>
+      <Paper variant="outlined" sx={{ boxShadow: 3 }}>
+        <Box sx={{ ml: 2, mr: 2 }}>
+          <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
 
-  if (userSession.status === "loading") {
+          <Typography variant="caption" sx={{ ml: 2 }}>Choose a session and a semester</Typography>
+          <Box sx={{ mt: 1, ml: 2, mr: 2, mb: 3, display: 'flex', alignItems: 'end' }}>
+            <AutoCompleteSession sx={{ width: '180px', mr: 3 }} list={sessionList} onChange={(value) => { setSession(value) }} label='Session' />
+            <SemesterSelector sx={{ width: '180px' }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
+
+            <Box sx={{ ml: 'auto', }}>
+
+              <Slide in={checked} direction='left' mountOnEnter unmountOnExit easing={{
+                enter: "cubic-bezier(0, 1.2, .8, 1)",
+                exit: "liner"
+              }}>
+                <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'red' } }}>Delete Committee</Button>
+              </Slide>
+              <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}><AddIcon />Create Committee</Button>
+            </Box>
+
+          </Box>
+          <Slide in={checked} direction='left' easing={{
+            enter: "cubic-bezier(0, 1.2, .8, 1)",
+            exit: "liner"
+          }}
+          >
+            <Box sx={{ m: 2, mb: 4 }}>
+              <AntDesignGrid
+                sx={{ boxShadow: 3, fontSize: '16px' }}
+                columns={columns}
+                rows={committeeList}
+                checked={checked}
+                hideFooter
+                autoHeight
+                experimentalFeatures={{ newEditingApi: true }}
+                processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
+              />
+            </Box>
+          </Slide>
+
+          <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />
+          <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />
+
+        </Box>
+        {!!snackbar && (
+          <Snackbar
+            open
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            onClose={handleCloseSnackbar}
+            autoHideDuration={6000}
+          >
+            <Alert {...snackbar} onClose={handleCloseSnackbar} />
+          </Snackbar>
+        )}
+      </Paper>
+    </Box>
+  )
+}
+
+Home.getLayout = function getLayout({children}) {
+  const {status, data } = useSession()
+
+  if (status === "loading") {
     return <p>Loading...</p>
   }
 
-  else if (userSession.status === 'unauthenticated' || userSession.data.user.role !== 'Chairman') {
-    return (
-      <>
-        <h1>Access Denied</h1>
-        <Button onClick={() => signOut({ callbackUrl: '/auth/signin' })}>Signout</Button>
-      </>
-    )
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin');
   }
-  else {
-    return (
-      <Box>
-        <Paper variant="outlined" sx={{ boxShadow: 3 }}>
-          <Box sx={{ ml: 2, mr: 2 }}>
-            <Typography fontSize={30} sx={{ ml: 2, mt: 2 }}>Exam committee</Typography>
 
-            <Typography variant="caption" sx={{ ml: 2 }}>Choose a session and a semester</Typography>
-            <Box sx={{ mt: 1, ml: 2, mr: 2, mb: 3, display: 'flex', alignItems: 'end' }}>
-              <AutoCompleteSession sx={{ width: '180px', mr: 3 }} list={sessionList} onChange={(value) => { setSession(value) }} label='Session' />
-              <SemesterSelector sx={{ width: '180px' }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
-
-              <Box sx={{ ml: 'auto', }}>
-
-                <Slide in={checked} direction='left' mountOnEnter unmountOnExit easing={{
-                  enter: "cubic-bezier(0, 1.2, .8, 1)",
-                  exit: "liner"
-                }}>
-                  <Button variant="contained" size="small" onClick={handleDeleteCommittee} sx={{ ml: 2, bgcolor: 'red', boxShadow: 1, ":hover": { bgcolor: 'red' } }}>Delete Committee</Button>
-                </Slide>
-                <Button variant="contained" size="small" onClick={handleCreateCommittee} sx={{ ml: 2, boxShadow: 1, color: 'white', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}><AddIcon />Create Committee</Button>
-              </Box>
-
-            </Box>
-            <Slide in={checked} direction='left' easing={{
-              enter: "cubic-bezier(0, 1.2, .8, 1)",
-              exit: "liner"
-            }}
-            >
-              <Box sx={{ m: 2, mb: 4 }}>
-                <AntDesignGrid
-                  sx={{ boxShadow: 3, fontSize: '16px' }}
-                  columns={columns}
-                  rows={committeeList}
-                  checked={checked}
-                  hideFooter
-                  autoHeight
-                  experimentalFeatures={{ newEditingApi: true }}
-                  processRowUpdate={processRowUpdate}
-                  onProcessRowUpdateError={handleProcessRowUpdateError}
-                />
-              </Box>
-            </Slide>
-
-            <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />
-            <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />
-
-          </Box>
-          {!!snackbar && (
-            <Snackbar
-              open
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-              onClose={handleCloseSnackbar}
-              autoHideDuration={6000}
-            >
-              <Alert {...snackbar} onClose={handleCloseSnackbar} />
-            </Snackbar>
-          )}
-        </Paper>
-      </Box>
-    )
+  if (status === 'authenticated' && data.user.role !== 'Chairman') {
+    Router.replace('/accessDenied');
   }
-}
 
-Home.getLayout = function getLayout(page) {
   return (
-    <Layout pages={AdminPages} >
-      <main>{page}</main>
+    <Layout pages={AdminPages} idx={0}>
+      <main>{children}</main>
     </Layout>
   )
 }

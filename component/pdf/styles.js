@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     float: "left",
     marginTop: '44.5px',
     width: '44.5px',
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingTop:'2px'
   },
   vTextNP2: {
     transform: "rotate(-90deg)",
@@ -71,8 +72,8 @@ const styles = StyleSheet.create({
     transform: "rotate(-90deg)",
     transformOrigin: "left top 0",
     float: "left",
-    width: '35px',
-    height: '11px',
+    width: '47px',
+    height: '18.2px',
     textAlign: 'center',
     paddingTop:'1px'
   },
@@ -80,15 +81,15 @@ const styles = StyleSheet.create({
     transform: "rotate(-90deg)",
     transformOrigin: "left top 0",
     float: "left",
-    width: '34px',
-    height: '11px',
+    width: '47px',
+    height: '18.2px',
     textAlign: 'center',
     paddingTop:'1px'
   },
   hText: {
     borderRight: 1,
     borderBottom: 1,
-    width: '68.6px',
+    width: '84.8px',
     textAlign: 'center'
   },
   hText2: {

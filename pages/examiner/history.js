@@ -7,7 +7,10 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
+import { GridToolbar } from "@mui/x-data-grid";
+import dayjs from "dayjs";
 import { getSession, useSession } from "next-auth/react";
+import Router from "next/router";
 import { useEffect, useState } from "react";
 
 
@@ -67,7 +70,7 @@ const History = () => {
       headerName: "Semester",
       minWidth: 200,
       flex: 1,
-      valueFormatter: ({value}) => formatOrdinals(value)
+      valueFormatter: ({ value }) => formatOrdinals(value)
     },
     {
       field: "exam_session",
@@ -80,6 +83,20 @@ const History = () => {
       headerName: "Set",
       minWidth: 200,
       flex: 1
+    },
+    {
+      field: "assigned_date",
+      headerName: "Assigned Date",
+      minWidth: 200,
+      flex: 1,
+      valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
+    },
+    {
+      field: "submit_date",
+      headerName: "Submit Date",
+      minWidth: 200,
+      flex: 1,
+      valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
     },
     {
       field: "enter",
@@ -98,29 +115,54 @@ const History = () => {
 
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, minWidth: 700 }}>
-        <Box sx={{ pt: 2, pb:2 }}>
+      <Paper sx={{ boxShadow: 3, minHeight:'750px' }}>
+        <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
-            sx={{ m:4, boxShadow: 3, fontSize:'16px' }}
+            sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
             autoHeight
             columns={columns}
             checked={checked}
             onRowDoubleClick={handleRowClick}
             rows={list}
             getRowId={(row) => row.id + row.exam_session + row.course_code + row.set}
+            disableColumnSelector
+            disableDensitySelector
+            component={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: {
+                csvOptions: { disableToolbarButton: true },
+                printOptions: { disableToolbarButton: true },
+                showQuickFilter: true,
+                quickFilterProps: { debounceMs: 250 },
+              },
+            }}
           />
         </Box>
       </Paper>
-      
-      {openDialog && <MarksheetDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowData} editableData={false}/>}
+
+      {openDialog && <MarksheetDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowData} editableData={false} />}
     </Box>
   )
 }
 
-History.getLayout = function getLayout(page) {
+History.getLayout = function getLayout({ children }) {
+  const { data, status } = useSession()
+
+  if (status === 'loading') {
+    return <p>loading</p>
+  }
+
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin')
+  }
+
+  if (status === 'authenticated' && data.user.role !== 'Teacher') {
+    Router.replace('/accessDenied')
+  }
+
   return (
-    <Layout pages={examinerPages}>
-      <main>{page}</main>
+    <Layout pages={examinerPages} idx={2}>
+      <main>{children}</main>
     </Layout>
   )
 }

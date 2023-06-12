@@ -3,7 +3,6 @@ import pool from "@/lib/db";
 export default async function (req, res) {
     const param = req.body;
 
-
     if (param.session == '' || param.semester == '' || isNaN(param.session)) {
         res.status(505).send({message: "session or semester can't be empty"});
         return;
@@ -12,7 +11,7 @@ export default async function (req, res) {
         const client = await pool.connect();
         try {
             await client.query('BEGIN')
-            const text = 'INSERT INTO exam_committee(id, semester, exam_session, role) VALUES($1, $2, $3, $4)'
+            const text = 'INSERT INTO exam_committee(id, semester, exam_session, role, assigned_date) VALUES($1, $2, $3, $4, CURRENT_DATE)'
 
             if (param.member1 != null) {
                 await client.query(text, [param.member1.id, param.semester, param.session, param.role1 || 'Member'])
@@ -56,8 +55,9 @@ export default async function (req, res) {
                     FROM stud_per_session s JOIN 
                     courses c
 					ON 
-                    s.exam_session = $1 AND
-                    s.semester = $2)`,
+                    s.semester = c.semester
+                    WHERE s.semester = $2 AND
+                    s.exam_session = $1)`,
                     values:[param.session, param.semester]
                 }
             )

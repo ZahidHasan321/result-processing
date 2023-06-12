@@ -1,20 +1,26 @@
 import Theme from "@/styles/Theme"
-import { CssBaseline, ThemeProvider } from "@mui/material"
+import CssBaseline from "@mui/material/CssBaseline"
+import { ThemeProvider } from "@mui/material/"
 import { SessionProvider } from "next-auth/react"
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-export default function App({ Component, pageProps }) {
-  const getLayout = Component.getLayout || ((page) => page)
 
-  return getLayout(
-    <SessionProvider session={pageProps.session}>
+export default function App({ Component, pageProps }) {
+  const GetLayout = Component.getLayout || ((page) => page);
+
+
+  return (
+    <SessionProvider session={pageProps.session} >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ThemeProvider theme={Theme}>
           <CssBaseline />
-          <Component {...pageProps} />
+          <GetLayout>
+            <Component {...pageProps} />
+          </GetLayout>
         </ThemeProvider>
       </LocalizationProvider>
     </SessionProvider>
+
   )
 }

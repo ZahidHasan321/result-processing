@@ -8,13 +8,14 @@ export default async function handler(req, res) {
     try {
         await client.query('BEGIN');
         const query = {
-            text: 'INSERT INTO examiner(id, exam_session, course_code, set_number) VALUES (($1)::uuid, $2, $3, $4) ON CONFLICT ON CONSTRAINT examiner_unq '
-                + 'DO UPDATE SET id = examiner.id',
+            text: `INSERT INTO examiner(id, exam_session, course_code, set_number, assigned_date) 
+                    VALUES (($1)::uuid, $2, $3, $4, CURRENT_DATE) ON CONFLICT ON CONSTRAINT examiner_unq
+                    DO UPDATE SET id = examiner.id, assigned_date = CURRENT_DATE`,
             values: [param.id, param.session, param.course, param.set]
         }
 
         await client.query(query)
-            .catch(err => {throw err})
+            .catch(err => { throw err })
 
         var temp = 'examiner_a';
         if (param.set === 'B') temp = 'examiner_b'
@@ -25,8 +26,8 @@ export default async function handler(req, res) {
         }
 
         await client.query(query2)
-            .catch(err => {throw err})
-            
+            .catch(err => { throw err })
+
         res.status(200).send({ message: 'Examiner Assigned' })
         await client.query('COMMIT')
     }
@@ -35,7 +36,7 @@ export default async function handler(req, res) {
         res.status(500).send({ message: 'Cannot assign examiner' });
         throw e
     }
-    finally{
+    finally {
         client.release()
     }
 }

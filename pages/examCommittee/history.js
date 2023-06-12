@@ -9,8 +9,8 @@ import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { GridToolbar } from "@mui/x-data-grid";
-import { getSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { getSession, useSession } from "next-auth/react";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 
@@ -79,7 +79,7 @@ const History = () => {
     {
       field: "publish_date",
       headerName: "Publish Date",
-      
+      valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
       minWidth: 200,
       flex: 1
     },
@@ -98,7 +98,7 @@ const History = () => {
   ]
 
   return (
-    <Paper variant="Outlined" sx={{ boxShadow: 3 }}>
+    <Paper variant="Outlined" sx={{ boxShadow: 3, minHeight:'750px'}}>
       <Typography fontSize={30} sx={{ ml: 12, pt: 3 }}>History</Typography>
       <Typography variant="caption" sx={{ ml:12 }}>Double click on row for more.</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -138,10 +138,25 @@ const History = () => {
   )
 
 }
-History.getLayout = function getLayout(page) {
+History.getLayout = function getLayout({children}) {
+
+  const {data, status} = useSession()
+
+  if (status === 'loading') {
+    return <p>loading</p>
+  }
+
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin')
+  }
+
+  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+    Router.replace('/accessDenied')
+  }
+
   return (
-    <Layout pages={committeePages}>
-      <main>{page}</main>
+    <Layout pages={committeePages} idx={2}>
+      <main>{children}</main>
     </Layout>
   )
 }

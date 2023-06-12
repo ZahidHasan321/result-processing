@@ -7,7 +7,8 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const dayjs = require('dayjs')
 
@@ -99,18 +100,18 @@ const Decoded = () => {
   ]
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, minWidth: 700 }}>
+      <Paper sx={{ boxShadow: 3, minHeight:'750px' }}>
         <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
-            sx={{  m:4, boxShadow: 3, fontSize:'16px'}}
+            sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
             autoHeight
-            getRowId={(row) => row.course_code + row.semester + row.exam_session+row.set_number}
+            getRowId={(row) => row.course_code + row.semester + row.exam_session + row.set_number}
             checked={checked}
             columns={columns}
             rows={rows}
           />
         </Box>
-      </Paper >{openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={false} showName = {false} />}
+      </Paper >{openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={true} showName={false} />}
 
     </Box >
   )
@@ -124,21 +125,51 @@ const HeaderLayout = ({ children }) => {
 
   return (
     <>
-      <Layout pages={semesterPages} query={query}>
+      <Layout pages={semesterPages} query={query} idx={3}>
         {children}
       </Layout>
     </>
   );
 };
 
-Decoded.getLayout = function getLayout(page) {
-  
+Decoded.getLayout = function getLayout({ children }) {
+
+  const { data, status } = useSession();
+  const router = useRouter();
+  const { session, semester } = router.query
+
+  const isAssigned = async (session, semester, id) => {
+    const assigned = await fetch('/api/examCommittee/semester/isAssigned', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ session, semester, id })
+    })
+      .then(res => res.json())
+      .then(data => data[0].exists)
+
+    return assigned;
+  }
+
+  if (status === 'loading') {
+    return <p>loading</p>
+  }
+
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin')
+  }
+
+  if (status === 'authenticated' && data.user.role !== 'Teacher') {
+    Router.replace('/accessDenied')
+  }
 
   return (
     <HeaderLayout>
-      <main>{page}</main>
+      <main>{children}</main>
     </HeaderLayout>
   )
+
 }
 
 export default Decoded;

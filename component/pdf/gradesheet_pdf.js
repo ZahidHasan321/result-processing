@@ -104,7 +104,7 @@ const GradesheetPDF = ({ semester, session, tabularData, examInfo }) => {
                                                 <Text style={{ textAlign: 'left' }}>Faculty of Engineering</Text>
                                                 <Text style={{ textAlign: 'left' }}>Department of Computer Science & Enginerring</Text>
                                                 <Text style={{ textAlign: 'left' }}>{`${formatOrdinals(semester)} Semester BSc Engineering Examination ${session}`}</Text>
-                                                <Text style={{ textAlign: 'left' }}>Held in: {monthsArray[startMonth]} - {monthsArray[endMonth]} {dayjs(examInfo.start_date).year()}</Text>
+                                                <Text style={{ textAlign: 'left' }}>Held in: { startMonth === endMonth ? monthsArray[startMonth]: `${monthsArray[startMonth]} - ${monthsArray[endMonth]}`} {dayjs(examInfo.start_date).year()}</Text>
                                                 <Text style={{ textAlign: 'left' }}>Grade Sheet</Text>
                                             </View>
                                         </View>

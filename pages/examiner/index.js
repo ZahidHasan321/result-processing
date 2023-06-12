@@ -9,7 +9,10 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Snackbar from "@mui/material/Snackbar";
+import { GridToolbar } from "@mui/x-data-grid";
+import dayjs from "dayjs";
 import { getSession, useSession } from "next-auth/react";
+import Router from "next/router";
 import { useEffect, useState } from "react";
 
 
@@ -65,7 +68,7 @@ const Home = () => {
       headerName: "Semester",
       minWidth: 200,
       flex: 1,
-      valueFormatter: ({value}) => formatOrdinals(value)
+      valueFormatter: ({ value }) => formatOrdinals(value)
     },
     {
       field: "exam_session",
@@ -78,6 +81,13 @@ const Home = () => {
       headerName: "Set",
       minWidth: 200,
       flex: 1
+    },
+    {
+      field: "assigned_date",
+      headerName: "Assigned Date",
+      minWidth: 200,
+      flex: 1,
+      valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
     },
     {
       field: "enter",
@@ -96,20 +106,31 @@ const Home = () => {
 
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, minWidth: 700 }}>
-        <Box sx={{ pt: 2, pb:2 }}>
+      <Paper sx={{ boxShadow: 3, minHeight:'750px' }}>
+        <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
-          sx={{m:4, boxShadow: 3, fontSize:'16px'}}
+            sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
             autoHeight
             onRowDoubleClick={handleRowClick}
             columns={columns}
             checked={checked}
             rows={list}
             getRowId={(row) => row.id + row.exam_session + row.course_code + row.set}
+            disableColumnSelector
+            disableDensitySelector
+            component={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: {
+                csvOptions: { disableToolbarButton: true },
+                printOptions: { disableToolbarButton: true },
+                showQuickFilter: true,
+                quickFilterProps: { debounceMs: 250 },
+              },
+            }}
           />
         </Box>
       </Paper>
-      {openDialog && <MarksheetDialog open={openDialog} onClose={(notice) => { setOpenDialog(false); notice && setSnackbar(notice); notice && getList() }}data={rowData} editableData={true}/>}
+      {openDialog && <MarksheetDialog open={openDialog} onClose={(notice) => { setOpenDialog(false); notice && setSnackbar(notice); notice && getList() }} data={rowData} editableData={true} />}
       {!!snackbar && (
         <Snackbar
           open
@@ -124,10 +145,26 @@ const Home = () => {
   )
 }
 
-Home.getLayout = function getLayout(page) {
+Home.getLayout = function getLayout({children}) {
+
+  const {data, status} = useSession()
+
+  if (status === 'loading') {
+    return <p>loading</p>
+  }
+
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin')
+  }
+
+  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+    Router.replace('/accessDenied')
+  }
+
+
   return (
-    <Layout pages={examinerPages}>
-      <main>{page}</main>
+    <Layout pages={examinerPages} idx={1}>
+      <main>{children}</main>
     </Layout>
   )
 }
