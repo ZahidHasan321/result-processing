@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Router from "next/router";
+import Loading from "./loading";
 
 
 const Home = () => {
@@ -44,7 +45,7 @@ Home.getLayout = function getLayout({ children }) {
   const {data, status} = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

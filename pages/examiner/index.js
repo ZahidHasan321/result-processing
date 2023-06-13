@@ -4,6 +4,7 @@ import Layout from "@/component/layout/layout";
 import { examinerPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { Typography } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -106,10 +107,12 @@ const Home = () => {
 
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, minHeight:'750px' }}>
-        <Box sx={{ pt: 2, pb: 2 }}>
+      <Paper sx={{ boxShadow: 3, minHeight: '750px' }}>
+        <Typography fontSize={30} sx={{ ml: 4, pt: 3 }}>IN PROGRESS</Typography>
+        <Typography variant="caption" sx={{ ml: 4 }}>Double click on row for more.</Typography>
+        <Box >
           <AntDesignGrid
-            sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
+            sx={{ ml: 4, mr: 4, mb: 4, boxShadow: 3, fontSize: '16px' }}
             autoHeight
             onRowDoubleClick={handleRowClick}
             columns={columns}
@@ -145,9 +148,9 @@ const Home = () => {
   )
 }
 
-Home.getLayout = function getLayout({children}) {
+Home.getLayout = function getLayout({ children }) {
 
-  const {data, status} = useSession()
+  const { data, status } = useSession()
 
   if (status === 'loading') {
     return <p>loading</p>
@@ -157,7 +160,7 @@ Home.getLayout = function getLayout({children}) {
     Router.replace('/auth/signin')
   }
 
-  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+  if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
 

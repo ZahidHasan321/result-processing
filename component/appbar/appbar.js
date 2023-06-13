@@ -1,5 +1,4 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Button, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -13,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 
 
@@ -114,7 +113,9 @@ function MenuAppBar(props) {
           </Box>
           {
             data &&
-            <Link style={{ textDecoration: 'none' }} href='/profile'>{data.user.name.length > 10 ? `${data.user.name.substring(0, 10)}...` : data.user.name}</Link >
+            <Tooltip title={data && data.user.name}>
+              <Link style={{ textDecoration: 'none' }} href='/profile'>{data.user.name.length > 10 ? `${data.user.name.substring(0, 10)}...` : data.user.name}</Link >
+            </Tooltip>
           }
         </Toolbar>
       </AppBar>

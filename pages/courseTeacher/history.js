@@ -4,6 +4,7 @@ import Layout from "@/component/layout/layout";
 import { courseTeacher } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -100,10 +101,12 @@ const History = () => {
 
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, minHeight:'750px' }}>
-        <Box sx={{ pt: 2, pb: 2 }}>
+      <Paper sx={{ boxShadow: 3, minHeight: '750px' }}>
+        <Typography fontSize={30} sx={{ ml: 4, pt: 3 }}>History</Typography>
+        <Typography variant="caption" sx={{ ml: 4 }}>Double click on row for more.</Typography>
+        <Box>
           <AntDesignGrid
-            sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
+            sx={{ ml: 4, mr: 4, mb: 4, boxShadow: 3, fontSize: '16px' }}
             autoHeight
             onRowDoubleClick={handleRowClick}
             columns={columns}
