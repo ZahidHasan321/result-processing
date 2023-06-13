@@ -1,17 +1,17 @@
-import Button from "@mui/material/Button";
+import CancelIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import { GridActionsCellItem, GridRowModes, GridToolbar } from "@mui/x-data-grid";
 import { useCallback, useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
+import UploadStudentDialog from "../dialog/uploadStudentDialog";
 import AutoCompleteSession from "../selector/autocompleteSession";
 import SemesterSelector from "../selector/semesterSelector";
-import Alert from "@mui/material/Alert";
-import Snackbar from "@mui/material/Snackbar";
-import UploadStudentDialog from "../dialog/uploadStudentDialog";
-import { GridActionsCellItem, GridRowModes } from "@mui/x-data-grid";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 
 
 const StudentList = () => {
@@ -47,12 +47,12 @@ const StudentList = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({id})
+      body: JSON.stringify({ id })
     })
       .then(res => res.json())
       .then(data => {
         if (data.status === "Success") {
-          setSnackbar({ children: data.message , severity: "success" })
+          setSnackbar({ children: data.message, severity: "success" })
         }
         else {
           setSnackbar({ children: data.message, severity: "error" })
@@ -254,7 +254,7 @@ const StudentList = () => {
         </Box>
       </Box>
       <AntDesignGrid
-        sx={{ boxShadow: 3, fontSize:'16px' }}
+        sx={{ boxShadow: 3, fontSize: '16px' }}
         autoHeight
         checked={checked}
         rows={studentList}
@@ -268,6 +268,17 @@ const StudentList = () => {
         onRowEditStart={handleRowEditStart}
         onRowEditStop={handleRowEditStop}
         getRowId={(row) => row.roll}
+        disableColumnSelector
+        disableDensitySelector
+        component={{ Toolbar: GridToolbar }}
+        componentsProps={{
+          toolbar: {
+            csvOptions: { disableToolbarButton: true },
+            printOptions: { disableToolbarButton: true },
+            showQuickFilter: true,
+            quickFilterProps: { debounceMs: 250 },
+          },
+        }}
       />
 
       {studentList.length > 0 && openDialog && <UploadStudentDialog list={studentList} open={openDialog} onClose={(value) => { setOpenDialog(false); setSnackbar(value); value && getSessionList() }} />}

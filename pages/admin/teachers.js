@@ -13,16 +13,12 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Snackbar from "@mui/material/Snackbar";
 import Typography from "@mui/material/Typography";
-import { GridActionsCellItem, GridRowModes } from "@mui/x-data-grid";
+import { GridActionsCellItem, GridRowModes, GridToolbar } from "@mui/x-data-grid";
 import { useSession } from "next-auth/react";
+import Router from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { signOut } from 'next-auth/react';
 
 const Teachers = () => {
-
-  const userSession = useSession()
-
-
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(null)
   const [open, setOpen] = useState(false);
@@ -43,8 +39,6 @@ const Teachers = () => {
     setRowModesModel(newRowModesModel);
   };
 
-
-
   const handleOnClose = () => {
     getList();
     setOpen(false);
@@ -52,12 +46,6 @@ const Teachers = () => {
   const handleAddTeacher = () => {
     setOpen(true);
   }
-
-  useEffect(() => {
-    setLoading(true)
-    getList()
-    setLoading(false)
-  }, [])
 
   const handleRowEditStart = (params, event) => {
     event.defaultMuiPrevented = true;
@@ -104,6 +92,12 @@ const Teachers = () => {
     }
   };
 
+  useEffect(() => {
+    setLoading(true)
+    getList()
+    setLoading(false)
+  }, [])
+
   const columns = [
     {
       field: "name",
@@ -115,7 +109,8 @@ const Teachers = () => {
       field: "email",
       headerName: "Email",
       minWidth: 200,
-      flex: 1
+      flex: 1,
+      editable: true
     },
     {
       field: "phone",
@@ -208,64 +203,72 @@ const Teachers = () => {
     setSnackbar({ children: error.message, severity: 'error' });
   }, []);
 
-  if (loading) return <div>loading</div>
+  return (
+    <Paper variant="outlined" sx={{ boxShadow: 3, minHeight: 400 }}>
+      <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Teachers</Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'column', ml: 4, mr: 4, mb: 3 }}>
+        <Button sx={{ ml: 'auto', mb: 3, boxShadow: 1, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant="contained" onClick={handleAddTeacher}><AddIcon /> Add Teacher</Button>
 
-  if (userSession.status === "loading") {
+        <AntDesignGrid
+          sx={{ boxShadow: 3, fontSize: '16px' }}
+          checked={checked}
+          columns={columns}
+          rows={list}
+          disableSelectionOnClick
+          autoHeight
+          experimentalFeatures={{ newEditingApi: true }}
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={handleProcessRowUpdateError}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStart={handleRowEditStart}
+          onRowEditStop={handleRowEditStop}
+          disableColumnSelector
+          disableDensitySelector
+          component={{ Toolbar: GridToolbar }}
+          componentsProps={{
+            toolbar: {
+              csvOptions: { disableToolbarButton: true },
+              printOptions: { disableToolbarButton: true },
+              showQuickFilter: true,
+              quickFilterProps: { debounceMs: 250 },
+            },
+          }}
+        />
+        {open && <TeacherDialog open={open} onClose={handleOnClose} />}
+      </Box>
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={() => { setSnackbar(null) }}
+          autoHideDuration={3000}
+        >
+          <Alert {...snackbar} onClose={(() => { setSnackbar(null) })} />
+        </Snackbar>
+      )}
+    </Paper>
+  )
+}
+
+Teachers.getLayout = function getLayout({ children }) {
+  const { status, data } = useSession()
+
+  if (status === "loading") {
     return <p>Loading...</p>
   }
 
-  else if (userSession.status === 'unauthenticated' || userSession.data.user.role !== 'Chairman') {
-    return (
-      <>
-        <h1>Access Denied</h1>
-        <Button onClick={() => signOut({ callbackUrl: '/auth/signin' })}>Signout</Button>
-      </>
-    )
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin');
   }
-  else {
-    return (
-      <Paper variant="outlined" sx={{ boxShadow: 3, minHeight: 400 }}>
-        <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Teachers</Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', ml: 4, mr: 4, mb: 3 }}>
-          <Button sx={{ ml: 'auto', mb: 3, boxShadow: 1, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant="contained" onClick={handleAddTeacher}><AddIcon /> Add Teacher</Button>
 
-          <AntDesignGrid
-            sx={{ boxShadow: 3, fontSize: '16px' }}
-            checked={checked}
-            columns={columns}
-            rows={list}
-            disableSelectionOnClick
-            autoHeight
-            experimentalFeatures={{ newEditingApi: true }}
-            processRowUpdate={processRowUpdate}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStart={handleRowEditStart}
-            onRowEditStop={handleRowEditStop}
-          />
-          {open && <TeacherDialog open={open} onClose={handleOnClose} />}
-        </Box>
-        {!!snackbar && (
-          <Snackbar
-            open
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            onClose={() => { setSnackbar(null) }}
-            autoHideDuration={3000}
-          >
-            <Alert {...snackbar} onClose={(() => { setSnackbar(null) })} />
-          </Snackbar>
-        )}
-      </Paper>
-    )
+  if (status === 'authenticated' && data.user.role !== 'Chairman') {
+    Router.replace('/accessDenied');
   }
-}
-
-Teachers.getLayout = function getLayout(page) {
   return (
-    <Layout pages={AdminPages}>
-      <main>{page}</main>
+    <Layout pages={AdminPages} idx={1}>
+      <main>{children}</main>
     </Layout>
   )
 }

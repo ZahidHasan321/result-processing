@@ -8,8 +8,9 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { GridToolbar } from "@mui/x-data-grid";
-import { getSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import { getSession, useSession } from "next-auth/react";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 
@@ -19,6 +20,7 @@ const Home = () => {
   const [checked, setChecked] = useState(false)
 
   const router = useRouter();
+  
   async function getList() {
     const { user } = await getSession();
     await fetch('/api/examCommittee/committeeLog', {
@@ -71,9 +73,10 @@ const Home = () => {
       flex: 1
     },
     {
-      field: "published",
-      headerName: "Published",
-      type: "boolean",
+      field: "assigned_date",
+      headerName: "Assigned Date",
+      type: "date",
+      valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
       minWidth: 200,
       flex: 1
     },
@@ -91,7 +94,7 @@ const Home = () => {
     }
   ]
   return (
-    <Paper variant="Outlined" sx={{ boxShadow: 3 }}>
+    <Paper variant="Outlined" sx={{ boxShadow: 3, minHeight:'750px' }}>
       <Box >
         <Typography fontSize={30} sx={{ ml: 12, pt: 3 }}>IN PROGRESS</Typography>
         <Typography variant="caption" sx={{ ml:12 }}>Double click on row for more.</Typography>
@@ -131,10 +134,25 @@ const Home = () => {
   )
 
 }
-Home.getLayout = function getLayout(page) {
+Home.getLayout = function getLayout({children}) {
+
+  const {data, status} = useSession()
+
+  if (status === 'loading') {
+    return <p>loading</p>
+  }
+
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin')
+  }
+
+  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+    Router.replace('/accessDenied')
+  }
+
   return (
-    <Layout pages={committeePages}>
-      <main>{page}</main>
+    <Layout pages={committeePages} idx={1}>
+      <main>{children}</main>
     </Layout>
   )
 }

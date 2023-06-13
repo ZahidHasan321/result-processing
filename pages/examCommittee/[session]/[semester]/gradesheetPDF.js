@@ -1,7 +1,8 @@
 import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
+import Router, { useRouter } from "next/router"
 import GradesheetView from "@/component/pdf/gradesheet_Viewer"
+import { useSession } from "next-auth/react"
 const dynamicPDF = dynamic(() => import("../../../../component/pdf/pdfViewer"), {
     ssr: false,
 })
@@ -118,4 +119,28 @@ const GradesheetViewer = () => {
         )
     }
 }
+
+GradesheetViewer.getLayout = function getLayout({ children }) {
+
+    const { data, status } = useSession()
+  
+    if (status === 'loading') {
+      return <p>loading</p>
+    }
+  
+    if (status === 'unauthenticated') {
+      Router.replace('/auth/signin')
+    }
+  
+    if (status === 'authenticated' && data.user.role !== 'Teacher') {
+      Router.replace('/accessDenied')
+    }
+  
+    return (
+      <>
+        <main>{children}</main>
+      </>
+    )
+  }
+
 export default GradesheetViewer

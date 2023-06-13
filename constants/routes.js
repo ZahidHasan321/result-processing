@@ -65,10 +65,6 @@ export const semesterPages = [
 
 export const AdminPages = [
   {
-    routename: "Home",
-    routepath: "/",
-  },
-  {
     routename: "Exam Committee",
     routepath: "/admin",
   },

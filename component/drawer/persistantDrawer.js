@@ -17,16 +17,11 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import GroupsIcon from '@mui/icons-material/Groups';
 import { styled, useTheme } from '@mui/material/styles';
-import Image from 'next/image';
 import Link from "next/link";
 import * as React from 'react';
-import StudentIcon from '../../public/graduated.png';
-import TeacherIcon from '../../public/teacher.png';
-import CourseIcon from '../../public/courses.png';
 import MenuAppBar from '../appbar/appbar';
-import { Typography } from '@mui/material';
+import { useSession } from 'next-auth/react';
 
 const drawerWidth = 240;
 
@@ -80,144 +75,154 @@ const linkStyle = {
   color: "black"
 }
 
-export default function PersistentDrawerLeft({ children, pages, query }) {
+export default function PersistentDrawerLeft({ children, pages, query, idx }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [openCommittee, setOpenCommittee] = React.useState(false);
   const [openExaminer, setOpenExaminer] = React.useState(false);
   const [openTeacher, setOpenTeacher] = React.useState(false);
-  const [openAdmin, setOpenAdmin] = React.useState(false);
+
+  const { status, data } = useSession();
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <MenuAppBar onAppbarClick={() => setOpen(true)} pages={pages} query={query} open={open} />
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
+
+
+  if (status === 'unauthenticated')
+    return
+
+  if (status === 'loading')
+    return
+    
+  else {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <MenuAppBar idx={idx} onAppbarClick={() => setOpen(true)} pages={pages} query={query} open={open} />
+        <Drawer
+          sx={{
             width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
 
-        <List>
-          <Link style={linkStyle} href='/' >
-            <ListItemButton>
+          <List>
+            <Link style={linkStyle} href='/' >
+              <ListItemButton>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary='Home' />
+              </ListItemButton>
+              <Divider />
+            </Link>
+            <ListItemButton onClick={() => setOpenCommittee(!openCommittee)}>
               <ListItemIcon>
-                <HomeIcon />
+                <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary='Home' />
+              <ListItemText primary="Exam Committee" />
+              {openCommittee ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Divider />
-          </Link>
-          <ListItemButton onClick={() => setOpenCommittee(!openCommittee)}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Exam Committee" />
-            {openCommittee ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={openCommittee} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <Link style={linkStyle} href='/examCommittee' >
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
-                    <RotateLeftIcon />
-                  </ListItemIcon>
-                  <ListItemText primary='Pending' />
-                </ListItemButton>
-              </Link>
+            <Collapse in={openCommittee} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <Link style={linkStyle} href='/examCommittee' >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <RotateLeftIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='Pending' />
+                  </ListItemButton>
+                </Link>
 
-              <Link style={linkStyle} href='/examCommittee/history' >
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
-                    <CheckCircleOutlineIcon />
-                  </ListItemIcon>
-                  <ListItemText primary='History' />
-                </ListItemButton>
-              </Link>
-              <Divider />
-            </List>
-          </Collapse>
+                <Link style={linkStyle} href='/examCommittee/history' >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <CheckCircleOutlineIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='History' />
+                  </ListItemButton>
+                </Link>
+                <Divider />
+              </List>
+            </Collapse>
 
 
-          <ListItemButton onClick={() => setOpenExaminer(!openExaminer)}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Examiner" />
-            {openExaminer ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={openExaminer} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <Link style={linkStyle} href='/examiner' >
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
-                    <RotateLeftIcon />
-                  </ListItemIcon>
-                  <ListItemText primary='Pending' />
-                </ListItemButton>
-              </Link>
+            <ListItemButton onClick={() => setOpenExaminer(!openExaminer)}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Examiner" />
+              {openExaminer ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openExaminer} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <Link style={linkStyle} href='/examiner' >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <RotateLeftIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='Pending' />
+                  </ListItemButton>
+                </Link>
 
-              <Link style={linkStyle} href='/examiner/history' >
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
-                    <CheckCircleOutlineIcon />
-                  </ListItemIcon>
-                  <ListItemText primary='History' />
-                </ListItemButton>
-              </Link>
-              <Divider />
-            </List>
-          </Collapse>
+                <Link style={linkStyle} href='/examiner/history' >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <CheckCircleOutlineIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='History' />
+                  </ListItemButton>
+                </Link>
+                <Divider />
+              </List>
+            </Collapse>
 
 
-          <ListItemButton onClick={() => setOpenTeacher(!openTeacher)}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Course Teacher" />
-            {openTeacher ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={openTeacher} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <Link style={linkStyle} href='/courseTeacher' >
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
-                    <RotateLeftIcon />
-                  </ListItemIcon>
-                  <ListItemText primary='Pending' />
-                </ListItemButton>
-              </Link>
-              <Link style={linkStyle} href='/courseTeacher/history' >
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemIcon>
-                    <CheckCircleOutlineIcon />
-                  </ListItemIcon>
-                  <ListItemText primary='History' />
-                </ListItemButton>
-              </Link>
-              <Divider />
-            </List>
-          </Collapse>
+            <ListItemButton onClick={() => setOpenTeacher(!openTeacher)}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Course Teacher" />
+              {openTeacher ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openTeacher} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <Link style={linkStyle} href='/courseTeacher' >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <RotateLeftIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='Pending' />
+                  </ListItemButton>
+                </Link>
+                <Link style={linkStyle} href='/courseTeacher/history' >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <CheckCircleOutlineIcon />
+                    </ListItemIcon>
+                    <ListItemText primary='History' />
+                  </ListItemButton>
+                </Link>
+                <Divider />
+              </List>
+            </Collapse>
 
-          {/* <ListItemButton onClick={() => setOpenAdmin(!openAdmin)}>
+            {/* <ListItemButton onClick={() => setOpenAdmin(!openAdmin)}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -280,12 +285,13 @@ export default function PersistentDrawerLeft({ children, pages, query }) {
           
             </List>
           </Collapse> */}
-        </List>
-      </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        {children}
-      </Main>
-    </Box>
-  );
+          </List>
+        </Drawer>
+        <Main open={open}>
+          <DrawerHeader />
+          {children}
+        </Main>
+      </Box>
+    );
+  }
 }

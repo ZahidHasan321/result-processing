@@ -2,7 +2,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
 const AutoCompleteTeacher = (props) => {
-    const {list ,label, onChange, sx, value, editable} = props;
+    const {list ,label, onChange, sx, value} = props;
     return(
         <Autocomplete
         value={value}

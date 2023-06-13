@@ -5,6 +5,8 @@ import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import Circle from "@mui/icons-material/Circle";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -19,10 +21,9 @@ import Typography from "@mui/material/Typography";
 import Grid from '@mui/material/Unstable_Grid2';
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Alert, Snackbar } from "@mui/material";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -83,7 +84,7 @@ const Dashboard = () => {
     })
       .then(res => res.json())
       .then(data => {
-        setStartDate(data[0] != null? dayjs(data[0].start_date) : null)
+        setStartDate(data[0] != null ? dayjs(data[0].start_date) : null)
         setEndDate(data[0] != null ? dayjs(data[0].end_date) : null)
         setChecked(true);
       })
@@ -105,7 +106,7 @@ const Dashboard = () => {
       },
       body: JSON.stringify({ semester: query.semester, session: query.session, startDate: dayjs(value).format('YYYY-MM-DD') })
     })
-    .then(() => setSnackbar({children:'Start Date Updated', severity:'success'}))
+      .then(() => setSnackbar({ children: 'Start Date Updated', severity: 'success' }))
   }
 
   const endDateset = async (value) => {
@@ -116,39 +117,29 @@ const Dashboard = () => {
       },
       body: JSON.stringify({ semester: query.semester, session: query.session, endDate: dayjs(value).format('YYYY-MM-DD') })
     })
-    .then(() => setSnackbar({children:'End Date Updated', severity:'success'}))
+      .then(() => setSnackbar({ children: 'End Date Updated', severity: 'success' }))
   }
 
   return (
     <>
-      <Paper elevation={3} sx={{ bgcolor: '#e7ebf0' }}>
+      <Paper elevation={3} sx={{ bgcolor: '#e7ebf0', minHeight: '750px' }}>
         <Box sx={{ display: 'flex', ml: 3, pt: 3 }}>
           <Typography fontSize={30} sx={{ mr: 'auto' }}> {formatOrdinals(query.semester)} Semester, {query.session}</Typography>
-          <Box sx={{ pr: 3, display: 'flex', alignItems:'baseline' }}>
+          <Box sx={{ pr: 3, display: 'flex', alignItems: 'baseline' }}>
+
             <DatePicker value={startDate} onChange={value => { setStartDate(value), startDateset(value) }}
               label="Start Date"
               sx={{ mr: 3 }}
-              format="DD-MM-YYYY"
-              slotProps={{
-                textField: {
-                  helperText: "DD-MM-YYYY"
-                },
-              }}
-              />
+              format="DD/MM/YYYY"
+            />
 
             <DatePicker value={endDate} onChange={value => { setEndDate(value), endDateset(value) }}
               label="End Date"
               sx={{ mr: 3 }}
-              format="DD-MM-YYYY"
-              slotProps={{
-                textField: {
-                  helperText: "DD-MM-YYYY"
-                },
-                
-              }}
-              />
-            <Link href={`/examCommittee/${query.session}/${query.semester}/tabulationPDF`} style={{marginRight:'10px'}}><Button variant="contained">Tabulation PDF</Button></Link>
-            <Link href={`/examCommittee/${query.session}/${query.semester}/gradesheetPDF`}><Button variant="contained">Gradesheet PDF</Button></Link>
+              format="DD/MM/YYYY"
+            />
+            <a href={`/examCommittee/${query.session}/${query.semester}/tabulationPDF`} target="_blank" style={{ marginRight: '10px' }}> <Button variant="contained">Tabularsheet PDF</Button></a>
+            <a href={`/examCommittee/${query.session}/${query.semester}/gradesheetPDF`} target="_blank"> <Button variant="contained">Gradesheet PDF</Button></a>
           </Box>
         </Box>
         <Slide in={checked}>
@@ -239,15 +230,15 @@ const Dashboard = () => {
       </Paper>
 
       {!!snackbar && (
-                <Snackbar
-                    open
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                    onClose={() => setSnackbar(null)}
-                    autoHideDuration={3000}
-                >
-                    <Alert {...snackbar} onClose={() => setSnackbar(null)} />
-                </Snackbar>
-            )}
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={() => setSnackbar(null)}
+          autoHideDuration={3000}
+        >
+          <Alert {...snackbar} onClose={() => setSnackbar(null)} />
+        </Snackbar>
+      )}
     </>
   )
 }
@@ -258,19 +249,32 @@ const HeaderLayout = ({ children }) => {
 
   return (
     <>
-      <Layout pages={semesterPages} query={query}>
+      <Layout pages={semesterPages} query={query} idx={1}>
         {children}
       </Layout>
     </>
   );
 };
 
-Dashboard.getLayout = function getLayout(page) {
+Dashboard.getLayout = function getLayout({ children }) {
 
+  const { data, status } = useSession()
+
+  if (status === 'loading') {
+    return <p>loading</p>
+  }
+
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin')
+  }
+
+  if (status === 'authenticated' && data.user.role !== 'Teacher') {
+    Router.replace('/accessDenied')
+  }
 
   return (
     <HeaderLayout>
-      <main>{page}</main>
+      <main>{children}</main>
     </HeaderLayout>
   )
 }

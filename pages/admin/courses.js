@@ -4,29 +4,27 @@ import Layout from "@/component/layout/layout";
 import SemesterSelector from "@/component/selector/semesterSelector";
 import { AdminPages } from "@/constants/routes";
 
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import Paper from "@mui/material/Paper"
-import Typography from "@mui/material/Typography"
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 import { GridActionsCellItem, GridRowModes } from "@mui/x-data-grid";
 
 
-import { useCallback, useEffect, useState } from "react";
-import { Alert, Snackbar } from "@mui/material";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 import { useSession } from "next-auth/react";
-import { signOut } from 'next-auth/react';
+import Router from "next/router";
+import { useCallback, useEffect, useState } from "react";
 
 
 
 const Courses = () => {
-
-  const userSession = useSession()
-
   const [semesterList, setSemesterList] = useState([]);
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(null);
@@ -237,71 +235,73 @@ const Courses = () => {
     getSemesterList();
   }, [])
 
-  if (userSession.status === "loading") {
+
+  return (
+    <Paper variant="outlined" sx={{ boxShadow: 3, minHeight: 400 }}>
+      <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Courses</Typography>
+
+      <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mr: 4, ml: 4, mb: 3 }}>
+        <Typography variant="caption" sx={{ mb: 1 }}>Choose a session and a semester</Typography>
+        <Box sx={{ display: 'flex', mb: 2 }}>
+          <SemesterSelector sx={{ width: '180px' }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
+
+          <Button variant="contained" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}><AddIcon /> Add Course</Button>
+        </Box>
+
+        <AntDesignGrid
+          sx={{ boxShadow: 3, fontSize: '16px' }}
+          columns={columns}
+          checked={checked}
+          rows={courseList}
+          getRowId={row => row.course_code}
+          autoHeight
+          hideFooter
+          experimentalFeatures={{ newEditingApi: true }}
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={handleProcessRowUpdateError}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStart={handleRowEditStart}
+          onRowEditStop={handleRowEditStop}
+        />
+        <CourseDialog open={open} onClose={handleClose} />
+      </Box>
+      {
+        !!snackbar && (
+          <Snackbar
+            open
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            onClose={() => { setSnackbar(null) }}
+            autoHideDuration={3000}
+          >
+            <Alert {...snackbar} onClose={(() => { setSnackbar(null) })} />
+          </Snackbar>
+        )
+      }
+    </Paper>
+  )
+}
+
+
+Courses.getLayout = function getLayout({ children }) {
+  const { status, data } = useSession()
+
+  if (status === "loading") {
     return <p>Loading...</p>
   }
 
-  else if (userSession.status === 'unauthenticated' || userSession.data.user.role !== 'Chairman') {
-    return (
-      <>
-        <h1>Access Denied</h1>
-        <Button onClick={() => signOut({ callbackUrl: '/auth/signin' })}>Signout</Button>
-      </>
-    )
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin');
   }
-  else {
-    return (
-      <Paper variant="outlined" sx={{ boxShadow: 3, minHeight: 400 }}>
-        <Typography fontSize={30} sx={{ ml: 4, mt: 2 }}>Courses</Typography>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', m: 2, mr: 4, ml: 4, mb: 3 }}>
-          <Typography variant="caption" sx={{ mb: 1 }}>Choose a session and a semester</Typography>
-          <Box sx={{ display: 'flex', mb: 2 }}>
-            <SemesterSelector sx={{ width: '180px' }} list={semesterList} value={semester} onChange={(value) => setSemester(value)} label='semester' />
-
-            <Button variant="contained" onClick={() => setOpen(true)} sx={{ ml: 'auto', alignSelf: 'flex-end', bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}><AddIcon /> Add Course</Button>
-          </Box>
-
-          <AntDesignGrid
-            sx={{ boxShadow: 3, fontSize: '16px' }}
-            columns={columns}
-            checked={checked}
-            rows={courseList}
-            getRowId={row => row.course_code}
-            autoHeight
-            hideFooter
-            experimentalFeatures={{ newEditingApi: true }}
-            processRowUpdate={processRowUpdate}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStart={handleRowEditStart}
-            onRowEditStop={handleRowEditStop}
-          />
-          <CourseDialog open={open} onClose={handleClose} />
-        </Box>
-        {
-          !!snackbar && (
-            <Snackbar
-              open
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-              onClose={() => { setSnackbar(null) }}
-              autoHideDuration={3000}
-            >
-              <Alert {...snackbar} onClose={(() => { setSnackbar(null) })} />
-            </Snackbar>
-          )
-        }
-      </Paper>
-    )
+  if (status === 'authenticated' && data.user.role !== 'Chairman') {
+    Router.replace('/accessDenied');
   }
-}
 
-Courses.getLayout = function getLayout(page) {
   return (
-    <Layout pages={AdminPages}>
-      <main>{page}</main>
+    <Layout pages={AdminPages} idx={2}>
+      <main>{children}</main>
     </Layout>
   )
 }

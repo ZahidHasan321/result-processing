@@ -9,7 +9,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Snackbar from "@mui/material/Snackbar";
-import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const dayjs = require('dayjs')
 
@@ -96,7 +97,7 @@ const Submitted = () => {
   ]
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, minWidth: 700 }}>
+      <Paper sx={{ boxShadow: 3, minHeight:'750px' }}>
         <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
             sx={{ m:4, boxShadow: 3, fontSize:'16px' }}
@@ -129,19 +130,33 @@ const HeaderLayout = ({ children }) => {
 
   return (
     <>
-      <Layout pages={semesterPages} query={query}>
+      <Layout pages={semesterPages} query={query} idx={2}>
         {children}
       </Layout>
     </>
   );
 };
 
-Submitted.getLayout = function getLayout(page) {
-  
+Submitted.getLayout = function getLayout({children}) {
+
+  const {data, status} = useSession()
+
+  if (status === 'loading') {
+    return <p>loading</p>
+  }
+
+  if (status === 'unauthenticated') {
+    Router.replace('/auth/signin')
+  }
+
+  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+    Router.replace('/accessDenied')
+  }
+
 
   return (
     <HeaderLayout>
-      <main>{page}</main>
+      <main>{children}</main>
     </HeaderLayout>
   )
 }

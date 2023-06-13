@@ -3,7 +3,6 @@ import pool from "@/lib/db";
 export default async function (req, res) {
     const param = req.body;
 
-
     if (param.session == '' || param.semester == '' || isNaN(param.session)) {
         res.status(505).send({message: "session or semester can't be empty"});
         return;
@@ -12,7 +11,7 @@ export default async function (req, res) {
         const client = await pool.connect();
         try {
             await client.query('BEGIN')
-            const text = 'INSERT INTO exam_committee(id, semester, exam_session, role) VALUES($1, $2, $3, $4)'
+            const text = 'INSERT INTO exam_committee(id, semester, exam_session, role, assigned_date) VALUES($1, $2, $3, $4, CURRENT_DATE)'
 
             if (param.member1 != null) {
                 await client.query(text, [param.member1.id, param.semester, param.session, param.role1 || 'Member'])
@@ -51,12 +50,15 @@ export default async function (req, res) {
 
             await client.query(
                 {
-                    text:`INSERT INTO summation_sheet (roll, course_code)
-                    SELECT s.roll, c.course_code
+                    text:`INSERT INTO summation_sheet (roll, course_code, exam_session)
+                    (SELECT roll, course_code, s.exam_session
                     FROM stud_per_session s JOIN 
                     courses c
-                    s.exam_session = $1 AND
-                    c.semester = $2`
+					ON 
+                    s.semester = c.semester
+                    WHERE s.semester = $2 AND
+                    s.exam_session = $1)`,
+                    values:[param.session, param.semester]
                 }
             )
 
@@ -66,7 +68,7 @@ export default async function (req, res) {
         }
         catch (e) {
             await client.query('ROLLBACK')
-            res.status(500).send({ message: 'Couldnot create committee' });
+            res.status(500).send({ message: 'Could not create committee' });
             throw e
         } 
         finally {
