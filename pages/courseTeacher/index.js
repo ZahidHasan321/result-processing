@@ -3,8 +3,8 @@ import CATMdialog from "@/component/dialog/catmDialog";
 import Layout from "@/component/layout/layout";
 import { courseTeacher } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Typography } from "@mui/material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Typography  from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import { getSession, useSession } from "next-auth/react";
 import Router from "next/router";
 import { useEffect, useState } from "react";
+import Loading from "../loading";
 
 const Home = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -85,12 +86,12 @@ const Home = () => {
     },
     {
       field: "enter",
-      headerName: "Enter",
+      headerName: "Open",
       width: 100,
       renderCell: (params) => {
         return (
-          <Button sx={{ bgcolor: 'lightgreen', ":hover": { bgcolor: 'lightgreen' } }} onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
-            <NavigateNextIcon />
+          <Button onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
+            <ArrowForwardIosIcon />
           </Button>
         )
       }
@@ -144,7 +145,7 @@ Home.getLayout = function getLayout({ children }) {
   const { data, status } = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

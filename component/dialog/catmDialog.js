@@ -1,15 +1,17 @@
 
+import { Typography } from "@mui/material"
 import Alert from "@mui/material/Alert"
+import Backdrop from "@mui/material/Backdrop"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
-import Backdrop from "@mui/material/Backdrop"
 import CircularProgress from "@mui/material/CircularProgress"
-import Snackbar from "@mui/material/Snackbar"
 import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
 import Grow from "@mui/material/Grow"
-import { useCallback, useEffect, useState } from "react";
-import AntDesignGrid from "../customDatagrid/customDatagrid";
+import Snackbar from "@mui/material/Snackbar"
+import { useCallback, useEffect, useState } from "react"
+import AntDesignGrid from "../customDatagrid/customDatagrid"
+import PublishIcon from '@mui/icons-material/Publish';
+import { GridToolbar } from "@mui/x-data-grid"
 
 const CATMdialog = (props) => {
     const { open, onClose, data, editableData, sx } = props;
@@ -27,27 +29,19 @@ const CATMdialog = (props) => {
     }
 
     const handleOnSubmit = async () => {
-        marks.map(async(item) => {
-            await fetch('/api/courseTeacher/setMarks', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ item, session: data.exam_session, course: data.course_code })
-            })
-        })
 
-        await fetch('/api/courseTeacher/updateInsert', {
+        await fetch('/api/courseTeacher/setMarks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ session: data.exam_session, course: data.course_code })
+            body: JSON.stringify({ marks, session: data.exam_session, course: data.course_code })
         })
-
-
-        localStorage.removeItem(JSON.stringify(data) + 'catm')
-        onClose({ children: "Submitted Successfully", serverity: 'success' });
+            .then(res => res.json())
+            .then(data => {
+                localStorage.removeItem(JSON.stringify(data) + 'catm')
+                onClose(data);
+            })
     }
 
     const handleCloseSnackbar = () => setSnackbar(null);
@@ -74,6 +68,8 @@ const CATMdialog = (props) => {
     }
 
     const ProcessRowUpdate = (newRow, oldRow) => {
+        if (JSON.stringify(oldRow) === JSON.stringify(newRow)) return oldRow;
+
         if (newRow.ct > 13.5 || newRow.attendance > 7.5) {
             setSnackbar({ children: "Out of Range number", serverity: 'error' })
             return oldRow;
@@ -171,7 +167,9 @@ const CATMdialog = (props) => {
             getMarks()
             return;
         }
+
         const item = JSON.parse(localStorage.getItem(JSON.stringify(data) + 'catm'))
+
         if (item && item.length > 0) {
             if (item[0].roll != null)
                 setMarks(item);
@@ -195,12 +193,15 @@ const CATMdialog = (props) => {
 
 
     return (
-        <Dialog TransitionComponent={Grow} fullWidth maxWidth='md' open={open} onClose={() => onClose()} sx={{ ...sx, backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 500 } }}>
-            <DialogTitle sx={{ ml: 2 }}>Class Attendance and Test Marks</DialogTitle>
-            <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column' }}>
-                {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2 }} onClick={handleOnSubmit}>Submit</Button>}
+        <Dialog TransitionComponent={Grow} fullWidth maxWidth='lg' open={open} onClose={() => onClose()} sx={{ ...sx, backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 750 } }}>
+            <Typography fontWeight={'bold'} textAlign={'center'} fontSize={30} mt={3}>Class Attendance & Test Marks</Typography>
+            <Typography textAlign={'center'} fontSize={20}>Course Name: {data.course_name}</Typography>
+            <Typography textAlign={'center'} fontSize={20}>Course Code: {data.course_code}</Typography>
+            <Typography textAlign={'center'} fontSize={20}> Session: {data.exam_session} </Typography>
+            <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column', mt: 2}}>
+                {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit <PublishIcon /></Button>}
                 <AntDesignGrid
-                    sx={{ boxShadow: 3, fontSize:'16px' }}
+                    sx={{ boxShadow: 3, fontSize: '16px' }}
                     getRowId={row => row.roll}
                     autoHeight
                     columns={columns}
@@ -210,6 +211,17 @@ const CATMdialog = (props) => {
                     processRowUpdate={ProcessRowUpdate}
                     onProcessRowUpdateError={handleProcessRowUpdateError}
                     disableIgnoreModificationsIfProcessingProps
+                    disableColumnSelector
+                    disableDensitySelector
+                    component={{ Toolbar: GridToolbar }}
+                    componentsProps={{
+                        toolbar: {
+                            csvOptions: { disableToolbarButton: true },
+                            printOptions: { disableToolbarButton: true },
+                            showQuickFilter: true,
+                            quickFilterProps: { debounceMs: 250 },
+                        },
+                    }}
                 />
             </Box>
             <Backdrop

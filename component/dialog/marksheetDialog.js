@@ -1,15 +1,15 @@
 import CloseIcon from '@mui/icons-material/Close';
-import Alert from "@mui/material/Alert"
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import Backdrop from "@mui/material/Backdrop"
-import CircularProgress from "@mui/material/CircularProgress"
-import Snackbar from "@mui/material/Snackbar"
-import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
-import Grow from "@mui/material/Grow"
+import Alert from "@mui/material/Alert";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Dialog from "@mui/material/Dialog";
+import Grow from "@mui/material/Grow";
+import Snackbar from "@mui/material/Snackbar";
 
 
+import { Typography } from '@mui/material';
 import { useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
 
@@ -31,29 +31,21 @@ const MarksheetDialog = (props) => {
 
     const handleOnSubmit = () => {
         if (marks) {
-            marks.map((item => {
-                var f =  false;
-                Object.entries(item).forEach(([key, value]) => {
-                    if (value != null && key != 'code' && key != 'Total' && item.code) {
-                        fetch('/api/examiner/setMark', {
-                            method: 'POST',
-                            headers: {
-                                'content-type': 'application/json'
-                            },
-                            body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number, paperCode: item.code, question: key, mark: value })
-                        })
-                    }
-                })
-            }))
-            fetch('/api/examiner/updateSubmitted', {
+            fetch('/api/examiner/setMark', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
+                body: JSON.stringify({ session: data.exam_session, course: data.course_code, marks, set: data.set_number })
             })
-            localStorage.removeItem(JSON.stringify(data) + 'marksheet');
-            onClose({children:'Successfully submitted', serverity:'success'});
+                .then(res => res.json())
+                .then(data => {
+                    if (data.serverity === 'success')
+                        localStorage.removeItem(JSON.stringify(data) + 'marksheet');
+                    onClose(data);
+                })
+
+
         }
     }
 
@@ -84,7 +76,7 @@ const MarksheetDialog = (props) => {
         setChecked(true)
     }, 500)
 
-    const getMarks = async() => {
+    const getMarks = async () => {
         fetch('/api/examiner/getMarks', {
             method: 'POST',
             headers: {
@@ -98,7 +90,7 @@ const MarksheetDialog = (props) => {
 
     useEffect(() => {
         if (editableData === false) {
-           getMarks();
+            getMarks();
         }
         else {
             const items = JSON.parse(localStorage.getItem(JSON.stringify(data) + 'marksheet'))
@@ -111,6 +103,7 @@ const MarksheetDialog = (props) => {
     }, []);
 
     const ProcessRowUpdate = async (newRow, oldRow) => {
+        if(JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
         if (marks) {
             const temp = marks.map((item) => {
                 if (item.code == newRow.code) {
@@ -119,7 +112,7 @@ const MarksheetDialog = (props) => {
                 else return item;
             })
             setMarks(temp);
-            setSnackbar({children:'saved', serverity:"success"})
+            setSnackbar({ children: 'saved', serverity: "success" })
         }
         return newRow;
     }
@@ -243,18 +236,20 @@ const MarksheetDialog = (props) => {
 
     return (
         <Box>
-            <Dialog TransitionComponent={Grow} fullWidth maxWidth='xl' open={open} sx={{ ...sx, backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 500 } }}>
-                <Box sx={{ display: 'flex' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <DialogTitle fontSize={25} fontWeight={'bold'}>Marksheet</DialogTitle>
-                    </Box>
-                    <Button size='small' sx={{ width: 30, m: 1, ml: 'auto' }} onClick={handleOnClose}><CloseIcon htmlColor='red' /></Button>
+            <Dialog TransitionComponent={Grow} fullWidth maxWidth='xl' open={open} sx={{ ...sx, backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 750 } }}>
+                <Button size='small' sx={{ width: 30, m: 1, ml: 'auto' }} onClick={handleOnClose}><CloseIcon htmlColor='red' /></Button>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', }}>
+                    <Typography fontWeight={'bold'} textAlign={'center'} fontSize={30} >Paper Marks</Typography>
+                    <Typography textAlign={'center'} fontSize={20}>Course Name: {data.course_name}</Typography>
+                    <Typography textAlign={'center'} fontSize={20}>Course Code: {data.course_code}</Typography>
+                    <Typography textAlign={'center'} fontSize={20}> Session: {data.exam_session} </Typography>
                 </Box>
-                <Box sx={{ ml: 3, mr: 3, mb: 3, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ ml: 3, mr: 3, mb: 3, mt:2 , display: 'flex', flexDirection: 'column' }}>
                     {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>}
                     {marks &&
                         <AntDesignGrid
-                            sx={{ boxShadow: 3, fontSize:'16px' }}
+                            sx={{ boxShadow: 3, fontSize: '16px' }}
                             getRowId={row => row.code}
                             autoHeight
                             columns={columns}
@@ -266,7 +261,7 @@ const MarksheetDialog = (props) => {
                             disableIgnoreModificationsIfProcessingProps
                         />}
                 </Box>
-                
+
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                     open={openBackdrop}

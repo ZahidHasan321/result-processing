@@ -25,8 +25,6 @@ function MenuAppBar(props) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [value, setValue] = useState(idx);
 
-  console.log(idx)
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };

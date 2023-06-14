@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import TabulationView from "../../../../component/pdf/pdfViewer"
 import Router, { useRouter } from "next/router"
 import { useSession } from "next-auth/react"
+import Loading from "@/pages/loading"
 const dynamicPDF = dynamic(() => import("../../../../component/pdf/pdfViewer"), {
     ssr: false,
 })
@@ -114,7 +115,7 @@ const Viewer = () => {
     else {
         return (
             <>
-                <p>waiting</p>
+                <Loading />
             </>
         )
     }
@@ -125,7 +126,7 @@ Viewer.getLayout = function getLayout({ children }) {
     const { data, status } = useSession()
   
     if (status === 'loading') {
-      return <p>loading</p>
+        return <Loading />
     }
   
     if (status === 'unauthenticated') {

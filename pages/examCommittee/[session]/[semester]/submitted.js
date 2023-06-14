@@ -3,7 +3,8 @@ import DecodeDialog from "@/component/dialog/decodeDialog";
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Loading from "@/pages/loading";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -84,12 +85,12 @@ const Submitted = () => {
     },
     {
       field: "enter",
-      headerName: "Enter",
+      headerName: "Open",
       width: 100,
       renderCell: (params) => {
         return (
-          <Button sx={{ bgcolor: 'lightgreen', ":hover": { bgcolor: 'lightgreen' } }} onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
-            <NavigateNextIcon />
+          <Button onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
+            <ArrowForwardIosIcon />
           </Button>
         )
       }
@@ -142,7 +143,7 @@ Submitted.getLayout = function getLayout({children}) {
   const {data, status} = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

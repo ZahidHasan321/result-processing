@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Loading from "@/pages/loading";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -261,7 +262,7 @@ Dashboard.getLayout = function getLayout({ children }) {
   const { data, status } = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

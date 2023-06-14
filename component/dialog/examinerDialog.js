@@ -69,10 +69,10 @@ const ExaminerDialog = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(examinerA === null && examinerB === null && courseTeacher === null){
+        if (examinerA === null && examinerB === null && courseTeacher === null) {
             setSnackbar({ children: "Examiner cannot be left empty", severity: 'error' });
             return;
-        } 
+        }
         var f = false;
         if (examinerA != null && examinerB != null) {
             if (examinerA.id !== examinerB.id) {
@@ -93,9 +93,9 @@ const ExaminerDialog = (props) => {
                     },
                     body: JSON.stringify({ id: examinerB.id, session, course, set: 'B' })
                 })
-                
+
                 setSnackbar({ children: "Examiners assigned to course", severity: 'success' })
-                
+
             }
             else {
                 f = true;
@@ -112,7 +112,7 @@ const ExaminerDialog = (props) => {
                 body: JSON.stringify({ id: courseTeacher.id, session, course })
             })
 
-            if(f=== false) setSnackbar({ children: "Course Teacher assigned", severity: 'success' })
+            if (f === false) setSnackbar({ children: "Course Teacher assigned", severity: 'success' })
         }
     }
     useEffect(() => {
@@ -134,8 +134,8 @@ const ExaminerDialog = (props) => {
                             <AutoCompleteTeacher value={examinerA ? examinerA : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-A Examiner" />
                             <AutoCompleteTeacher value={examinerB ? examinerB : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
                             <Typography fontWeight={'bold'}>Add Course Teacher</Typography>
-                            <AutoCompleteTeacher value={courseTeacher  ? courseTeacher : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setCourseTeacher(value)} label="Course Teacher" />
-                            <Button type='submit' variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3 , bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}>Submit</Button>
+                            <AutoCompleteTeacher value={courseTeacher ? courseTeacher : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setCourseTeacher(value)} label="Course Teacher" />
+                            <Button type='submit' variant="contained" sx={{ display: 'table', m: '0 auto', mb: 3, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }}>Submit</Button>
                         </Box>
                     }
                 </Container>

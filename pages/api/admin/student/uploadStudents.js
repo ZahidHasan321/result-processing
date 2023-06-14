@@ -3,8 +3,6 @@ import pool from "@/lib/db";
 export default async function handler(req, res) {
     const { list, session, semester } = req.body;
 
-    console.log(req.body)
-
     const client = await pool.connect()
 
     try {

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import Router, { useRouter } from "next/router"
 import GradesheetView from "@/component/pdf/gradesheet_Viewer"
 import { useSession } from "next-auth/react"
+import Loading from "@/pages/loading"
 const dynamicPDF = dynamic(() => import("../../../../component/pdf/pdfViewer"), {
     ssr: false,
 })
@@ -114,7 +115,7 @@ const GradesheetViewer = () => {
     else {
         return (
             <>
-                <p>waiting</p>
+                <Loading />
             </>
         )
     }
@@ -125,7 +126,7 @@ GradesheetViewer.getLayout = function getLayout({ children }) {
     const { data, status } = useSession()
   
     if (status === 'loading') {
-      return <p>loading</p>
+        return <Loading />
     }
   
     if (status === 'unauthenticated') {

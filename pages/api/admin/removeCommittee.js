@@ -18,7 +18,7 @@ export default async function handler(req, res) {
             text: `DELETE FROM examiner USING courses 
         WHERE examiner.course_code = courses.course_code
         AND examiner.exam_session = $1 
-        AND semester = $2`,
+        AND courses.semester = $2`,
             values: [param.session, param.semester]
         }
 
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
             text: `DELETE FROM course_teacher USING courses 
             WHERE course_teacher.course_code = courses.course_code
             AND course_teacher.exam_session = $1 
-            AND semester = $2`,
+            AND courses.semester = $2`,
             values: [param.session, param.semester]
         }
 
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
             text: `DELETE FROM topsheet USING courses 
             WHERE topsheet.course_code = courses.course_code
             AND topsheet.exam_session = $1 
-            AND semester = $2`,
+            AND courses.semester = $2`,
             values: [param.session, param.semester]
         }
 
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
             text: `DELETE FROM summation_sheet USING courses 
             WHERE summation_sheet.course_code = courses.course_code
             AND summation_sheet.exam_session = $1 
-            AND semester = $2`,
+            AND courses.semester = $2`,
             values: [param.session, param.semester]
         }
 
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
             text: `DELETE FROM marks USING courses 
             WHERE marks.course_code = courses.course_code
             AND marks.exam_session = $1 
-            AND semester = $2`,
+            AND courses.semester = $2`,
             values: [param.session, param.semester]
         }
 
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
             text: `DELETE FROM catm_marks USING courses 
             WHERE catm_marks.course_code = courses.course_code
             AND catm_marks.exam_session = $1 
-            AND semester = $2`,
+            AND courses.semester = $2`,
             values: [param.session, param.semester]
         }
 

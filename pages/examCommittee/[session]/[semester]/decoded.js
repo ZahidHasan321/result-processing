@@ -3,10 +3,12 @@ import DecodeDialog from "@/component/dialog/decodeDialog";
 import Layout from "@/component/layout/layout";
 import { semesterPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Loading from "@/pages/loading";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
+import { GridToolbar } from "@mui/x-data-grid";
 import { useSession } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -87,12 +89,12 @@ const Decoded = () => {
     },
     {
       field: "enter",
-      headerName: "Enter",
+      headerName: "Open",
       width: 100,
       renderCell: (params) => {
         return (
-          <Button sx={{ bgcolor: 'lightgreen', ":hover": { bgcolor: 'lightgreen' } }} onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
-            <NavigateNextIcon />
+          <Button onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
+            <ArrowForwardIosIcon />
           </Button>
         )
       }
@@ -100,7 +102,7 @@ const Decoded = () => {
   ]
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, minHeight:'750px' }}>
+      <Paper sx={{ boxShadow: 3, minHeight: '750px' }}>
         <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
             sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
@@ -109,9 +111,20 @@ const Decoded = () => {
             checked={checked}
             columns={columns}
             rows={rows}
+            disableColumnSelector
+            disableDensitySelector
+            component={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: {
+                csvOptions: { disableToolbarButton: true },
+                printOptions: { disableToolbarButton: true },
+                showQuickFilter: true,
+                quickFilterProps: { debounceMs: 250 },
+              },
+            }}
           />
         </Box>
-      </Paper >{openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={true} showName={false} />}
+      </Paper >{openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={false} showName={false} />}
 
     </Box >
   )
@@ -153,7 +166,7 @@ Decoded.getLayout = function getLayout({ children }) {
   }
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

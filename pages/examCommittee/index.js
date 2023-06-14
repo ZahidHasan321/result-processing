@@ -2,7 +2,7 @@ import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import Layout from "@/component/layout/layout";
 import { committeePages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import { getSession, useSession } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Loading from "../loading";
 
 
 
@@ -82,12 +83,12 @@ const Home = () => {
     },
     {
       field: "enter",
-      headerName: "Enter",
+      headerName: "Open",
       width: 90,
       renderCell: (params) => {
         return (
-          <Button sx={{ bgcolor: 'lightgreen', ":hover": { bgcolor: 'lightgreen' } }} onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
-            <NavigateNextIcon />
+          <Button onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
+            <ArrowForwardIosIcon />
           </Button>
         )
       }
@@ -139,7 +140,7 @@ Home.getLayout = function getLayout({children}) {
   const {data, status} = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

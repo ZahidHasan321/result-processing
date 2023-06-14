@@ -3,8 +3,8 @@ import MarksheetDialog from "@/component/dialog/marksheetDialog";
 import Layout from "@/component/layout/layout";
 import { examinerPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Typography } from "@mui/material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Typography  from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { getSession, useSession } from "next-auth/react";
 import Router from "next/router";
 import { useEffect, useState } from "react";
+import Loading from "../loading";
 
 
 
@@ -57,7 +58,7 @@ const History = () => {
       field: "course_code",
       headerName: "Course Code",
       minWidth: 200,
-      flex: 1
+      
     },
     {
       field: "course_name",
@@ -69,44 +70,40 @@ const History = () => {
     {
       field: "semester",
       headerName: "Semester",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 150,
+    
       valueFormatter: ({ value }) => formatOrdinals(value)
     },
     {
       field: "exam_session",
       headerName: "Exam Session",
-      minWidth: 200,
-      flex: 1
+      minWidth: 150,
     },
     {
       field: "set_number",
       headerName: "Set",
-      minWidth: 200,
-      flex: 1
+      minWidth: 150,
     },
     {
       field: "assigned_date",
       headerName: "Assigned Date",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 250,
       valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
     },
     {
       field: "submit_date",
       headerName: "Submit Date",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 250,
       valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
     },
     {
       field: "enter",
-      headerName: "Enter",
+      headerName: "Open",
       width: 100,
       renderCell: (params) => {
         return (
-          <Button sx={{ bgcolor: 'lightgreen', ":hover": { bgcolor: 'lightgreen' } }} onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
-            <NavigateNextIcon />
+          <Button onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
+            <ArrowForwardIosIcon />
           </Button>
         )
       }
@@ -152,7 +149,7 @@ History.getLayout = function getLayout({ children }) {
   const { data, status } = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {
