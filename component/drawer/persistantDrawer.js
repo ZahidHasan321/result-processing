@@ -22,6 +22,7 @@ import Link from "next/link";
 import * as React from 'react';
 import MenuAppBar from '../appbar/appbar';
 import { useSession } from 'next-auth/react';
+import useDrawerStore from '@/store/store';
 
 const drawerWidth = 240;
 
@@ -77,15 +78,12 @@ const linkStyle = {
 
 export default function PersistentDrawerLeft({ children, pages, query, idx }) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [openCommittee, setOpenCommittee] = React.useState(false);
-  const [openExaminer, setOpenExaminer] = React.useState(false);
-  const [openTeacher, setOpenTeacher] = React.useState(false);
+  const {drawerState, toggleDrawer, committeeState, toggleCommittee, examinerState, toggleExaminer, teacherState, toggleTeacher} = useDrawerStore()
 
   const { status, data } = useSession();
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    toggleDrawer()
   };
 
 
@@ -100,7 +98,7 @@ export default function PersistentDrawerLeft({ children, pages, query, idx }) {
     return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <MenuAppBar idx={idx} onAppbarClick={() => setOpen(true)} pages={pages} query={query} open={open} />
+        <MenuAppBar idx={idx} onAppbarClick={toggleDrawer} pages={pages} query={query} open={drawerState} />
         <Drawer
           sx={{
             width: drawerWidth,
@@ -112,7 +110,7 @@ export default function PersistentDrawerLeft({ children, pages, query, idx }) {
           }}
           variant="persistent"
           anchor="left"
-          open={open}
+          open={drawerState}
         >
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
@@ -131,14 +129,14 @@ export default function PersistentDrawerLeft({ children, pages, query, idx }) {
               </ListItemButton>
               <Divider />
             </Link>
-            <ListItemButton onClick={() => setOpenCommittee(!openCommittee)}>
+            <ListItemButton onClick={toggleCommittee}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary="Exam Committee" />
-              {openCommittee ? <ExpandLess /> : <ExpandMore />}
+              {committeeState ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Collapse in={openCommittee} timeout="auto" unmountOnExit>
+            <Collapse in={committeeState} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <Link style={linkStyle} href='/examCommittee' >
                   <ListItemButton sx={{ pl: 4 }}>
@@ -162,14 +160,14 @@ export default function PersistentDrawerLeft({ children, pages, query, idx }) {
             </Collapse>
 
 
-            <ListItemButton onClick={() => setOpenExaminer(!openExaminer)}>
+            <ListItemButton onClick={toggleExaminer}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary="Examiner" />
-              {openExaminer ? <ExpandLess /> : <ExpandMore />}
+              {examinerState ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Collapse in={openExaminer} timeout="auto" unmountOnExit>
+            <Collapse in={examinerState} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <Link style={linkStyle} href='/examiner' >
                   <ListItemButton sx={{ pl: 4 }}>
@@ -193,14 +191,14 @@ export default function PersistentDrawerLeft({ children, pages, query, idx }) {
             </Collapse>
 
 
-            <ListItemButton onClick={() => setOpenTeacher(!openTeacher)}>
+            <ListItemButton onClick={toggleTeacher}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary="Course Teacher" />
-              {openTeacher ? <ExpandLess /> : <ExpandMore />}
+              {teacherState ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Collapse in={openTeacher} timeout="auto" unmountOnExit>
+            <Collapse in={teacherState} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <Link style={linkStyle} href='/courseTeacher' >
                   <ListItemButton sx={{ pl: 4 }}>
@@ -287,7 +285,7 @@ export default function PersistentDrawerLeft({ children, pages, query, idx }) {
           </Collapse> */}
           </List>
         </Drawer>
-        <Main open={open}>
+        <Main open={drawerState}>
           <DrawerHeader />
           {children}
         </Main>
