@@ -89,17 +89,14 @@ const CATMdialog = (props) => {
         {
             field: "no",
             headerName: "No",
-            minWidth: 100,
-            flex: 1,
+            minWidth: 50,
             filterable: false,
             renderCell: (index) => index.api.getRowIndex(index.row.roll) + 1,
-            flex: 1
         },
         {
             field: "roll",
             headerName: "Roll No",
-            minWidth: 100,
-            flex: 1
+            minWidth: 150
         },
         {
             field: "name",
@@ -110,16 +107,15 @@ const CATMdialog = (props) => {
         {
             field: "ct",
             headerName: "ClassTest(13.5)",
-            minWidth: 120,
-            flex: 1,
+            minWidth: 200,
             editable: editableData,
             preProcessEditCellProps
         },
         {
             field: "attendance",
             headerName: "Attendace(7.5)",
-            minWidth: 120,
-            flex: 1,
+            minWidth: 250,
+            flex:1,
             editable: editableData,
             preProcessEditCellProps
         },
@@ -127,7 +123,6 @@ const CATMdialog = (props) => {
             field: "total",
             headerName: "Total(21)",
             minWidth: 120,
-            flex: 1,
             valueGetter: getTotal
         }
     ]

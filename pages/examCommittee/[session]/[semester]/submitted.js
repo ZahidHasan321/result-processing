@@ -55,7 +55,6 @@ const Submitted = () => {
       field: "course_code",
       headerName: "Course Code",
       minWidth: 200,
-      flex: 1
     },
     {
       field: "course_name",
@@ -67,20 +66,17 @@ const Submitted = () => {
       field: "semester",
       headerName: "Semester",
       minWidth: 200,
-      flex: 1,
       valueFormatter: ({ value }) => formatOrdinals(value)
     },
     {
       field: "set_number",
       headerName: "Set",
       minWidth: 200,
-      flex: 1
     },
     {
       field: "submit_date",
       headerName: "Submit Date",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 250,
       valueFormatter: (params) => dayjs(params.value).format('DD/MM/YYYY'),
     },
     {

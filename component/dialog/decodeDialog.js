@@ -65,7 +65,8 @@ const DecodeDialog = (props) => {
 
 
     useEffect(() => {
-        if (submittedData) {
+        if (submittedData && submittedData.length > 0) {
+            var list = []
             submittedData.map((item) => {
                 const found = list.findIndex(element => element.code === item.code)
 
@@ -146,15 +147,13 @@ const DecodeDialog = (props) => {
         {
             field: "code",
             headerName: "Paper Code",
-            minWidth: 150,
-            flex: 1
+            minWidth: 120,
         },
 
         {
             field: "roll",
             headerName: "Roll No",
             minWidth: 150,
-            flex: 1,
             editable: editableData,
             preProcessEditCellProps
         },
@@ -168,68 +167,67 @@ const DecodeDialog = (props) => {
         {
             field: "Q1",
             headerName: "Q1",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q2",
             headerName: "Q2",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q3",
             headerName: "Q3",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q4",
             headerName: "Q4",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q5",
             headerName: "Q5",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q6",
             headerName: "Q6",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q7",
             headerName: "Q7",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q8",
             headerName: "Q8",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q9",
             headerName: "Q9",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Q10",
             headerName: "Q10",
-            minWidth: 70,
-            flex: 1,
+            minWidth: 30,
+            flex:1
         },
         {
             field: "Total",
             headerName: "Total",
             minWidth: 70,
-            flex: 1,
             valueGetter: getTotal
         },
     ]

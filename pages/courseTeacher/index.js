@@ -54,8 +54,7 @@ const Home = () => {
     {
       field: "course_code",
       headerName: "Course Code",
-      minWidth: 200,
-      flex: 1
+      minWidth: 200
     },
     {
       field: "course_name",
@@ -68,27 +67,23 @@ const Home = () => {
       field: "semester",
       headerName: "Semester",
       minWidth: 200,
-      flex: 1,
       valueFormatter: ({ value }) => formatOrdinals(value)
     },
     {
       field: "exam_session",
       headerName: "Exam Session",
-      minWidth: 200,
-      flex: 1
+      minWidth: 200
     },
     {
       field: "assigned_date",
       headerName: "Assigned Date",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 250,
       valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
     },
     {
       field: "submit_date",
       headerName: "Submit_date",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 250,
       valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
       hide:true
     },
