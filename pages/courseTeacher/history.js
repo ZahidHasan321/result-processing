@@ -28,7 +28,7 @@ const History = () => {
 
   const getList = async () => {
     const { user } = await getSession();
-    await fetch('/api/courseTeacher/getHistory', {
+  await fetch('/api/courseTeacher/getHistory', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

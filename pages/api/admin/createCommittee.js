@@ -39,14 +39,14 @@ export default async function (req, res) {
                     text: 'SELECT insert_into_sem_course($1, $2)',
                     values: [param.semester, param.session]
                 }
-            ).catch(err => console.log(err));
+            )
             
             await client.query(
                 {
                     text: 'INSERT INTO exam_info(exam_session, semester) VALUES($1, $2) ',
                     values: [param.session, param.semester]
                 }
-            ).catch(err => console.log(err));
+            )
 
             await client.query(
                 {

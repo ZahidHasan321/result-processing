@@ -60,6 +60,10 @@ export const semesterPages = [
   {
     routename: "Decoded",
     routepath: "/examCommittee/[session]/[semester]/decoded"
+  },
+  {
+    routename: "CATM",
+    routepath: "/examCommittee/[session]/[semester]/catm"
   }
 ]
 

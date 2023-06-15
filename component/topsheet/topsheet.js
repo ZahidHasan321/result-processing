@@ -133,37 +133,9 @@ const Topsheet = (props) => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <Button sx={{ ml: 'auto', mr: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant='contained' onClick={handleClick}>Submit</Button>
-            
-            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2, mb: 2 }}>
-                <Typography fontSize={15} sx={{ mr: 1, mt:3}}>DEPARTMENT:</Typography>
-                <TextField
-                    sx={{mt:2}}
-                    variant="standard"
-                />
-                <BasicSelect sx={{ width: 180, alignSelf: 'flex-start', ml: 3 }} list={periodList} value={period} onChange={(value) => setPeriod(value)} label="Time Period" />
-            </Box>
-
-
-            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2 }}>
-                <Typography fontSize={15} sx={{ mr: 1 }}>TOTAL ANSWER SHEET:</Typography>
-                <TextField
-                    sx={{ width: 80}}
-                    type='number'
-                    variant="standard"
-                />
-            </Box>
-
-            <Box sx={{ display: 'flex', alignSelf: 'flex-start', ml: 2}}>
-                <Typography fontSize={15} sx={{ mr: 1 }}>TOTAL EXTRA SHEET:</Typography>
-                <TextField
-                    sx={{ width: 80 }}
-                    type='number'
-                    variant="standard"
-                />
-            </Box>
 
             <Paper sx={{ m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Present Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2 }} fontSize={16}>IDs of Present Students</Typography>
                 {presentData && <ChipArray show={true} list={presentData} onDelete={(data) => handlePresentDelete(data, 'present')} updateData={updatePresentData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',
@@ -172,7 +144,7 @@ const Topsheet = (props) => {
             </Paper>
 
             <Paper sx={{ m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Absent Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2}} fontSize={16}>IDs of Absent Students</Typography>
                 {absentData && <ChipArray list={absentData} onDelete={(data) => handlePresentDelete(data, 'absent')} updateData={updateAbsentData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',
@@ -181,7 +153,7 @@ const Topsheet = (props) => {
             </Paper>
 
             <Paper sx={{ m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center' }} fontSize={16}>IDs of Expelled Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2 }} fontSize={16}>IDs of Expelled Students</Typography>
                 {expelledData && <ChipArray list={expelledData} onDelete={(data) => handlePresentDelete(data, 'expelled')} updateData={updateExpelledData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',

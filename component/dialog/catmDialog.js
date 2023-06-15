@@ -140,7 +140,10 @@ const CATMdialog = (props) => {
                     return { no: idx + 1, ...item }
                 }))
 
-                setMarks(list);
+                if(list && list.length > 1)
+                    setMarks(list);
+                else
+                    getStudentID()
             });
     }
 
@@ -157,31 +160,27 @@ const CATMdialog = (props) => {
                 const rolls = data.map((item) => {
                     return { roll: item.roll, name: item.name, ct: null, attendance: null }
                 })
-
                 setMarks(rolls)
             })
     }
 
     useEffect(() => {
-        if (!editableData) {
-            getMarks()
-            return;
-        }
-
         const item = JSON.parse(localStorage.getItem(JSON.stringify(data) + 'catm'))
 
-        if (item && item.length > 0) {
-            if (item[0].roll != null)
-                setMarks(item);
-        }
-        else if (marks.length < 1) {
+        if(data.submit_date == null){
             getStudentID();
         }
+        else if (item && item.length > 0) {
+                setMarks(item);
+        }
+        else
+            getMarks() 
+        
     }, [])
 
 
     useEffect(() => {
-        if (editableData == true && marks.length > 0 && marks[0].roll != null && editableData) {
+        if (editableData == true && marks.length > 0) {
             localStorage.setItem(JSON.stringify(data) + 'catm', JSON.stringify(marks));
         }
     }, [marks])
