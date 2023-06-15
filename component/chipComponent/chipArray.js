@@ -7,6 +7,7 @@ import Snackbar from "@mui/material/Snackbar"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import { useEffect, useState } from "react"
+import ConfirmDialog from "../dialog/ConfirmDialog"
 
 const ChipArray = (props) => {
     const { list, updateData, sx, onDelete, show } = props;
@@ -15,6 +16,9 @@ const ChipArray = (props) => {
     const [snackbar, setSnackbar] = useState()
     const [startValue, setStartValue] = useState('')
     const [endValue, setEndValue] = useState('')
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [openClear, setOpenClear] = useState(false);
+    const [params, setParams] = useState(null);
 
 
     const handleSubmit = (event) => {
@@ -31,7 +35,22 @@ const ChipArray = (props) => {
 
     }
 
-    const handleDelete = (item) => {
+
+    const handleOnClear = () => {
+        setOpenClear(true)
+    }
+
+    const handleOnClearConfirm = () => {
+        setArray([]);
+        updateData([]);
+    }
+
+    const handleOnDelete = (item) => {
+        setOpenConfirm(true);
+        setParams(item)
+    }
+
+    const handleOnDeleteConfirm = (item) => {
         setArray((students) => students.filter((student) => student.roll !== item.roll));
         onDelete(item.roll);
     }
@@ -67,7 +86,7 @@ const ChipArray = (props) => {
             <Box component='form' onSubmit={handleSubmit} noValidate sx={{ m: 3, display: 'flex', mt: 5 }}>
                 <Box sx={show && { display: 'flex', flexDirection: 'column' }}>
                     <TextField
-                        sx={{ maxWidth: 200 }}
+                        sx={{ maxWidth: 250 }}
                         autoComplete="off"
                         helperText='Enter student roll'
                         id="presentRolls"
@@ -77,7 +96,7 @@ const ChipArray = (props) => {
                     />
                     <Box sx={{ mb: 2 }}>
                         <Button type="submit" variant="contained" >Enter</Button>
-                        <Button onClick={() => { setArray([]); updateData(array) }} sx={{ ml: 2 }}>Clear</Button>
+                        <Button onClick={handleOnClear} sx={{ ml: 2 }}>Clear</Button>
                     </Box>
 
                     {show && <Box> <Box sx={{ display: 'flex' }}>
@@ -123,7 +142,7 @@ const ChipArray = (props) => {
                         border: 1,
                         p: .2,
                         mb: 2,
-                        ml: 0,
+                        ml: show ? 0 : 15,
                         mr: 3,
                         mt: 1
 
@@ -137,7 +156,7 @@ const ChipArray = (props) => {
                                 key={item.roll}
                                 onDelete={(e) => {
                                     e.preventDefault();
-                                    handleDelete(item)
+                                    handleOnDelete(item)
                                 }}
                             />
                         );
@@ -145,7 +164,8 @@ const ChipArray = (props) => {
                     }
                 </Box>
             </Box>
-
+            <ConfirmDialog open={openClear} message={'Are you sure you want to clear?'} onConfirm={handleOnClearConfirm} onClose={() => setOpenClear(false)} label={'Clear'} />
+            <ConfirmDialog open={openConfirm} message={'Are you sure you want to delete?'} onConfirm={handleOnDeleteConfirm} params={params} onClose={() => setOpenConfirm(false)} label={'Delete'} />
             {!!snackbar && (
                 <Snackbar
                     open

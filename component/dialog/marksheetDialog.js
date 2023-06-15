@@ -12,6 +12,7 @@ import Snackbar from "@mui/material/Snackbar";
 import { Typography } from '@mui/material';
 import { useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
+import ConfirmDialog from './ConfirmDialog';
 
 
 
@@ -22,6 +23,7 @@ const MarksheetDialog = (props) => {
     const [snackbar, setSnackbar] = useState(null);
     const [submittedData, setSubmittedData] = useState(null);
     const [openBackdrop, setOpenBackdrop] = useState(true);
+    const [openConfirm, setOpenConfirm] = useState(false);
 
     const handleCloseSnackbar = () => setSnackbar(null);
 
@@ -30,6 +32,11 @@ const MarksheetDialog = (props) => {
     }
 
     const handleOnSubmit = () => {
+        setOpenConfirm(true);
+    }
+
+
+    const handleOnConfirm = () => {
         if (marks) {
             fetch('/api/examiner/setMark', {
                 method: 'POST',
@@ -103,7 +110,7 @@ const MarksheetDialog = (props) => {
     }, []);
 
     const ProcessRowUpdate = async (newRow, oldRow) => {
-        if(JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
+        if (JSON.stringify(newRow) === JSON.stringify(oldRow)) return oldRow;
         if (marks) {
             const temp = marks.map((item) => {
                 if (item.code == newRow.code) {
@@ -238,14 +245,14 @@ const MarksheetDialog = (props) => {
         <Box>
             <Dialog TransitionComponent={Grow} fullWidth maxWidth='xl' open={open} sx={{ ...sx, backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 750 } }}>
                 <Button size='small' sx={{ width: 30, m: 1, ml: 'auto' }} onClick={handleOnClose}><CloseIcon htmlColor='red' /></Button>
-                
+
                 <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', }}>
                     <Typography fontWeight={'bold'} textAlign={'center'} fontSize={30} >Paper Marks</Typography>
                     <Typography textAlign={'center'} fontSize={20}>Course Name: {data.course_name}</Typography>
                     <Typography textAlign={'center'} fontSize={20}>Course Code: {data.course_code}</Typography>
                     <Typography textAlign={'center'} fontSize={20}> Session: {data.exam_session} </Typography>
                 </Box>
-                <Box sx={{ ml: 3, mr: 3, mb: 3, mt:2 , display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ ml: 5, mr: 5, mb: 3, mt: 2, display: 'flex', flexDirection: 'column' }}>
                     {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>}
                     {marks &&
                         <AntDesignGrid
@@ -261,6 +268,8 @@ const MarksheetDialog = (props) => {
                             disableIgnoreModificationsIfProcessingProps
                         />}
                 </Box>
+
+                <ConfirmDialog open={openConfirm} message={'Are you sure you want to submit?'} onConfirm={handleOnConfirm} onClose={() => setOpenConfirm(false)} label={'Submit'} />
 
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

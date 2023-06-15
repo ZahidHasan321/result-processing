@@ -3,12 +3,12 @@ import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Paper from "@mui/material/Paper"
 import Snackbar from "@mui/material/Snackbar"
-import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 
 import { useEffect, useState } from "react"
 import ChipArray from "../chipComponent/chipArray"
-import BasicSelect from "../selector/selector"
+import ConfirmDialog from "../dialog/ConfirmDialog"
+import { Alert } from "@mui/material"
 
 
 const periodList = [
@@ -25,6 +25,8 @@ const Topsheet = (props) => {
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState({ open: false, message: '' });
     const [period, setPeriod] = useState('');
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [snackbar, setSnackbar] = useState(null);
 
     const getList = async () => {
         await fetch('/api/examCommittee/semester/getTopsheet', {
@@ -70,7 +72,11 @@ const Topsheet = (props) => {
         setExpelledData([...array]);
     }
 
-    const handleClick = async () => {
+    const handleOnSubmit = () => {
+        setOpenConfirm(true);
+    }
+
+    const handleOnConfirm = async () => {
         const present = presentData.map((item) => {
             return item = { session: session, course: course, type: 'present', set: set, ...item }
         })
@@ -85,7 +91,7 @@ const Topsheet = (props) => {
 
         const list = present.concat(absent, expelled)
         if (list.length < 1) {
-            setOpen({ open: true, message: 'Cannot submit empty topsheet' })
+            setSnackbar({ children: 'Cannot submit empty topsheet', severiy:'error' })
             return;
         };
 
@@ -98,9 +104,7 @@ const Topsheet = (props) => {
         })
             .then(res => res.json())
             .then(data => {
-                if (data == 'ok') {
-                    setOpen({ open: true, message: 'Submitted Topsheet' })
-                }
+                setSnackbar(data)
             })
     }
 
@@ -132,7 +136,7 @@ const Topsheet = (props) => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <Button sx={{ ml: 'auto', mr: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant='contained' onClick={handleClick}>Submit</Button>
+            <Button sx={{ ml: 'auto', mr: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant='contained' onClick={handleOnSubmit}>Submit</Button>
 
             <Paper sx={{ m: 2, boxShadow: 2 }}>
                 <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2 }} fontSize={16}>IDs of Present Students</Typography>
@@ -160,7 +164,17 @@ const Topsheet = (props) => {
                     minHeight: '100px'
                 }} />}
             </Paper>
-            <Snackbar open={open.open} onClose={() => setOpen({ open: false, message: '' })} message={open.message} />
+            {!!snackbar && (
+                <Snackbar
+                    open
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    onClose={() => { setSnackbar(null) }}
+                    autoHideDuration={5000}
+                >
+                    <Alert {...snackbar} onClose={(() => { setSnackbar(null) })} />
+                </Snackbar>
+            )}
+            <ConfirmDialog open={openConfirm} message={'Are you sure you want to submit?'} onConfirm={handleOnConfirm} onClose={() => setOpenConfirm(false)} label={'Submit'} />
 
         </Box>
     )

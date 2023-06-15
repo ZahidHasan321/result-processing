@@ -11,6 +11,7 @@ import Grow from "@mui/material/Grow"
 
 import { useEffect, useState } from "react";
 import AutoCompleteTeacher from "../selector/autocompleteTeacher";
+import ConfirmDialog from "./ConfirmDialog"
 
 const ExaminerDialog = (props) => {
     const { open, onClose, semester, session, course } = props;
@@ -21,6 +22,8 @@ const ExaminerDialog = (props) => {
     const [loading, setLoading] = useState(false);
     const [List, setList] = useState([]);
     const [snackbar, setSnackbar] = useState(null);
+    const [openConfirm, setOpenConfirm] = useState(false);
+
     const getList = async () => {
         fetch('/api/admin/teacherList')
             .then(res => res.json())
@@ -67,12 +70,17 @@ const ExaminerDialog = (props) => {
         setLoading(true);
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleOnSubmit = (e) => {
+        e.preventDefault()
+        setOpenConfirm(true);
+    }
+
+    const handleOnConfirm = async () => {
         if (examinerA === null && examinerB === null && courseTeacher === null) {
             setSnackbar({ children: "Examiner cannot be left empty", severity: 'error' });
             return;
         }
+
         var f = false;
         if (examinerA != null && examinerB != null) {
             if (examinerA.id !== examinerB.id) {
@@ -84,7 +92,6 @@ const ExaminerDialog = (props) => {
                     },
                     body: JSON.stringify({ id: examinerA.id, session, course, set: 'A' })
                 })
-
 
                 await fetch('/api/examCommittee/semester/addExaminer', {
                     method: 'POST',
@@ -112,7 +119,8 @@ const ExaminerDialog = (props) => {
                 body: JSON.stringify({ id: courseTeacher.id, session, course })
             })
 
-            if (f === false) setSnackbar({ children: "Course Teacher assigned", severity: 'success' })
+            if (f === false) 
+                setSnackbar({ children: "Course Teacher assigned", severity: 'success' })
         }
     }
     useEffect(() => {
@@ -130,7 +138,7 @@ const ExaminerDialog = (props) => {
                 <Container component='main' maxWidth='lg'>
 
                     {loading &&
-                        <Box component='form' onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box component='form' onSubmit={handleOnSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                             <AutoCompleteTeacher value={examinerA ? examinerA : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerA(value)} label="SET-A Examiner" />
                             <AutoCompleteTeacher value={examinerB ? examinerB : null} sx={{ width: '350px', mb: 3 }} list={List} onChange={(value) => setExaminerB(value)} label="SET-B Examiner" />
                             <Typography fontWeight={'bold'}>Add Course Teacher</Typography>
@@ -140,6 +148,7 @@ const ExaminerDialog = (props) => {
                     }
                 </Container>
             </Box>
+            <ConfirmDialog open={openConfirm} message={'Are you sure you want to submit?'} onConfirm={handleOnConfirm} onClose={() => setOpenConfirm(false)} label={'Submit'} />
             {!!snackbar && (
                 <Snackbar
                     open

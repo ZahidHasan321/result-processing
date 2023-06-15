@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import UndoIcon from '@mui/icons-material/Undo';
 import Snackbar from "@mui/material/Snackbar"
 import Alert from "@mui/material/Alert"
+import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 
 const CATM = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -23,6 +24,8 @@ const CATM = () => {
   const [checked, setChecked] = useState(false);
   const [clickedRow, setClickedRow] = useState(null);
   const [snackbar, setSnackbar] = useState(null);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [params, setParams] = useState(null);
 
   const router = useRouter()
   const query = router.query
@@ -46,6 +49,12 @@ const CATM = () => {
       .then(data => setList(data))
 
     setChecked(true);
+  }
+
+
+  const handleOnUndo = (param) => {
+    setOpenConfirm(true);
+    setParams(param)
   }
 
   const handleRowUndoClick = async (params) => {
@@ -99,7 +108,7 @@ const CATM = () => {
       valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
     },
     {
-      field: "enter",
+      field: "open",
       headerName: "Open",
       width: 100,
       renderCell: (params) => {
@@ -116,7 +125,7 @@ const CATM = () => {
       width: 100,
       renderCell: (params) => {
         return (
-          <Button onClick={(event) => { event.preventDefault(); handleRowUndoClick(params) }}>
+          <Button onClick={(event) => { event.preventDefault(); handleOnUndo(params) }}>
             <UndoIcon />
           </Button>
         )
@@ -152,6 +161,8 @@ const CATM = () => {
         </Box>
       </Paper>
       {openDialog && <CATMdialog open={openDialog} onClose={() => setOpenDialog(false)} data={clickedRow} editableData={false} />}
+      <ConfirmDialog open={openConfirm} message={'Are you sure you want to Undo?'} onConfirm={handleRowUndoClick} params={params} onClose={() => setOpenConfirm(false)} label={'Confirm'} />
+
       {!!snackbar && (
         <Snackbar
           open

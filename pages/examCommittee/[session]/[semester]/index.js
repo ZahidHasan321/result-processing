@@ -132,12 +132,16 @@ const Dashboard = () => {
               label="Start Date"
               sx={{ mr: 3 }}
               format="DD/MM/YYYY"
+              showDaysOutsideCurrentMonth
+              views={["day", "month","year"]}
             />
 
             <DatePicker value={endDate} onChange={value => { setEndDate(value), endDateset(value) }}
               label="End Date"
               sx={{ mr: 3 }}
               format="DD/MM/YYYY"
+              showDaysOutsideCurrentMonth
+              views={["day", "month","year"]}
             />
             <a href={`/examCommittee/${query.session}/${query.semester}/tabulationPDF`} target="_blank" style={{ marginRight: '10px' }}> <Button variant="contained">Tabularsheet PDF</Button></a>
             <a href={`/examCommittee/${query.session}/${query.semester}/gradesheetPDF`} target="_blank"> <Button variant="contained">Gradesheet PDF</Button></a>

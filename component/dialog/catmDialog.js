@@ -12,6 +12,7 @@ import { useCallback, useEffect, useState } from "react"
 import AntDesignGrid from "../customDatagrid/customDatagrid"
 import PublishIcon from '@mui/icons-material/Publish';
 import { GridToolbar } from "@mui/x-data-grid"
+import ConfirmDialog from "./ConfirmDialog"
 
 const CATMdialog = (props) => {
     const { open, onClose, data, editableData, sx } = props;
@@ -19,6 +20,7 @@ const CATMdialog = (props) => {
     const [snackbar, setSnackbar] = useState(null);
     const [checked, setChecked] = useState(false);
     const [openBackdrop, setOpenBackdrop] = useState(true);
+    const [openConfirm, setOpenConfirm] = useState(false);
 
 
     const getTotal = (params) => {
@@ -28,7 +30,11 @@ const CATMdialog = (props) => {
         return null;
     }
 
-    const handleOnSubmit = async () => {
+    const handleOnSubmit = () =>{
+        setOpenConfirm(true);
+    }
+
+    const handleOnConfirm = async () => {
 
         await fetch('/api/courseTeacher/setMarks', {
             method: 'POST',
@@ -140,7 +146,7 @@ const CATMdialog = (props) => {
                     return { no: idx + 1, ...item }
                 }))
 
-                if(list && list.length > 1)
+                if (list && list.length > 1)
                     setMarks(list);
                 else
                     getStudentID()
@@ -167,15 +173,15 @@ const CATMdialog = (props) => {
     useEffect(() => {
         const item = JSON.parse(localStorage.getItem(JSON.stringify(data) + 'catm'))
 
-        if(data.submit_date == null){
+        if (data.submit_date == null) {
             getStudentID();
         }
         else if (item && item.length > 0) {
-                setMarks(item);
+            setMarks(item);
         }
         else
-            getMarks() 
-        
+            getMarks()
+
     }, [])
 
 
@@ -197,7 +203,7 @@ const CATMdialog = (props) => {
             <Typography textAlign={'center'} fontSize={20}>Course Name: {data.course_name}</Typography>
             <Typography textAlign={'center'} fontSize={20}>Course Code: {data.course_code}</Typography>
             <Typography textAlign={'center'} fontSize={20}> Session: {data.exam_session} </Typography>
-            <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column', mt: 2}}>
+            <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column', mt: 2 }}>
                 {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit <PublishIcon /></Button>}
                 <AntDesignGrid
                     sx={{ boxShadow: 3, fontSize: '16px' }}
@@ -223,12 +229,14 @@ const CATMdialog = (props) => {
                     }}
                 />
             </Box>
+            <ConfirmDialog open={openConfirm} message={'Are you sure you want to submit?'} onConfirm={handleOnConfirm} onClose={() => setOpenConfirm(false)} label={'Submit'} />
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={openBackdrop}
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
+
             {!!snackbar && (
                 <Snackbar
                     open

@@ -49,7 +49,7 @@ const TopsheetDialog = (props) => {
                     <Tab value={1} label="Set B" />
                 </Tabs>
 
-                    <Box borderTop={1} boxShadow={2} marginBottom={2}>
+                    <Box borderTop={1} boxShadow={2} marginBottom={2} sx={{bgcolor: '#e7ebf0'}}>
                         <TabPanel value={tab} index={0}>
                             <Topsheet set="A" course={course} semester={semester} session={session} />
                         </TabPanel>

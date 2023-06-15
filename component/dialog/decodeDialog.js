@@ -7,13 +7,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import Grow from "@mui/material/Grow";
 import Snackbar from "@mui/material/Snackbar";
-
-
 import { Typography } from '@mui/material';
+import { GridToolbar } from '@mui/x-data-grid';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
-import { GridToolbar } from '@mui/x-data-grid';
+import ConfirmDialog from './ConfirmDialog';
 
 
 
@@ -35,6 +34,7 @@ const DecodeDialog = (props) => {
     const [snackbar, setSnackbar] = useState(null);
     const [submittedData, setSubmittedData] = useState(null);
     const [openBackdrop, setOpenBackdrop] = useState(true);
+    const [openConfirm, setOpenConfirm] = useState(false);
 
     const handleCloseSnackbar = () => setSnackbar(null);
 
@@ -42,7 +42,10 @@ const DecodeDialog = (props) => {
         onClose();
     }
     const handleOnSubmit = () => {
+        setOpenConfirm(true)
+    }
 
+    const handleOnConfirm = () => {
         if (marks) {
             fetch('/api/examCommittee/semester/submitDecode', {
                 method: 'POST',
@@ -62,9 +65,7 @@ const DecodeDialog = (props) => {
 
 
     useEffect(() => {
-        const savedData = JSON.parse(localStorage.getItem(data.exam_session + data.course_code + data.set_number + 'decode'));
-        var list = [];
-        if (submittedData && !savedData) {
+        if (submittedData) {
             submittedData.map((item) => {
                 const found = list.findIndex(element => element.code === item.code)
 
@@ -84,6 +85,7 @@ const DecodeDialog = (props) => {
         setOpenBackdrop(false);
         setChecked(true)
     }, 500)
+
 
     useEffect(() => {
         const savedData = JSON.parse(localStorage.getItem(data.exam_session + data.course_code + data.set_number + 'decode'));
@@ -243,7 +245,7 @@ const DecodeDialog = (props) => {
                     <Typography textAlign={'center'} fontSize={20}>Course Code: {data.course_code}</Typography>
                     <Typography textAlign={'center'} fontSize={20}> Session: {data.exam_session} </Typography>
                 </Box>
-                <Box sx={{ ml: 3, mr: 3, mb: 3, display: 'flex', flexDirection: 'column', mt: 2}}>
+                <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column', mt: 2 }}>
                     {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>}
                     {marks &&
                         <AntDesignGrid
@@ -275,6 +277,9 @@ const DecodeDialog = (props) => {
                 >
                     <CircularProgress color="inherit" />
                 </Backdrop>
+
+                <ConfirmDialog open={openConfirm} message={'Are you sure you want to submit?'} onConfirm={handleOnConfirm} onClose={() => setOpenConfirm(false)} label={'Submit'} />
+                
                 {!!snackbar && (
                     <Snackbar
                         open

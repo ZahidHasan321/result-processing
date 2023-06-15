@@ -60,6 +60,7 @@ const StudentList = () => {
       });
     setStudentList(studentList.filter((row) => row.roll !== id));
   };
+  
 
   const handleCancelClick = (id) => () => {
     setRowModesModel({
@@ -215,6 +216,7 @@ const StudentList = () => {
 
     if (newRow.name != '' && newRow.hall != '' && newRow.roll != '') {
       setStudentList(studentList.map(x => x.roll === newRow.roll ? newRow : x));
+
       fetch('/api/admin/student/updateStudent', {
         method: 'POST',
         headers: {

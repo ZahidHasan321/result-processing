@@ -248,7 +248,7 @@ const Home = () => {
             </Box>
           </Slide>
 
-          <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} />
+          <ConfirmDialog open={openConfirm} onClose={() => { setOpenConfirm(false) }} onConfirm={handleConfirmSubmit} message={'Are you sure you want to delete?'} label={'Delete'} />
           <CommitteeDialog open={open} onClose={handleClose} list={teacherlist} />
 
         </Box>
