@@ -3,8 +3,8 @@ import CATMdialog from "@/component/dialog/catmDialog";
 import Layout from "@/component/layout/layout";
 import { courseTeacher } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Typography } from "@mui/material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Typography  from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { getSession, useSession } from "next-auth/react";
 import Router from "next/router";
 import { useEffect, useState } from "react";
+import Loading from "../loading";
 
 const History = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -27,7 +28,7 @@ const History = () => {
 
   const getList = async () => {
     const { user } = await getSession();
-    await fetch('/api/courseTeacher/getHistory', {
+  await fetch('/api/courseTeacher/getHistory', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -87,12 +88,12 @@ const History = () => {
     },
     {
       field: "enter",
-      headerName: "Enter",
+      headerName: "Open",
       width: 100,
       renderCell: (params) => {
         return (
-          <Button sx={{ bgcolor: 'lightgreen', ":hover": { bgcolor: 'lightgreen' } }} onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
-            <NavigateNextIcon />
+          <Button onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
+            <ArrowForwardIosIcon />
           </Button>
         )
       }
@@ -137,7 +138,7 @@ History.getLayout = function getLayout({ children }) {
   const { data, status } = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

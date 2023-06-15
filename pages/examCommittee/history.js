@@ -2,7 +2,7 @@ import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import Layout from "@/component/layout/layout";
 import { committeePages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grow from "@mui/material/Grow";
@@ -12,6 +12,7 @@ import { GridToolbar } from "@mui/x-data-grid";
 import { getSession, useSession } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Loading from "../loading";
 
 
 
@@ -85,12 +86,12 @@ const History = () => {
     },
     {
       field: "enter",
-      headerName: "Enter",
+      headerName: "Open",
       width: 90,
       renderCell: (params) => {
         return (
           <Button onClick={(event) => { event.preventDefault();handleRowClick(params)}}>
-          <NavigateNextIcon />
+          <ArrowForwardIosIcon />
           </Button>
         )
       }
@@ -143,7 +144,7 @@ History.getLayout = function getLayout({children}) {
   const {data, status} = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

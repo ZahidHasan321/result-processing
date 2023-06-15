@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Loading from "@/pages/loading";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -131,12 +132,16 @@ const Dashboard = () => {
               label="Start Date"
               sx={{ mr: 3 }}
               format="DD/MM/YYYY"
+              showDaysOutsideCurrentMonth
+              views={["day", "month","year"]}
             />
 
             <DatePicker value={endDate} onChange={value => { setEndDate(value), endDateset(value) }}
               label="End Date"
               sx={{ mr: 3 }}
               format="DD/MM/YYYY"
+              showDaysOutsideCurrentMonth
+              views={["day", "month","year"]}
             />
             <a href={`/examCommittee/${query.session}/${query.semester}/tabulationPDF`} target="_blank" style={{ marginRight: '10px' }}> <Button variant="contained">Tabularsheet PDF</Button></a>
             <a href={`/examCommittee/${query.session}/${query.semester}/gradesheetPDF`} target="_blank"> <Button variant="contained">Gradesheet PDF</Button></a>
@@ -261,7 +266,7 @@ Dashboard.getLayout = function getLayout({ children }) {
   const { data, status } = useSession()
 
   if (status === 'loading') {
-    return <p>loading</p>
+    return <Loading />
   }
 
   if (status === 'unauthenticated') {

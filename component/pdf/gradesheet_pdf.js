@@ -109,7 +109,7 @@ const GradesheetPDF = ({ semester, session, tabularData, examInfo }) => {
                                             </View>
                                         </View>
 
-                                        <View style={{ display: "flex", flexDirection: 'column', fontSize: '12px', marginLeft: '20px' }}>
+                                        <View style={{ display: "flex", flexDirection: 'column', fontSize: '12px', marginLeft: '20px', marginTop:'10px' }}>
                                             <View style={{display:'flex', flexDirection:'row'}}>
                                                 <Text style={{marginRight:'6.7px'}}>Serial No. </Text>
                                                 <Text> :  R{idx + 1}</Text>
@@ -241,7 +241,7 @@ const GradesheetPDF = ({ semester, session, tabularData, examInfo }) => {
                                         })
                                     }
                                 </View>
-                                <View style={{ display: 'flex', flexDirection: 'column', fontSize: '12px', marginLeft: '60px' }}>
+                                <View style={{ display: 'flex', flexDirection: 'column', fontSize: '12px', marginLeft: '60px', marginTop:'5px' }}>
                                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                                         <Text style={{ marginRight: '20px', fontFamily: 'Times-Bold' }}>Total Credit Offered : {tco.toFixed(2)}</Text>
 

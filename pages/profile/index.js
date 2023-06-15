@@ -1,11 +1,14 @@
 import Layout from "@/component/layout/layout";
-import { Alert, Button, Paper, Snackbar, TextField } from "@mui/material";
+import Alert  from "@mui/material/Alert";
+import Button  from "@mui/material/Button";
+import Paper  from "@mui/material/Paper";
+import Snackbar  from "@mui/material/Snackbar";
+import TextField  from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
-
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import Loading from "../loading";
 
 const Profile = () => {
   const { status, data } = useSession();

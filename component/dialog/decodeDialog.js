@@ -1,18 +1,18 @@
 import CloseIcon from '@mui/icons-material/Close';
-import Alert from "@mui/material/Alert"
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
-import Backdrop from "@mui/material/Backdrop"
-import CircularProgress from "@mui/material/CircularProgress"
-import Snackbar from "@mui/material/Snackbar"
-import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
-import Grow from "@mui/material/Grow"
-
-
+import Alert from "@mui/material/Alert";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Dialog from "@mui/material/Dialog";
+import Grow from "@mui/material/Grow";
+import Snackbar from "@mui/material/Snackbar";
+import { Typography } from '@mui/material';
+import { GridToolbar } from '@mui/x-data-grid';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from "react";
 import AntDesignGrid from "../customDatagrid/customDatagrid";
-import { useSession } from 'next-auth/react';
+import ConfirmDialog from './ConfirmDialog';
 
 
 
@@ -34,6 +34,7 @@ const DecodeDialog = (props) => {
     const [snackbar, setSnackbar] = useState(null);
     const [submittedData, setSubmittedData] = useState(null);
     const [openBackdrop, setOpenBackdrop] = useState(true);
+    const [openConfirm, setOpenConfirm] = useState(false);
 
     const handleCloseSnackbar = () => setSnackbar(null);
 
@@ -41,47 +42,30 @@ const DecodeDialog = (props) => {
         onClose();
     }
     const handleOnSubmit = () => {
+        setOpenConfirm(true)
+    }
 
+    const handleOnConfirm = () => {
         if (marks) {
-            marks.map((item => {
-                var total = 0;
-                Object.entries(item).forEach(([key, value]) => {
-                    if (value != null && !isNaN(value) && key != 'roll' && key != 'code' && key != 'Total') {
-                        total = total + (+value);
-                    }
-                })
-
-                if (total == 0) total = null;
-
-                if (item.roll != null) {
-                    fetch('/api/examCommittee/semester/submitDecode', {
-                        method: 'POST',
-                        headers: {
-                            'content-type': 'application/json'
-                        },
-                        body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number, paperCode: item.code, roll: item.roll, total: total })
-                    })
-                }
-            }))
-
-            fetch('/api/examCommittee/semester/updateDecode', {
+            fetch('/api/examCommittee/semester/submitDecode', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number })
+                body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number, marks })
             })
+                .then(res => res.json())
+                .then(data => {
+                    onClose(data)
+                    if (data.serverity === 'success')
+                        localStorage.removeItem(data.exam_session + data.course_code + data.set_number + 'decode');
+                })
         }
-
-        onClose({ children: 'Succesfully Decoded', serverity: 'success' })
-        localStorage.clear(data.exam_session + data.course_code + data.set_number + 'decode');
     }
 
 
     useEffect(() => {
-        const savedData = JSON.parse(localStorage.getItem(data.exam_session + data.course_code + data.set_number + 'decode'));
-        var list = [];
-        if (submittedData && !savedData) {
+        if (submittedData) {
             submittedData.map((item) => {
                 const found = list.findIndex(element => element.code === item.code)
 
@@ -101,6 +85,7 @@ const DecodeDialog = (props) => {
         setOpenBackdrop(false);
         setChecked(true)
     }, 500)
+
 
     useEffect(() => {
         const savedData = JSON.parse(localStorage.getItem(data.exam_session + data.course_code + data.set_number + 'decode'));
@@ -251,14 +236,16 @@ const DecodeDialog = (props) => {
 
     return (
         <Box>
-            <Dialog TransitionComponent={Grow} fullWidth maxWidth='xl' open={open} sx={{ ...sx, backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 500 } }}>
-                <Box sx={{ display: 'flex' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <DialogTitle fontSize={25} fontWeight={'bold'}>Decode</DialogTitle>
-                    </Box>
-                    <Button size='small' sx={{ width: 30, m: 1, ml: 'auto' }} onClick={handleOnClose}><CloseIcon htmlColor='red' /></Button>
+            <Dialog TransitionComponent={Grow} fullWidth maxWidth='xl' open={open} sx={{ ...sx, backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 750 } }}>
+                <Button size='small' sx={{ width: 30, m: 1, ml: 'auto' }} onClick={handleOnClose}><CloseIcon htmlColor='red' /></Button>
+
+                <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                    <Typography fontWeight={'bold'} textAlign={'center'} fontSize={30} >Decode Paper Code</Typography>
+                    <Typography textAlign={'center'} fontSize={20}>Course Name: {data.course_name}</Typography>
+                    <Typography textAlign={'center'} fontSize={20}>Course Code: {data.course_code}</Typography>
+                    <Typography textAlign={'center'} fontSize={20}> Session: {data.exam_session} </Typography>
                 </Box>
-                <Box sx={{ ml: 3, mr: 3, mb: 3, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column', mt: 2 }}>
                     {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>}
                     {marks &&
                         <AntDesignGrid
@@ -271,6 +258,17 @@ const DecodeDialog = (props) => {
                             experimentalFeatures={{ newEditingApi: true }}
                             processRowUpdate={ProcessRowUpdate}
                             onProcessRowUpdateError={handleProcessRowUpdateError}
+                            disableColumnSelector
+                            disableDensitySelector
+                            component={{ Toolbar: GridToolbar }}
+                            componentsProps={{
+                                toolbar: {
+                                    csvOptions: { disableToolbarButton: true },
+                                    printOptions: { disableToolbarButton: true },
+                                    showQuickFilter: true,
+                                    quickFilterProps: { debounceMs: 250 },
+                                },
+                            }}
                         />}
                 </Box>
                 <Backdrop
@@ -279,6 +277,9 @@ const DecodeDialog = (props) => {
                 >
                     <CircularProgress color="inherit" />
                 </Backdrop>
+
+                <ConfirmDialog open={openConfirm} message={'Are you sure you want to submit?'} onConfirm={handleOnConfirm} onClose={() => setOpenConfirm(false)} label={'Submit'} />
+                
                 {!!snackbar && (
                     <Snackbar
                         open

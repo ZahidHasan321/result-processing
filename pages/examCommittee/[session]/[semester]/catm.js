@@ -1,44 +1,49 @@
 import AntDesignGrid from "@/component/customDatagrid/customDatagrid";
 import CATMdialog from "@/component/dialog/catmDialog";
 import Layout from "@/component/layout/layout";
-import { courseTeacher } from "@/constants/routes";
+import { semesterPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
+import Loading from "@/pages/loading";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Typography  from "@mui/material/Typography";
-import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import Snackbar from "@mui/material/Snackbar";
 import { GridToolbar } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-import { getSession, useSession } from "next-auth/react";
-import Router from "next/router";
+import { useSession } from "next-auth/react";
+import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Loading from "../loading";
+import UndoIcon from '@mui/icons-material/Undo';
+import Snackbar from "@mui/material/Snackbar"
+import Alert from "@mui/material/Alert"
+import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 
-const Home = () => {
+const CATM = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [list, setList] = useState([]);
   const [checked, setChecked] = useState(false);
-  const [snackbar, setSnackbar] = useState(null);
   const [clickedRow, setClickedRow] = useState(null);
+  const [snackbar, setSnackbar] = useState(null);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [params, setParams] = useState(null);
 
-  const handleCloseSnackbar = () => setSnackbar(null);
+  const router = useRouter()
+  const query = router.query
 
   const handleRowClick = (params) => {
     setClickedRow(params.row)
     setOpenDialog(true);
   }
 
+  const handleCloseSnackbar = () => setSnackbar(null);
+
   const getList = async () => {
-    const { user } = await getSession();
-    await fetch('/api/courseTeacher/getCurrentList', {
+    await fetch('/api/examCommittee/semester/getCatm', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(user.id)
+      body: JSON.stringify({ semester: query.semester, session: query.session })
     })
       .then(res => res.json())
       .then(data => setList(data))
@@ -46,9 +51,27 @@ const Home = () => {
     setChecked(true);
   }
 
+
+  const handleOnUndo = (param) => {
+    setOpenConfirm(true);
+    setParams(param)
+  }
+
+  const handleRowUndoClick = async (params) => {
+    await fetch('/api/examCommittee/semester/undoCatm', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params.row)
+    })
+      .then(res => res.json())
+      .then(data => setSnackbar(data))
+  }
+
   useEffect(() => {
     getList()
-  }, [])
+  }, [query.semester])
 
   const columns = [
     {
@@ -78,22 +101,14 @@ const Home = () => {
       flex: 1
     },
     {
-      field: "assigned_date",
-      headerName: "Assigned Date",
-      minWidth: 200,
-      flex: 1,
-      valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
-    },
-    {
       field: "submit_date",
-      headerName: "Submit_date",
+      headerName: "Submit Date",
       minWidth: 200,
       flex: 1,
       valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
-      hide:true
     },
     {
-      field: "enter",
+      field: "open",
       headerName: "Open",
       width: 100,
       renderCell: (params) => {
@@ -103,17 +118,28 @@ const Home = () => {
           </Button>
         )
       }
+    },
+    {
+      field: "undo",
+      headerName: "Undo",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <Button onClick={(event) => { event.preventDefault(); handleOnUndo(params) }}>
+            <UndoIcon />
+          </Button>
+        )
+      }
     }
   ]
 
   return (
     <Box>
       <Paper sx={{ boxShadow: 3, minHeight: '750px' }}>
-        <Typography fontSize={30} sx={{ ml: 4, pt: 3 }}>IN PROGRESS</Typography>
-        <Typography variant="caption" sx={{ ml: 4 }}>Double click on row for more.</Typography>
+
         <Box>
           <AntDesignGrid
-            sx={{ml:4, mr:4, mb:4, boxShadow: 3, fontSize: '16px' }}
+            sx={{ ml: 4, mr: 4, mb: 4, boxShadow: 3, fontSize: '16px' }}
             autoHeight
             onRowDoubleClick={handleRowClick}
             columns={columns}
@@ -134,7 +160,9 @@ const Home = () => {
           />
         </Box>
       </Paper>
-      {openDialog && <CATMdialog open={openDialog} onClose={(snackbar) => { setSnackbar(snackbar); getList(); setOpenDialog(false) }} data={clickedRow} editableData={true} />}
+      {openDialog && <CATMdialog open={openDialog} onClose={() => setOpenDialog(false)} data={clickedRow} editableData={false} />}
+      <ConfirmDialog open={openConfirm} message={'Are you sure you want to Undo?'} onConfirm={handleRowUndoClick} params={params} onClose={() => setOpenConfirm(false)} label={'Confirm'} />
+
       {!!snackbar && (
         <Snackbar
           open
@@ -149,7 +177,21 @@ const Home = () => {
   )
 }
 
-Home.getLayout = function getLayout({ children }) {
+
+const HeaderLayout = ({ children }) => {
+  const router = useRouter();
+  const query = router.query;
+
+  return (
+    <>
+      <Layout pages={semesterPages} query={query} idx={4}>
+        {children}
+      </Layout>
+    </>
+  );
+};
+
+CATM.getLayout = function getLayout({ children }) {
   const { data, status } = useSession()
 
   if (status === 'loading') {
@@ -164,11 +206,12 @@ Home.getLayout = function getLayout({ children }) {
     Router.replace('/accessDenied')
   }
 
-
   return (
-    <Layout pages={courseTeacher} idx={1} >
+    <HeaderLayout>
       <main>{children}</main>
-    </Layout>
+    </HeaderLayout>
   )
 }
-export default Home;
+
+
+export default CATM;

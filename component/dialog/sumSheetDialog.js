@@ -1,10 +1,12 @@
 
+import CloseIcon from '@mui/icons-material/Close'
+import { Button, Typography } from "@mui/material"
 import Backdrop from "@mui/material/Backdrop"
-import CircularProgress from "@mui/material/CircularProgress"
 import Box from "@mui/material/Box"
+import CircularProgress from "@mui/material/CircularProgress"
 import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
 import Grow from "@mui/material/Grow"
+import { GridToolbar } from "@mui/x-data-grid"
 import { useEffect, useState } from "react"
 import AntDesignGrid from "../customDatagrid/customDatagrid"
 
@@ -106,13 +108,17 @@ const SumSheetDialog = (props) => {
         onClose();
     }
     return (
-        <Dialog TransitionComponent={Grow} maxWidth='xl' fullWidth open={open} onClose={handleOnClose} sx={{ backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 500 } }} >
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <DialogTitle>Suummation Sheet</DialogTitle>
+        <Dialog TransitionComponent={Grow} maxWidth='xl' fullWidth open={open} onClose={handleOnClose} sx={{ backdropFilter: 'blur(5px)' }} PaperProps={{ sx: { minHeight: 750 } }} >
+            <Button size='small' sx={{ width: 30, m: 1, ml: 'auto' }} onClick={handleOnClose}><CloseIcon htmlColor='red' /></Button>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+                <Typography fontWeight={'bold'} textAlign={'center'} fontSize={30} >Summation Sheet</Typography>
+                <Typography textAlign={'center'} fontSize={20}>Course Code: {course}</Typography>
+                <Typography textAlign={'center'} fontSize={20}> Session: {session} </Typography>
             </Box>
-            <Box sx={{ m: 3, flexGrow: 1 }}>
+            <Box sx={{ m: 3, flexGrow: 1, mt: 2}}>
                 <AntDesignGrid
-                    sx={{ boxShadow: 3, fontSize:'16px' }}
+                    sx={{ boxShadow: 3, fontSize: '16px' }}
                     autoHeight
                     checked={checked}
                     rows={summationData}
@@ -120,6 +126,17 @@ const SumSheetDialog = (props) => {
                     getRowId={(row) => row.roll}
                     experimentalFeatures={{ columnGrouping: true }}
                     columnGroupingModel={columnGroupingModel}
+                    disableColumnSelector
+                    disableDensitySelector
+                    component={{ Toolbar: GridToolbar }}
+                    componentsProps={{
+                        toolbar: {
+                            csvOptions: { disableToolbarButton: true },
+                            printOptions: { disableToolbarButton: true },
+                            showQuickFilter: true,
+                            quickFilterProps: { debounceMs: 250 },
+                        },
+                    }}
                 />
             </Box>
             <Backdrop
