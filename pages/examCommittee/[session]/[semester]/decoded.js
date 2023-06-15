@@ -135,6 +135,7 @@ const Decoded = () => {
   return (
     <Box>
       <Paper sx={{ boxShadow: 3, minHeight: '750px' }}>
+        
         <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
             sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
@@ -143,6 +144,7 @@ const Decoded = () => {
             checked={checked}
             columns={columns}
             rows={rows}
+            onRowDoubleClick={handleRowClick}
             disableColumnSelector
             disableDensitySelector
             component={{ Toolbar: GridToolbar }}

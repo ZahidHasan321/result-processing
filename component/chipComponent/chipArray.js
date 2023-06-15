@@ -130,7 +130,7 @@ const ChipArray = (props) => {
             </Box>
 
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="body2" sx={{ justifySelf: 'center', alignSelf: 'flex-end', mr: 3 }}>Total: {array.length}</Typography>
+                <Typography fontWeight={'bold'} variant="body2" sx={{ justifySelf: 'center', alignSelf: 'flex-end', mr: 3 }}>TOTAL: {array.length}</Typography>
                 <Box
 
                     sx={{

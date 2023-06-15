@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Snackbar from "@mui/material/Snackbar";
+import { GridToolbar } from "@mui/x-data-grid";
 import { useSession } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -101,8 +102,20 @@ const Submitted = () => {
             autoHeight
             getRowId={(row) => row.course_code + row.semester + row.exam_session + row.set_number}
             checked={checked}
+            onRowDoubleClick={handleRowClick}
             columns={columns}
             rows={rows}
+            disableColumnSelector
+            disableDensitySelector
+            component={{ Toolbar: GridToolbar }}
+            componentsProps={{
+              toolbar: {
+                csvOptions: { disableToolbarButton: true },
+                printOptions: { disableToolbarButton: true },
+                showQuickFilter: true,
+                quickFilterProps: { debounceMs: 250 },
+              },
+            }}
           />
         </Box>
       </Paper >
