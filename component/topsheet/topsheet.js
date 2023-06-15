@@ -139,7 +139,7 @@ const Topsheet = (props) => {
             <Button sx={{ ml: 'auto', mr: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} variant='contained' onClick={handleOnSubmit}>Submit</Button>
 
             <Paper sx={{ m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2 }} fontSize={16}>IDs of Present Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2 }} fontSize={16}>Present Students</Typography>
                 {presentData && <ChipArray show={true} list={presentData} onDelete={(data) => handlePresentDelete(data, 'present')} updateData={updatePresentData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',
@@ -148,7 +148,7 @@ const Topsheet = (props) => {
             </Paper>
 
             <Paper sx={{ m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2}} fontSize={16}>IDs of Absent Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2}} fontSize={16}>Absent Students</Typography>
                 {absentData && <ChipArray list={absentData} onDelete={(data) => handlePresentDelete(data, 'absent')} updateData={updateAbsentData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',
@@ -157,7 +157,7 @@ const Topsheet = (props) => {
             </Paper>
 
             <Paper sx={{ m: 2, boxShadow: 2 }}>
-                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2 }} fontSize={16}>IDs of Expelled Students</Typography>
+                <Typography textTransform={'uppercase'} fontWeight='bold' sx={{ textAlign: 'center', mt:2 }} fontSize={16}>Expelled Students</Typography>
                 {expelledData && <ChipArray list={expelledData} onDelete={(data) => handlePresentDelete(data, 'expelled')} updateData={updateExpelledData} sx={{
                     minWidth: '700px',
                     maxWidth: '700px',

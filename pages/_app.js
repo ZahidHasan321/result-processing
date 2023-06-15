@@ -13,12 +13,12 @@ export default function App({ Component, pageProps }) {
   return (
     <SessionProvider session={pageProps.session} >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <ThemeProvider theme={Theme}>
-          <CssBaseline />
-          <GetLayout>
-            <Component {...pageProps} />
-          </GetLayout>
-        </ThemeProvider>
+          <ThemeProvider theme={Theme}>
+              <CssBaseline />
+              <GetLayout>
+                <Component {...pageProps} />
+              </GetLayout>
+          </ThemeProvider>
       </LocalizationProvider>
     </SessionProvider>
 
