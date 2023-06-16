@@ -9,8 +9,8 @@ export default async function handler(req, res) {
         await client.query('BEGIN');
         const query = {
             text: `INSERT INTO examiner(id, exam_session, course_code, set_number, assigned_date) 
-                    VALUES (($1)::uuid, $2, $3, $4, CURRENT_DATE) ON CONFLICT ON CONSTRAINT examiner_unq
-                    DO UPDATE SET id = examiner.id, assigned_date = CURRENT_DATE`,
+                    VALUES (($1)::uuid, $2, $3, $4, CURRENT_DATE) ON CONFLICT (exam_session, course_code, set_number)
+                    DO UPDATE SET id = $1, assigned_date = CURRENT_DATE`,
             values: [param.id, param.session, param.course, param.set]
         }
 

@@ -36,6 +36,10 @@ const Decoded = () => {
     setRowClick(params.row);
     setOpenDialog(true);
   }
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(null)
+  }
   const getRows = async () => {
     await fetch('/api/examCommittee/semester/getDecodedList', {
       method: 'POST',
@@ -158,7 +162,8 @@ const Decoded = () => {
             }}
           />
         </Box>
-      </Paper >{openDialog && <DecodeDialog open={openDialog} onClose={() => setOpenDialog(false)} data={rowClick} editableData={false} showName={false} />}
+      </Paper >
+      {openDialog && <DecodeDialog open={openDialog} onClose={(snacks) => {setOpenDialog(false), setSnackbar(snacks)}} data={rowClick} editableData={false} showName={false} />}
       <ConfirmDialog open={openConfirm} message={'Are you sure you want to Undo?'} onConfirm={handleRowUndoClick} params={params} onClose={() => setOpenConfirm(false)} label={'Confirm'} />
       {!!snackbar && (
         <Snackbar
