@@ -45,9 +45,10 @@ const DecodeDialog = (props) => {
         setOpenConfirm(true)
     }
 
-    const handleOnConfirm = () => {
+    const handleOnConfirm = async () => {
+
         if (marks) {
-            fetch('/api/examCommittee/semester/submitDecode', {
+            await fetch('/api/examCommittee/semester/submitDecode', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -57,9 +58,8 @@ const DecodeDialog = (props) => {
                 .then(res => res.json())
                 .then(data => {
                     onClose(data)
-                    if (data.serverity === 'success')
-                        localStorage.removeItem(data.exam_session + data.course_code + data.set_number + 'decode');
                 })
+            localStorage.removeItem(data.exam_session + data.course_code + data.set_number + 'decode');
         }
     }
 
@@ -77,7 +77,7 @@ const DecodeDialog = (props) => {
                 }
             })
             setMarks(list);
-            localStorage.setItem(data.exam_session + data.course_code + data.set_number + 'decode', JSON.stringify(marks));
+            localStorage.setItem(data.exam_session + data.course_code + data.set_number + 'decode', JSON.stringify(list));
         }
 
     }, [submittedData])
@@ -154,7 +154,7 @@ const DecodeDialog = (props) => {
             field: "roll",
             headerName: "Roll No",
             minWidth: 150,
-            editable: editableData,
+            editable: true,
             preProcessEditCellProps
         },
         {
@@ -168,61 +168,61 @@ const DecodeDialog = (props) => {
             field: "Q1",
             headerName: "Q1",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q2",
             headerName: "Q2",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q3",
             headerName: "Q3",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q4",
             headerName: "Q4",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q5",
             headerName: "Q5",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q6",
             headerName: "Q6",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q7",
             headerName: "Q7",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q8",
             headerName: "Q8",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q9",
             headerName: "Q9",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Q10",
             headerName: "Q10",
             minWidth: 30,
-            flex:1
+            flex: 1
         },
         {
             field: "Total",
@@ -244,7 +244,7 @@ const DecodeDialog = (props) => {
                     <Typography textAlign={'center'} fontSize={20}> Session: {data.exam_session} </Typography>
                 </Box>
                 <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column', mt: 2 }}>
-                    {editableData && <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>}
+                     <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>
                     {marks &&
                         <AntDesignGrid
                             sx={{ boxShadow: 3, fontSize: '16px' }}
@@ -277,7 +277,7 @@ const DecodeDialog = (props) => {
                 </Backdrop>
 
                 <ConfirmDialog open={openConfirm} message={'Are you sure you want to submit?'} onConfirm={handleOnConfirm} onClose={() => setOpenConfirm(false)} label={'Submit'} />
-                
+
                 {!!snackbar && (
                     <Snackbar
                         open

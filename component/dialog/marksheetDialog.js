@@ -36,9 +36,10 @@ const MarksheetDialog = (props) => {
     }
 
 
-    const handleOnConfirm = () => {
+    const handleOnConfirm = async () => {
+
         if (marks) {
-            fetch('/api/examiner/setMark', {
+            await fetch('/api/examiner/setMark', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -47,13 +48,11 @@ const MarksheetDialog = (props) => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.serverity === 'success')
-                        localStorage.removeItem(JSON.stringify(data) + 'marksheet');
                     onClose(data);
                 })
-
-
+            localStorage.removeItem(JSON.stringify(data) + 'marksheet')
         }
+
     }
 
     useEffect(() => {

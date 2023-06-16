@@ -15,7 +15,6 @@ import { styled } from '@mui/material/styles';
 import BasicSelect from '../selector/selector';
 
 
-
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 1,
     color:
