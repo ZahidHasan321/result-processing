@@ -139,7 +139,7 @@ const Decoded = () => {
   return (
     <Box>
       <Paper sx={{ boxShadow: 3, minHeight: '750px' }}>
-        
+
         <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
             sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
@@ -163,7 +163,7 @@ const Decoded = () => {
           />
         </Box>
       </Paper >
-      {openDialog && <DecodeDialog open={openDialog} onClose={(snacks) => {setOpenDialog(false), setSnackbar(snacks)}} data={rowClick} editableData={false} showName={false} />}
+      {openDialog && <DecodeDialog open={openDialog} onClose={(snacks) => { setOpenDialog(false), setSnackbar(snacks) }} data={rowClick} editableData={false} showName={false} />}
       <ConfirmDialog open={openConfirm} message={'Are you sure you want to Undo?'} onConfirm={handleRowUndoClick} params={params} onClose={() => setOpenConfirm(false)} label={'Confirm'} />
       {!!snackbar && (
         <Snackbar
@@ -225,12 +225,13 @@ Decoded.getLayout = function getLayout({ children }) {
   if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
-
-  return (
-    <HeaderLayout>
-      <main>{children}</main>
-    </HeaderLayout>
-  )
+  else {
+    return (
+      <HeaderLayout>
+        <main>{children}</main>
+      </HeaderLayout>
+    )
+  }
 
 }
 

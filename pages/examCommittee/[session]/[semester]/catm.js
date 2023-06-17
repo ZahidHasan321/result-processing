@@ -205,12 +205,13 @@ CATM.getLayout = function getLayout({ children }) {
   if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
-
-  return (
-    <HeaderLayout>
-      <main>{children}</main>
-    </HeaderLayout>
-  )
+  else {
+    return (
+      <HeaderLayout>
+        <main>{children}</main>
+      </HeaderLayout>
+    )
+  }
 }
 
 

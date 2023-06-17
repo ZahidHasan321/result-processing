@@ -24,7 +24,7 @@ export default async function handler(req, res) {
             if (item.roll != null && item.roll !== '') {
                 const query = {
                     text: `INSERT INTO stud_mark VALUES($1, $2, $3, $4, $5, $6) 
-                    ON CONFLICT(exam_session, course_code, set, code) 
+                    ON CONFLICT ON CONSTRAINT stud_mark_unq
                     DO UPDATE set roll = $5, total = $6`,
                     values: [session, course, set, item.code, item.roll, total]
                 }

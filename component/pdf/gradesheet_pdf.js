@@ -74,6 +74,8 @@ const GradesheetPDF = ({ semester, session, tabularData, examInfo }) => {
         return point
     }
 
+    console.log(tabularData)
+
 
     return (
         <Document >
@@ -253,7 +255,7 @@ const GradesheetPDF = ({ semester, session, tabularData, examInfo }) => {
                                         <Text style={{ marginRight: '29px', fontFamily: 'Times-Bold' }}>Total Credit Point : {tcp.toFixed(2)}</Text>
                                         <Text > Grade Point Average:</Text>
                                         <Text style={{ marginRight: '31px', fontFamily: 'Times-Bold' }}> {(tcp != 0 && tce != 0) ? (tcp / tce).toFixed(2) : '0.00'} </Text>
-                                        <Text style={{ fontFamily: 'Times-Bold' }}>Result: {(tcp / tce) != Infinity && (tcp / tce) != 0 ? 'P' : 'F'}</Text>
+                                        <Text style={{ fontFamily: 'Times-Bold' }}>Result: {(tcp / tce) != Infinity && (tcp / tce) != 0 ? student[1][0].improve ? 'P (Improve)' : 'P': student[1][0].improve ? 'F (Improve)' :'F'}</Text>
                                     </View>
                                 </View>
 

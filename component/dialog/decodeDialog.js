@@ -45,21 +45,30 @@ const DecodeDialog = (props) => {
         setOpenConfirm(true)
     }
 
-    const handleOnConfirm = async () => {
+    function hasDuplicates(array) {
+        const list = array.map((item) => item.roll)
+        return (new Set(list)).size !== list.length;
+    }
 
+    const handleOnConfirm = async () => {
         if (marks) {
-            await fetch('/api/examCommittee/semester/submitDecode', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number, marks })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    onClose(data)
+            if (hasDuplicates(marks)) {
+                setSnackbar({ children: 'Please remove duplicate rolls', severity: 'error' })
+            }
+            else {
+                await fetch('/api/examCommittee/semester/submitDecode', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ session: data.exam_session, course: data.course_code, set: data.set_number, marks })
                 })
-            localStorage.removeItem(data.exam_session + data.course_code + data.set_number + 'decode');
+                    .then(res => res.json())
+                    .then(data => {
+                        onClose(data)
+                    })
+                localStorage.removeItem(data.exam_session + data.course_code + data.set_number + 'decode');
+            }
         }
     }
 
@@ -244,7 +253,7 @@ const DecodeDialog = (props) => {
                     <Typography textAlign={'center'} fontSize={20}> Session: {data.exam_session} </Typography>
                 </Box>
                 <Box sx={{ ml: 5, mr: 5, mb: 3, display: 'flex', flexDirection: 'column', mt: 2 }}>
-                     <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>
+                    <Button variant='contained' sx={{ ml: 'auto', mb: 2, bgcolor: '#67be23', ":hover": { bgcolor: '#67be23' } }} onClick={handleOnSubmit}>Submit</Button>
                     {marks &&
                         <AntDesignGrid
                             sx={{ boxShadow: 3, fontSize: '16px' }}

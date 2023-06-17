@@ -21,7 +21,7 @@ const Home = () => {
   const [checked, setChecked] = useState(false)
 
   const router = useRouter();
-  
+
   async function getList() {
     const { user } = await getSession();
     await fetch('/api/examCommittee/committeeLog', {
@@ -95,49 +95,49 @@ const Home = () => {
     }
   ]
   return (
-    <Paper variant="Outlined" sx={{ boxShadow: 3, minHeight:'750px' }}>
+    <Paper variant="Outlined" sx={{ boxShadow: 3, minHeight: '750px' }}>
       <Box >
         <Typography fontSize={30} sx={{ ml: 12, pt: 3 }}>IN PROGRESS</Typography>
-        <Typography variant="caption" sx={{ ml:12 }}>Double click on row for more.</Typography>
+        <Typography variant="caption" sx={{ ml: 12 }}>Double click on row for more.</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          
-            <Box sx={{ ml: 5, mr: 5, mb: 3, width: '90%' }}>
-              <AntDesignGrid
-                sx={{
-                  '& .MuiDataGrid-cell:focus': {
-                    outline: 'none',
-                  },
-                  boxShadow: 3, fontSize:'16px'
-                }}
-                rows={list}
-                columns={columns}
-                checked={checked}
-                autoHeight
-                getRowId={(row) => row.id + row.exam_session + row.semester}
-                onRowDoubleClick={handleRowClick}
-                disableColumnSelector
-                disableDensitySelector
-                component={{ Toolbar: GridToolbar }}
-                componentsProps={{
-                  toolbar: {
-                    csvOptions: { disableToolbarButton: true },
-                    printOptions: { disableToolbarButton: true },
-                    showQuickFilter: true,
-                    quickFilterProps: { debounceMs: 250 },
-                  },
-                }}
-              />
 
-            </Box>
+          <Box sx={{ ml: 5, mr: 5, mb: 3, width: '90%' }}>
+            <AntDesignGrid
+              sx={{
+                '& .MuiDataGrid-cell:focus': {
+                  outline: 'none',
+                },
+                boxShadow: 3, fontSize: '16px'
+              }}
+              rows={list}
+              columns={columns}
+              checked={checked}
+              autoHeight
+              getRowId={(row) => row.id + row.exam_session + row.semester}
+              onRowDoubleClick={handleRowClick}
+              disableColumnSelector
+              disableDensitySelector
+              component={{ Toolbar: GridToolbar }}
+              componentsProps={{
+                toolbar: {
+                  csvOptions: { disableToolbarButton: true },
+                  printOptions: { disableToolbarButton: true },
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 250 },
+                },
+              }}
+            />
+
+          </Box>
         </Box>
       </Box>
     </Paper>
   )
 
 }
-Home.getLayout = function getLayout({children}) {
+Home.getLayout = function getLayout({ children }) {
 
-  const {data, status} = useSession()
+  const { data, status } = useSession()
 
   if (status === 'loading') {
     return <Loading />
@@ -147,14 +147,16 @@ Home.getLayout = function getLayout({children}) {
     Router.replace('/auth/signin')
   }
 
-  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+  if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
 
-  return (
-    <Layout pages={committeePages} idx={1}>
-      <main>{children}</main>
-    </Layout>
-  )
+  else {
+    return (
+      <Layout pages={committeePages} idx={1}>
+        <main>{children}</main>
+      </Layout>
+    )
+  }
 }
 export default Home;

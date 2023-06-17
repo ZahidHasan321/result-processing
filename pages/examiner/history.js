@@ -4,7 +4,7 @@ import Layout from "@/component/layout/layout";
 import { examinerPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -58,7 +58,7 @@ const History = () => {
       field: "course_code",
       headerName: "Course Code",
       minWidth: 200,
-      
+
     },
     {
       field: "course_name",
@@ -71,7 +71,7 @@ const History = () => {
       field: "semester",
       headerName: "Semester",
       minWidth: 150,
-    
+
       valueFormatter: ({ value }) => formatOrdinals(value)
     },
     {
@@ -159,12 +159,13 @@ History.getLayout = function getLayout({ children }) {
   if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
-
-  return (
-    <Layout pages={examinerPages} idx={2}>
-      <main>{children}</main>
-    </Layout>
-  )
+  else {
+    return (
+      <Layout pages={examinerPages} idx={2}>
+        <main>{children}</main>
+      </Layout>
+    )
+  }
 }
 
 

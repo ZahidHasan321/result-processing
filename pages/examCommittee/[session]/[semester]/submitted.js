@@ -95,10 +95,10 @@ const Submitted = () => {
   ]
   return (
     <Box>
-      <Paper sx={{ boxShadow: 3, minHeight:'750px' }}>
+      <Paper sx={{ boxShadow: 3, minHeight: '750px' }}>
         <Box sx={{ pt: 2, pb: 2 }}>
           <AntDesignGrid
-            sx={{ m:4, boxShadow: 3, fontSize:'16px' }}
+            sx={{ m: 4, boxShadow: 3, fontSize: '16px' }}
             autoHeight
             getRowId={(row) => row.course_code + row.semester + row.exam_session + row.set_number}
             checked={checked}
@@ -147,9 +147,9 @@ const HeaderLayout = ({ children }) => {
   );
 };
 
-Submitted.getLayout = function getLayout({children}) {
+Submitted.getLayout = function getLayout({ children }) {
 
-  const {data, status} = useSession()
+  const { data, status } = useSession()
 
   if (status === 'loading') {
     return <Loading />
@@ -159,15 +159,16 @@ Submitted.getLayout = function getLayout({children}) {
     Router.replace('/auth/signin')
   }
 
-  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+  if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
 
-
-  return (
-    <HeaderLayout>
-      <main>{children}</main>
-    </HeaderLayout>
-  )
+  else {
+    return (
+      <HeaderLayout>
+        <main>{children}</main>
+      </HeaderLayout>
+    )
+  }
 }
 export default Submitted;

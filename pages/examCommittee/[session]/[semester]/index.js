@@ -25,6 +25,7 @@ import { useSession } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Loading from "@/pages/loading";
+import ConfirmDialog from "@/component/dialog/ConfirmDialog";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -39,6 +40,7 @@ const Dashboard = () => {
   const [endDate, setEndDate] = useState(null);
   const [checked, setChecked] = useState(false);
   const [snackbar, setSnackbar] = useState(null);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const handleExaminerClick = (event) => {
     setCourseCode(event.target.id);
@@ -58,6 +60,22 @@ const Dashboard = () => {
   const handleOnClose = () => {
     getCourseDataList();
     setExmainerOpen(false);
+  }
+
+  const handleOnPublish = () => {
+    setOpenConfirm(true)
+  }
+
+  const handleOnConfirm = async () => {
+    await fetch('/api/examCommittee/semester/publishResult', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ semester: query.semester, session: query.session })
+    })
+      .then(res => res.json())
+      .then(data => setSnackbar(data))
   }
   const getCourseDataList = async () => {
     if (query.semester != undefined && query.session != undefined) {
@@ -133,7 +151,7 @@ const Dashboard = () => {
               sx={{ mr: 3 }}
               format="DD/MM/YYYY"
               showDaysOutsideCurrentMonth
-              views={["day", "month","year"]}
+             
             />
 
             <DatePicker value={endDate} onChange={value => { setEndDate(value), endDateset(value) }}
@@ -141,10 +159,11 @@ const Dashboard = () => {
               sx={{ mr: 3 }}
               format="DD/MM/YYYY"
               showDaysOutsideCurrentMonth
-              views={["day", "month","year"]}
+             
             />
             <a href={`/examCommittee/${query.session}/${query.semester}/tabulationPDF`} target="_blank" style={{ marginRight: '10px' }}> <Button variant="contained">Tabularsheet PDF</Button></a>
             <a href={`/examCommittee/${query.session}/${query.semester}/gradesheetPDF`} target="_blank"> <Button variant="contained">Gradesheet PDF</Button></a>
+            <Button sx={{ml:'10px'}} variant="contained" onClick={handleOnPublish}>PUBLISH</Button>
           </Box>
         </Box>
         <Slide in={checked}>
@@ -232,6 +251,7 @@ const Dashboard = () => {
         {exmainerOpen && <ExaminerDialog open={exmainerOpen} onClose={handleOnClose} semester={query.semester} session={query.session} course={courseCode} />}
         {topsheetOpen && <TopsheetDialog open={topsheetOpen} onClose={() => { getCourseDataList(); setTopsheetOpen(false) }} semester={query.semester} session={query.session} course={courseCode} />}
         {sumSheetOpen && <SumSheetDialog open={sumSheetOpen} onClose={() => setSumSheetOpen(false)} semester={query.semester} session={query.session} course={courseCode} />}
+        <ConfirmDialog open={openConfirm} message={'Are you sure you want to submit?'} onConfirm={handleOnConfirm} onClose={() => setOpenConfirm(false)} label={'Submit'} />
       </Paper>
 
       {!!snackbar && (
@@ -276,12 +296,13 @@ Dashboard.getLayout = function getLayout({ children }) {
   if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
-
-  return (
-    <HeaderLayout>
-      <main>{children}</main>
-    </HeaderLayout>
-  )
+  else {
+    return (
+      <HeaderLayout>
+        <main>{children}</main>
+      </HeaderLayout>
+    )
+  }
 }
 
 export default Dashboard;
