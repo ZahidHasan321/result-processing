@@ -4,7 +4,7 @@ import Layout from "@/component/layout/layout";
 import { examinerPages } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -160,12 +160,13 @@ Home.getLayout = function getLayout({ children }) {
     Router.replace('/accessDenied')
   }
 
-
-  return (
-    <Layout pages={examinerPages} idx={1}>
-      <main>{children}</main>
-    </Layout>
-  )
+  else {
+    return (
+      <Layout pages={examinerPages} idx={1}>
+        <main>{children}</main>
+      </Layout>
+    )
+  }
 }
 
 

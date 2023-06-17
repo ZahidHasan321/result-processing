@@ -23,7 +23,7 @@ const Home = () => {
     color: "black"
   }
 
-  
+
   return (
     <>
       <Container maxWidth="xl">
@@ -42,7 +42,7 @@ const Home = () => {
 
 Home.getLayout = function getLayout({ children }) {
 
-  const {data, status} = useSession()
+  const { data, status } = useSession()
 
   if (status === 'loading') {
     return <Loading />
@@ -52,15 +52,16 @@ Home.getLayout = function getLayout({ children }) {
     Router.replace('/auth/signin')
   }
 
-  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+  if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
-
-  return (
-    <Layout>
-      <main>{children}</main>
-    </Layout>
-  )
+  else {
+    return (
+      <Layout>
+        <main>{children}</main>
+      </Layout>
+    )
+  }
 }
 
 export default Home;

@@ -4,7 +4,7 @@ import Layout from "@/component/layout/layout";
 import { courseTeacher } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -85,7 +85,7 @@ const Home = () => {
       headerName: "Submit_date",
       minWidth: 250,
       valueFormatter: ({ value }) => value && dayjs(value).format('DD/MM/YYYY'),
-      hide:true
+      hide: true
     },
     {
       field: "enter",
@@ -108,7 +108,7 @@ const Home = () => {
         <Typography variant="caption" sx={{ ml: 4 }}>Double click on row for more.</Typography>
         <Box>
           <AntDesignGrid
-            sx={{ml:4, mr:4, mb:4, boxShadow: 3, fontSize: '16px' }}
+            sx={{ ml: 4, mr: 4, mb: 4, boxShadow: 3, fontSize: '16px' }}
             autoHeight
             onRowDoubleClick={handleRowClick}
             columns={columns}
@@ -159,11 +159,12 @@ Home.getLayout = function getLayout({ children }) {
     Router.replace('/accessDenied')
   }
 
-
-  return (
-    <Layout pages={courseTeacher} idx={1} >
-      <main>{children}</main>
-    </Layout>
-  )
+  else {
+    return (
+      <Layout pages={courseTeacher} idx={1} >
+        <main>{children}</main>
+      </Layout>
+    )
+  }
 }
 export default Home;

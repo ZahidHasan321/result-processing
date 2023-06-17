@@ -4,7 +4,7 @@ import Layout from "@/component/layout/layout";
 import { courseTeacher } from "@/constants/routes";
 import { formatOrdinals } from "@/helper/ordinal";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -28,7 +28,7 @@ const History = () => {
 
   const getList = async () => {
     const { user } = await getSession();
-  await fetch('/api/courseTeacher/getHistory', {
+    await fetch('/api/courseTeacher/getHistory', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -144,10 +144,12 @@ History.getLayout = function getLayout({ children }) {
     Router.replace('/accessDenied')
   }
 
-  return (
-    <Layout pages={courseTeacher} idx={2}>
-      <main>{children}</main>
-    </Layout>
-  )
+  else {
+    return (
+      <Layout pages={courseTeacher} idx={2}>
+        <main>{children}</main>
+      </Layout>
+    )
+  }
 }
 export default History;

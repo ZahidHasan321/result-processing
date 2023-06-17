@@ -13,6 +13,7 @@ import { getSession, useSession } from "next-auth/react";
 import Router, { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Loading from "../loading";
+import dayjs from "dayjs";
 
 
 
@@ -31,10 +32,10 @@ const History = () => {
       body: JSON.stringify(user.id)
     }).then(res => res.json())
       .then(data => {
-        setList(data.map(({semester, ...list})=> ({
+        setList(data.map(({ semester, ...list }) => ({
           ...list,
           semester: formatOrdinals(semester)
-        })))   
+        })))
         setChecked(true);
       });
   }
@@ -90,8 +91,8 @@ const History = () => {
       width: 90,
       renderCell: (params) => {
         return (
-          <Button onClick={(event) => { event.preventDefault();handleRowClick(params)}}>
-          <ArrowForwardIosIcon />
+          <Button onClick={(event) => { event.preventDefault(); handleRowClick(params) }}>
+            <ArrowForwardIosIcon />
           </Button>
         )
       }
@@ -99,9 +100,9 @@ const History = () => {
   ]
 
   return (
-    <Paper variant="Outlined" sx={{ boxShadow: 3, minHeight:'750px'}}>
+    <Paper variant="Outlined" sx={{ boxShadow: 3, minHeight: '750px' }}>
       <Typography fontSize={30} sx={{ ml: 12, pt: 3 }}>History</Typography>
-      <Typography variant="caption" sx={{ ml:12 }}>Double click on row for more.</Typography>
+      <Typography variant="caption" sx={{ ml: 12 }}>Double click on row for more.</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Grow in={checked}>
           <Box sx={{ ml: 5, mr: 5, mb: 3, width: '90%' }}>
@@ -110,7 +111,7 @@ const History = () => {
                 '& .MuiDataGrid-cell:focus': {
                   outline: 'none',
                 },
-                boxShadow:3, fontSize:'16px'
+                boxShadow: 3, fontSize: '16px'
               }}
               rows={list}
               columns={columns}
@@ -139,9 +140,9 @@ const History = () => {
   )
 
 }
-History.getLayout = function getLayout({children}) {
+History.getLayout = function getLayout({ children }) {
 
-  const {data, status} = useSession()
+  const { data, status } = useSession()
 
   if (status === 'loading') {
     return <Loading />
@@ -151,14 +152,16 @@ History.getLayout = function getLayout({children}) {
     Router.replace('/auth/signin')
   }
 
-  if(status === 'authenticated' && data.user.role !== 'Teacher'){
+  if (status === 'authenticated' && data.user.role !== 'Teacher') {
     Router.replace('/accessDenied')
   }
 
-  return (
-    <Layout pages={committeePages} idx={2}>
-      <main>{children}</main>
-    </Layout>
-  )
+  else {
+    return (
+      <Layout pages={committeePages} idx={2}>
+        <main>{children}</main>
+      </Layout>
+    )
+  }
 }
 export default History;
