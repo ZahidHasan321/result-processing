@@ -13,6 +13,8 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 
 
@@ -105,8 +107,8 @@ function MenuAppBar(props) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <Link href='/profile' style={{ textDecoration: 'none', color: 'black' }}><MenuItem>Profile</MenuItem></Link>
-              <MenuItem onClick={() => { signOut({ callbackUrl: '/auth/signin' }) }}>Logout</MenuItem>
+              <Link href='/profile' style={{ textDecoration: 'none', color: 'black' }}><MenuItem><AccountCircleIcon sx={{mr:1}}/> Profile</MenuItem></Link>
+              <MenuItem onClick={() => { signOut({ callbackUrl: '/auth/signin' }) }}><LogoutIcon sx={{mr:1}}/> Logout</MenuItem>
             </Menu>
           </Box>
           {

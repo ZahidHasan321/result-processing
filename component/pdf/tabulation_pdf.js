@@ -91,7 +91,7 @@ const TabulationPDF = ({ semester, session, courseList, memberList, tabularData,
                 looper.map((loop, idx) => {
                     return (
                         <Page key={idx} size="A3" style={styles.page} orientation="landscape">
-                            <View style={{ display: 'flex', flexDirection: 'column', marginTop: '20px' }}>
+                            <View style={{ display: 'flex', flexDirection: 'column', marginTop: '50px' }}>
                                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                                     <View style={{ display: 'flex', flexDirection: 'column', fontSize: '10px', alignContent: 'center', width: '180px', marginRight: '20px', marginLeft: '50px' }}>
                                         <Text style={{ fontFamily: "Times-Bold", borderBottom: '3px', textAlign: 'center' }}>ABBREVIATIONS</Text>
